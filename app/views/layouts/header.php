@@ -227,8 +227,12 @@ $navCategories = $categoryModel->getActiveWithCounts();
 
     function handleModalFilter(type, val, label, targetUrl) {
         closeAllFiltersModal();
-        if (document.getElementById('paintingsGrid') && typeof selectFilter === 'function') {
-            selectFilter(type, val, label);
+        if (document.getElementById('paintingsGrid')) {
+            if (type === 'sort' && typeof selectSort === 'function') {
+                selectSort(val, label);
+            } else if (typeof selectFilter === 'function') {
+                selectFilter(type, val, label);
+            }
             const target = document.getElementById('catalogHeading') || document.getElementById('paintingsGrid');
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {

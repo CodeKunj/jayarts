@@ -290,6 +290,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 <span>All Filters</span>
             </button>
 
+            <!-- 1. Sort by Dropdown (Immediately visible as Pill #2) -->
+            <div class="relative filter-dropdown-wrap flex-shrink-0">
+                <button type="button" onclick="toggleFilterMenu('sortDropdown', this)" class="filter-pill bg-white border-stone-200 hover:border-black font-semibold" id="btnFilterSort">
+                    <span class="text-gray-500 font-normal">Sort:</span>
+                    <span class="font-bold sort-label">Popular</span>
+                    <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div id="sortDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-0 sm:left-0 sm:right-auto sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[210px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[60vh] overflow-y-auto">
+                    <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Sort Artworks</div>
+                    <button type="button" onclick="selectSort('popular', 'Popular')" class="filter-opt-btn active" data-type="sort" data-val="popular">
+                        <span>Popular / Best Sellers</span>
+                    </button>
+                    <button type="button" onclick="selectSort('price_low', 'Low to High')" class="filter-opt-btn" data-type="sort" data-val="price_low">
+                        <span>Price: Low to High</span>
+                    </button>
+                    <button type="button" onclick="selectSort('price_high', 'High to Low')" class="filter-opt-btn" data-type="sort" data-val="price_high">
+                        <span>Price: High to Low</span>
+                    </button>
+                    <button type="button" onclick="selectSort('rating', 'Top Rated')" class="filter-opt-btn" data-type="sort" data-val="rating">
+                        <span>Highest Rated</span>
+                    </button>
+                    <button type="button" onclick="selectSort('name', 'A to Z')" class="filter-opt-btn" data-type="sort" data-val="name">
+                        <span>Alphabetical (A&ndash;Z)</span>
+                    </button>
+                </div>
+            </div>
+
             <!-- 1. Medium Type Dropdown -->
             <div class="relative filter-dropdown-wrap flex-shrink-0">
                 <button type="button" onclick="toggleFilterMenu('mediumDropdown', this)" class="filter-pill" id="btnFilterMedium">
@@ -463,52 +490,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </button>
         </div>
 
-        <!-- Right: Sort by Dropdown -->
-        <div class="relative filter-dropdown-wrap flex-shrink-0">
-            <button type="button" onclick="toggleFilterMenu('sortDropdown', this)" class="filter-pill bg-gray-50 border-gray-200" id="btnFilterSort">
-                <span class="text-gray-500 font-normal">Sort:</span>
-                <span class="font-bold sort-label">Popular</span>
-                <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
-            <div id="sortDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto right-auto sm:right-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[210px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[60vh] overflow-y-auto">
-                <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Sort Options</div>
-                <button type="button" onclick="selectSort('popular', 'Popular')" class="filter-opt-btn active" data-type="sort" data-val="popular">
-                    <span>Popular / Best Sellers</span>
-                </button>
-                <button type="button" onclick="selectSort('price_low', 'Price: Low to High')" class="filter-opt-btn" data-type="sort" data-val="price_low">
-                    <span>Price: Low to High</span>
-                </button>
-                <button type="button" onclick="selectSort('price_high', 'Price: High to Low')" class="filter-opt-btn" data-type="sort" data-val="price_high">
-                    <span>Price: High to Low</span>
-                </button>
-                <button type="button" onclick="selectSort('rating', 'Highest Rated')" class="filter-opt-btn" data-type="sort" data-val="rating">
-                    <span>Highest Rated</span>
-                </button>
-                <button type="button" onclick="selectSort('name', 'Name: A to Z')" class="filter-opt-btn" data-type="sort" data-val="name">
-                    <span>Alphabetical (A&ndash;Z)</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</section>
-                <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Sort Options</div>
-                <button type="button" onclick="selectSort('popular', 'Popular')" class="filter-opt-btn active" data-type="sort" data-val="popular">
-                    <span>Popular / Best Sellers</span>
-                </button>
-                <button type="button" onclick="selectSort('price_low', 'Price: Low to High')" class="filter-opt-btn" data-type="sort" data-val="price_low">
-                    <span>Price: Low to High</span>
-                </button>
-                <button type="button" onclick="selectSort('price_high', 'Price: High to Low')" class="filter-opt-btn" data-type="sort" data-val="price_high">
-                    <span>Price: High to Low</span>
-                </button>
-                <button type="button" onclick="selectSort('rating', 'Highest Rated')" class="filter-opt-btn" data-type="sort" data-val="rating">
-                    <span>Highest Rated</span>
-                </button>
-                <button type="button" onclick="selectSort('name', 'Name: A to Z')" class="filter-opt-btn" data-type="sort" data-val="name">
-                    <span>Alphabetical (A&ndash;Z)</span>
-                </button>
-            </div>
-        </div>
     </div>
 </section>
 
@@ -773,6 +754,11 @@ function selectSort(sortVal, displayLabel) {
     if (sortBtn) {
         const sortLabel = sortBtn.querySelector('.sort-label');
         if (sortLabel) sortLabel.textContent = displayLabel;
+        if (sortVal !== 'popular') {
+            sortBtn.classList.add('active');
+        } else {
+            sortBtn.classList.remove('active');
+        }
     }
 
     closeAllFilterMenus();
@@ -838,37 +824,42 @@ function applyAllFilters() {
         }
     });
 
-    // Handle Sort Order on visible items
+    // Handle Sort Order on items
     if (activeFilters.sort !== 'popular') {
         items.sort((a, b) => {
             if (activeFilters.sort === 'price_low') {
-                return parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price'));
+                return parseFloat(a.getAttribute('data-price') || '0') - parseFloat(b.getAttribute('data-price') || '0');
             } else if (activeFilters.sort === 'price_high') {
-                return parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price'));
+                return parseFloat(b.getAttribute('data-price') || '0') - parseFloat(a.getAttribute('data-price') || '0');
             } else if (activeFilters.sort === 'rating') {
-                return parseInt(b.getAttribute('data-reviews')) - parseInt(a.getAttribute('data-reviews'));
+                return parseInt(b.getAttribute('data-reviews') || '0') - parseInt(a.getAttribute('data-reviews') || '0');
             } else if (activeFilters.sort === 'name') {
-                return a.getAttribute('data-title').localeCompare(b.getAttribute('data-title'));
+                return (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || '');
             }
             return 0;
         });
-
-        // Re-append in sorted order (before the empty card)
-        const emptyCard = document.getElementById('noPaintingsFound');
-        items.forEach(el => grid.insertBefore(el, emptyCard));
     } else {
         // Return to natural order
         items.sort((a, b) => {
-            return parseInt(a.getAttribute('data-original-order')) - parseInt(b.getAttribute('data-original-order'));
+            return parseInt(a.getAttribute('data-original-order') || '0') - parseInt(b.getAttribute('data-original-order') || '0');
         });
-        const emptyCard = document.getElementById('noPaintingsFound');
-        items.forEach(el => grid.insertBefore(el, emptyCard));
     }
 
-    // Toggle In-Grid Ad visibility if few results
+    // Re-append items in DOM before the empty card
+    const emptyCard = document.getElementById('noPaintingsFound');
     const inGridAd = document.getElementById('inGridAdPoster');
+    items.forEach(el => grid.insertBefore(el, emptyCard));
+
+    // Re-position in-grid ad after the 3rd artwork (slot index 2 or 3) if present
     if (inGridAd) {
-        inGridAd.style.display = (matchCount >= 3) ? '' : 'none';
+        if (matchCount >= 3) {
+            inGridAd.style.display = '';
+            const visibleItems = items.filter(el => el.style.display !== 'none');
+            const targetRef = visibleItems[2] ? visibleItems[2].nextSibling : emptyCard;
+            grid.insertBefore(inGridAd, targetRef);
+        } else {
+            inGridAd.style.display = 'none';
+        }
     }
 
     // Update Counter Badge

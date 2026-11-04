@@ -38,6 +38,21 @@
         <!-- Scrollable Modal Body -->
         <div class="p-5 sm:p-6 space-y-6 overflow-y-auto flex-1 overscroll-contain">
             
+            <!-- 0. Sort Order -->
+            <div>
+                <h4 class="text-xs font-bold text-[#18181B] uppercase tracking-wider mb-2.5 flex items-center justify-between">
+                    <span>Sort Artworks</span>
+                    <span class="text-[10px] text-stone-400 font-normal">Order By</span>
+                </h4>
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <button type="button" onclick="handleModalFilter('sort', 'popular', 'Popular', '<?= SITE_URL ?>/shop')" class="px-3.5 py-2 rounded-full border border-stone-200 bg-stone-50 hover:bg-stone-100 hover:border-black text-stone-800 font-semibold transition-all cursor-pointer">Popular / Featured</button>
+                    <button type="button" onclick="handleModalFilter('sort', 'price_low', 'Low to High', '<?= SITE_URL ?>/shop?sort=price_low')" class="px-3.5 py-2 rounded-full border border-stone-200 hover:border-black text-stone-700 hover:text-black font-semibold transition-all cursor-pointer">Price: Low to High</button>
+                    <button type="button" onclick="handleModalFilter('sort', 'price_high', 'High to Low', '<?= SITE_URL ?>/shop?sort=price_high')" class="px-3.5 py-2 rounded-full border border-stone-200 hover:border-black text-stone-700 hover:text-black font-semibold transition-all cursor-pointer">Price: High to Low</button>
+                    <button type="button" onclick="handleModalFilter('sort', 'rating', 'Top Rated', '<?= SITE_URL ?>/shop?sort=rating')" class="px-3.5 py-2 rounded-full border border-stone-200 hover:border-black text-stone-700 hover:text-black font-semibold transition-all cursor-pointer">Highest Rated</button>
+                    <button type="button" onclick="handleModalFilter('sort', 'name', 'A to Z', '<?= SITE_URL ?>/shop?sort=name')" class="px-3.5 py-2 rounded-full border border-stone-200 hover:border-black text-stone-700 hover:text-black font-semibold transition-all cursor-pointer">Alphabetical (A&ndash;Z)</button>
+                </div>
+            </div>
+
             <!-- 1. Medium -->
             <div>
                 <h4 class="text-xs font-bold text-[#18181B] uppercase tracking-wider mb-2.5 flex items-center justify-between">
