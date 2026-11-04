@@ -273,25 +273,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-    currentBentoSlide = (currentBentoSlide + dir + slides.length) % slides.length;
-    slides[currentBentoSlide].classList.remove('hidden');
-}
-</script>
 
 <!-- 2. Horizontal Filter Pills Bar with In-Place Interactive Dropdowns (Shopcart Style) -->
-<section class="w-full py-3 relative z-30">
-    <div class="flex items-center justify-between gap-3 overflow-x-visible pb-2 scrollbar-none">
+<section class="w-full py-2.5 sm:py-3 relative z-30">
+    <!-- Backdrop for mobile popovers -->
+    <div id="filterBackdrop" onclick="closeAllFilterMenus()" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 hidden sm:hidden transition-opacity"></div>
+
+    <div class="flex items-center gap-2 overflow-x-auto scrollbar-none pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-between sm:overflow-visible">
         
-        <!-- Left Filter Pills -->
-        <div class="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+        <!-- Filter Pills Scroll Row (Single Horizontal Line on Mobile) -->
+        <div class="flex items-center gap-2 flex-nowrap flex-shrink-0 sm:flex-shrink">
             
+            <!-- 0. All Filters Modal Trigger (Prominent on Mobile & Desktop) -->
+            <button type="button" onclick="openAllFiltersModal()" class="filter-pill font-bold bg-[#18181B] text-white hover:bg-black border-transparent shadow-xs flex-shrink-0" id="btnAllFilters">
+                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                <span>All Filters</span>
+            </button>
+
             <!-- 1. Medium Type Dropdown -->
-            <div class="relative filter-dropdown-wrap">
+            <div class="relative filter-dropdown-wrap flex-shrink-0">
                 <button type="button" onclick="toggleFilterMenu('mediumDropdown', this)" class="filter-pill" id="btnFilterMedium">
                     <span class="filter-label">Medium Type</span>
                     <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
-                <div id="mediumDropdown" class="filter-popover hidden absolute left-0 mt-2 z-50 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 min-w-[220px]">
+                <div id="mediumDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[220px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
                     <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Art Medium</div>
                     <button type="button" onclick="selectFilter('medium', 'all', 'Medium Type')" class="filter-opt-btn active" data-type="medium" data-val="all">
                         <span>All Mediums</span>
@@ -321,12 +326,12 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <!-- 2. Price Range Dropdown -->
-            <div class="relative filter-dropdown-wrap">
+            <div class="relative filter-dropdown-wrap flex-shrink-0">
                 <button type="button" onclick="toggleFilterMenu('priceDropdown', this)" class="filter-pill" id="btnFilterPrice">
                     <span class="filter-label">Price</span>
                     <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
-                <div id="priceDropdown" class="filter-popover hidden absolute left-0 mt-2 z-50 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 min-w-[210px]">
+                <div id="priceDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[210px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
                     <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Acquisition Price</div>
                     <button type="button" onclick="selectFilter('price', 'all', 'Price')" class="filter-opt-btn active" data-type="price" data-val="all">
                         <span>All Prices</span>
@@ -351,12 +356,12 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <!-- 3. Review / Rating Dropdown -->
-            <div class="relative filter-dropdown-wrap">
+            <div class="relative filter-dropdown-wrap flex-shrink-0">
                 <button type="button" onclick="toggleFilterMenu('reviewDropdown', this)" class="filter-pill" id="btnFilterReview">
                     <span class="filter-label">Review</span>
                     <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
-                <div id="reviewDropdown" class="filter-popover hidden absolute left-0 mt-2 z-50 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 min-w-[200px]">
+                <div id="reviewDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[200px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
                     <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Collector Rating</div>
                     <button type="button" onclick="selectFilter('review', 'all', 'Review')" class="filter-opt-btn active" data-type="review" data-val="all">
                         <span>All Ratings</span>
@@ -371,12 +376,12 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <!-- 4. Color Palette Dropdown -->
-            <div class="relative filter-dropdown-wrap">
+            <div class="relative filter-dropdown-wrap flex-shrink-0">
                 <button type="button" onclick="toggleFilterMenu('colorDropdown', this)" class="filter-pill" id="btnFilterColor">
                     <span class="filter-label">Color</span>
                     <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
-                <div id="colorDropdown" class="filter-popover hidden absolute left-0 mt-2 z-50 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 min-w-[220px]">
+                <div id="colorDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[220px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
                     <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Dominant Palette</div>
                     <button type="button" onclick="selectFilter('color', 'all', 'Color')" class="filter-opt-btn active" data-type="color" data-val="all">
                         <span>All Palettes</span>
@@ -399,13 +404,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
 
-            <!-- 5. Material / Canvas Dropdown (Highlighted in User's Screenshot) -->
-            <div class="relative filter-dropdown-wrap">
+            <!-- 5. Material / Canvas Dropdown -->
+            <div class="relative filter-dropdown-wrap flex-shrink-0">
                 <button type="button" onclick="toggleFilterMenu('materialDropdown', this)" class="filter-pill" id="btnFilterMaterial">
                     <span class="filter-label">Material</span>
                     <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
-                <div id="materialDropdown" class="filter-popover hidden absolute left-0 mt-2 z-50 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 min-w-[230px]">
+                <div id="materialDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[230px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
                     <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Canvas &amp; Substrate</div>
                     <button type="button" onclick="selectFilter('material', 'all', 'Material')" class="filter-opt-btn active" data-type="material" data-val="all">
                         <span>All Materials</span>
@@ -430,12 +435,12 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <!-- 6. Offer Dropdown -->
-            <div class="relative filter-dropdown-wrap">
+            <div class="relative filter-dropdown-wrap flex-shrink-0">
                 <button type="button" onclick="toggleFilterMenu('offerDropdown', this)" class="filter-pill" id="btnFilterOffer">
                     <span class="filter-label">Offer</span>
                     <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
-                <div id="offerDropdown" class="filter-popover hidden absolute left-0 mt-2 z-50 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 min-w-[210px]">
+                <div id="offerDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[210px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
                     <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Promotions &amp; Deals</div>
                     <button type="button" onclick="selectFilter('offer', 'all', 'Offer')" class="filter-opt-btn active" data-type="offer" data-val="all">
                         <span>All Paintings</span>
@@ -451,15 +456,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
 
-            <!-- 7. All Filters Modal Trigger -->
-            <button type="button" onclick="openAllFiltersModal()" class="filter-pill font-bold" id="btnAllFilters">
-                <span>All Filters</span>
-                <svg class="w-3.5 h-3.5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-            </button>
-
             <!-- Reset Active Filters Pill (Revealed when any filter is active) -->
-            <button type="button" onclick="resetAllFilters()" id="clearAllFiltersBtn" class="hidden filter-pill border-red-200 text-red-600 bg-red-50 hover:bg-red-100 hover:border-red-300 font-bold transition-colors">
-                <span>Reset Filters</span>
+            <button type="button" onclick="resetAllFilters()" id="clearAllFiltersBtn" class="hidden filter-pill border-red-200 text-red-600 bg-red-50 hover:bg-red-100 hover:border-red-300 font-bold transition-colors flex-shrink-0">
+                <span>Reset</span>
                 <span class="text-xs">&times;</span>
             </button>
         </div>
@@ -467,11 +466,31 @@ document.addEventListener('DOMContentLoaded', function() {
         <!-- Right: Sort by Dropdown -->
         <div class="relative filter-dropdown-wrap flex-shrink-0">
             <button type="button" onclick="toggleFilterMenu('sortDropdown', this)" class="filter-pill bg-gray-50 border-gray-200" id="btnFilterSort">
-                <span class="text-gray-500 font-normal">Sort by</span>
+                <span class="text-gray-500 font-normal">Sort:</span>
                 <span class="font-bold sort-label">Popular</span>
                 <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
-            <div id="sortDropdown" class="filter-popover hidden absolute right-0 mt-2 z-50 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 min-w-[210px]">
+            <div id="sortDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto right-auto sm:right-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[210px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[60vh] overflow-y-auto">
+                <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Sort Options</div>
+                <button type="button" onclick="selectSort('popular', 'Popular')" class="filter-opt-btn active" data-type="sort" data-val="popular">
+                    <span>Popular / Best Sellers</span>
+                </button>
+                <button type="button" onclick="selectSort('price_low', 'Price: Low to High')" class="filter-opt-btn" data-type="sort" data-val="price_low">
+                    <span>Price: Low to High</span>
+                </button>
+                <button type="button" onclick="selectSort('price_high', 'Price: High to Low')" class="filter-opt-btn" data-type="sort" data-val="price_high">
+                    <span>Price: High to Low</span>
+                </button>
+                <button type="button" onclick="selectSort('rating', 'Highest Rated')" class="filter-opt-btn" data-type="sort" data-val="rating">
+                    <span>Highest Rated</span>
+                </button>
+                <button type="button" onclick="selectSort('name', 'Name: A to Z')" class="filter-opt-btn" data-type="sort" data-val="name">
+                    <span>Alphabetical (A&ndash;Z)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
                 <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Sort Options</div>
                 <button type="button" onclick="selectSort('popular', 'Popular')" class="filter-opt-btn active" data-type="sort" data-val="popular">
                     <span>Popular / Best Sellers</span>
@@ -667,7 +686,9 @@ const defaultLabels = {
 
 function toggleFilterMenu(dropdownId, buttonEl) {
     const targetMenu = document.getElementById(dropdownId);
+    if (!targetMenu) return;
     const isCurrentlyOpen = !targetMenu.classList.contains('hidden');
+    const backdrop = document.getElementById('filterBackdrop');
 
     // Close all open popovers first
     closeAllFilterMenus();
@@ -675,6 +696,9 @@ function toggleFilterMenu(dropdownId, buttonEl) {
     if (!isCurrentlyOpen) {
         targetMenu.classList.remove('hidden');
         buttonEl.classList.add('open');
+        if (backdrop && window.innerWidth < 640) {
+            backdrop.classList.remove('hidden');
+        }
     }
 }
 
@@ -685,11 +709,15 @@ function closeAllFilterMenus() {
     document.querySelectorAll('.filter-pill').forEach(btn => {
         btn.classList.remove('open');
     });
+    const backdrop = document.getElementById('filterBackdrop');
+    if (backdrop) {
+        backdrop.classList.add('hidden');
+    }
 }
 
 // Global click outside to dismiss menus
 document.addEventListener('click', function(e) {
-    if (!e.target.closest('.filter-dropdown-wrap')) {
+    if (!e.target.closest('.filter-dropdown-wrap') && !e.target.closest('#filterBackdrop')) {
         closeAllFilterMenus();
     }
 });
