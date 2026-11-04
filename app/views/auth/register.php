@@ -1,0 +1,61 @@
+<?php
+/**
+ * JayArt Customer Registration View
+ */
+?>
+
+<div class="max-w-md mx-auto px-4 py-16">
+    <div class="bg-white border border-linen rounded-2xl p-8 shadow-sm">
+        
+        <div class="text-center mb-6">
+            <span class="w-10 h-10 rounded-full bg-gold/10 text-gold font-display font-bold flex items-center justify-center mx-auto mb-3">JA</span>
+            <h1 class="font-serif text-2xl font-bold text-ink">Join Collector Salon</h1>
+            <p class="text-xs text-muted mt-1">Acquire original certified artworks directly from artists</p>
+        </div>
+
+        <?php if (!empty($errors)): ?>
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs mb-4 space-y-1">
+                <?php foreach ($errors as $err): ?>
+                    <div>• <?= htmlspecialchars($err) ?></div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="<?= SITE_URL ?>/register" method="POST" class="space-y-4">
+            <?= Validator::csrfField() ?>
+
+            <div>
+                <label class="text-xs font-semibold text-ink block mb-1">Full Legal Name *</label>
+                <input type="text" name="name" required value="<?= htmlspecialchars($old['name'] ?? '') ?>" placeholder="Your Name" class="form-input text-xs">
+            </div>
+
+            <div>
+                <label class="text-xs font-semibold text-ink block mb-1">Email Address *</label>
+                <input type="email" name="email" required value="<?= htmlspecialchars($old['email'] ?? '') ?>" placeholder="collector@domain.com" class="form-input text-xs">
+            </div>
+
+            <div>
+                <label class="text-xs font-semibold text-ink block mb-1">Phone Number (For Delivery Logistics)</label>
+                <input type="tel" name="phone" value="<?= htmlspecialchars($old['phone'] ?? '') ?>" placeholder="+91 98765 43210" class="form-input text-xs">
+            </div>
+
+            <div>
+                <label class="text-xs font-semibold text-ink block mb-1">Account Password (Min 6 characters) *</label>
+                <input type="password" name="password" required placeholder="••••••••" class="form-input text-xs">
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" class="btn-gold w-full py-3 rounded-xl text-xs font-bold tracking-wider">
+                    Create Collector Account
+                </button>
+            </div>
+        </form>
+
+        <div class="text-center text-xs text-muted mt-6 pt-6 border-t border-linen">
+            Already have an account? 
+            <a href="<?= SITE_URL ?>/login" class="text-forest font-bold hover:text-gold ml-1">Sign In &rarr;</a>
+        </div>
+
+    </div>
+</div>
+

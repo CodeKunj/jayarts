@@ -1,0 +1,358 @@
+/* ====================================================================
+   JayArt Clean Master Stylesheet (Shopcart Inspired Design)
+   Crisp, Modern, High-Converting E-Commerce UI
+   ==================================================================== */
+
+@import url('tokens.css');
+@import url('mobile.css');
+
+/* Clean Pill Buttons */
+.btn-primary-pill {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(24, 24, 27, 0.12);
+}
+
+.btn-primary-pill:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(24, 24, 27, 0.18);
+}
+
+.btn-primary-pill:active {
+  transform: translateY(0);
+}
+
+.btn-outline-pill {
+  background-color: #FFFFFF;
+  color: var(--color-ink);
+  padding: 10px 24px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1.5px solid #111827;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-outline-pill:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+/* Horizontal Filter Pills */
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.filter-pill:hover,
+.filter-pill.active {
+  border-color: #111827;
+  background: #F9FAFB;
+  color: #111827;
+}
+
+.filter-pill.active {
+  box-shadow: 0 0 0 1px #111827;
+}
+
+.filter-pill .filter-chevron {
+  transition: transform 0.2s ease;
+}
+
+.filter-pill.open .filter-chevron {
+  transform: rotate(180deg);
+}
+
+.filter-popover {
+  animation: popoverFadeIn 0.15s ease-out;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-opt-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+}
+
+.filter-opt-btn:hover {
+  background-color: #F4F4F2;
+  color: #18181B;
+}
+
+.filter-opt-btn.active {
+  font-weight: 700;
+  color: #18181B;
+  background-color: #EAE8E3;
+}
+
+/* Product Card Elements */
+.product-card {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08);
+}
+
+.product-img-wrap {
+  background-color: var(--color-surface-soft);
+  border-radius: 14px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.wishlist-heart-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9CA3AF;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 2;
+}
+
+.wishlist-heart-btn:hover,
+.wishlist-heart-btn.active {
+  color: #EF4444;
+  transform: scale(1.1);
+}
+
+/* Star Rating */
+.star-rating-green {
+  color: var(--color-accent-green);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 700;
+}
+
+/* Category Box */
+.category-box-item {
+  background-color: var(--color-surface-soft);
+  border-radius: 16px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.category-box-item:hover {
+  background-color: #F7F7F5;
+  border-color: rgba(24, 24, 27, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Form Inputs */
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--color-ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(24, 24, 27, 0.08);
+}
+
+/* Flash Toasts */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  background: #18181B;
+  color: #FFFFFF;
+  padding: 12px 20px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideInToast 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast.toast-success {
+  border: 1.5px solid #22C55E;
+}
+
+.toast.toast-error {
+  border: 1.5px solid #EF4444;
+}
+
+@keyframes slideInToast {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ====================================================================
+   Modern Full-Screen Architectural Atelier Theme
+   ==================================================================== */
+html, body {
+  min-height: 100vh;
+  background-color: #FBFBFA;
+  color: #18181B;
+  overflow-x: clip !important;
+}
+
+/* Persistent Sticky Capsule Navigation Header */
+header.site-sticky-header,
+#siteMasterHeader {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 999 !important;
+}
+
+/* Cross-browser scrollbar hiding */
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.scrollbar-none {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Category Capsule Pills */
+.category-capsule-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #27272A;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.category-capsule-pill:hover {
+  background: #F4F4F2;
+  color: #18181B;
+  transform: translateY(-1px);
+}
+
+.category-capsule-pill.active {
+  background: #18181B !important;
+  color: #FFFFFF !important;
+  border-color: #18181B !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Bento Card Colors */
+.bento-stone-1 {
+  background-color: #E5E4E0;
+}
+.bento-stone-2 {
+  background-color: #E1DFDB;
+}
+.bento-stone-3 {
+  background-color: #ECEAE6;
+}
+

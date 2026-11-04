@@ -1,0 +1,4 @@
+# Deny all direct web requests to cache files
+Deny from all
+Options -Indexes
+

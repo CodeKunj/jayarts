@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>http://localhostdatabase/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/shop</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/offers</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/blog</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/track</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/contact</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/shop?category=oil-paintings</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/shop?category=acrylic-art</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/shop?category=watercolor-paintings</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/shop?category=modern-abstract</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/shop?category=traditional-heritage</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/shop?category=charcoal-and-ink</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/product/echoes-of-twilight-valley</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&amp;q=80</image:loc>
+      <image:title>Echoes of Twilight Valley</image:title>
+      <image:caption>Oil on Belgian Linen by Rajeshwar Sharma</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/product/symphony-in-ochre-and-gold</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=900&amp;q=80</image:loc>
+      <image:title>Symphony in Ochre &amp; Gold</image:title>
+      <image:caption>Mixed Media &amp; 24K Gold Leaf by Meera Vasudevan</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/product/morning-ghats-of-banaras</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=900&amp;q=80</image:loc>
+      <image:title>Morning Ghats of Banaras</image:title>
+      <image:caption>Fine Watercolor on Arches Paper by Sunita Deodhar</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/product/monsoon-reverie</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=900&amp;q=80</image:loc>
+      <image:title>Monsoon Reverie</image:title>
+      <image:caption>Heavy Impasto Acrylic on Canvas by Rajeshwar Sharma</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/product/eternal-flute-of-vrindavan</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1578925518470-4def7a0f08bb?w=900&amp;q=80</image:loc>
+      <image:title>Eternal Flute of Vrindavan</image:title>
+      <image:caption>Heritage Mineral Pigments on Linen by K. V. Ramanathan</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/product/abstract-harmony-in-cobalt</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800&amp;q=80</image:loc>
+      <image:title>Abstract Harmony in Cobalt</image:title>
+      <image:caption>Contemporary Oil on Canvas by Elena Rostova</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/product/whispers-of-the-thar-desert</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&amp;q=80</image:loc>
+      <image:title>Whispers of the Thar Desert</image:title>
+      <image:caption>Textured Acrylic on Raw Canvas by Arjun Singh Rathore</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/product/serenity-of-the-lotus-pond</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&amp;q=80</image:loc>
+      <image:title>Serenity of the Lotus Pond</image:title>
+      <image:caption>Fine Watercolor on Cotton Rag by Priyadarshini Rao</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/blog/lure-of-palette-knife-impasto-oil</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&amp;q=80</image:loc>
+      <image:title>The Lure of the Palette Knife: Impasto Oil Techniques in Modern Indian Art</image:title>
+      <image:caption>Discover how master painters use heavy impasto textures and steel palette knives to give sculptural depth and vitality to contemporary landscapes.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/blog/caring-for-canvas-paintings-tropical-climates</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=900&amp;q=80</image:loc>
+      <image:title>Caring for Original Canvas Paintings in Tropical Climates</image:title>
+      <image:caption>Archival conservation guidance: humidity management, UV-protective museum glass, and framing techniques for lasting provenance.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhostdatabase/blog/spiritual-architecture-banaras-ghats-watercolors</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=900&amp;q=80</image:loc>
+      <image:title>The Spiritual Architecture of Banaras Ghats in Watercolors</image:title>
+      <image:caption>Analyzing how light, river reflections, and ancient stone steps are captured through transparent French watercolor washes.</image:caption>
+    </image:image>
+  </url>
+</urlset>

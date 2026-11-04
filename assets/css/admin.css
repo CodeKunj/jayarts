@@ -1,0 +1,279 @@
+/* ====================================================================
+   JayArt Admin Panel Stylesheet (Professional Executive Tech Theme)
+   Deep Slate / Obsidian Navy + Crisp Glass Accents
+   ==================================================================== */
+
+:root {
+  --admin-sidebar-width: 260px;
+  --admin-header-height: 64px;
+  --admin-sidebar-bg: #0B0F19;
+  --admin-sidebar-border: #1E293B;
+  --admin-sidebar-text: #94A3B8;
+  --admin-sidebar-hover: #F8FAFC;
+  --admin-accent: #0F172A;
+  --admin-emerald: #10B981;
+  --admin-surface: #F8FAFC;
+}
+
+body.admin-body {
+  background-color: var(--admin-surface);
+  color: #0F172A;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ====================================================================
+   Admin Sidebar Navigation
+   ==================================================================== */
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--admin-sidebar-width);
+  background: var(--admin-sidebar-bg);
+  border-right: 1px solid var(--admin-sidebar-border);
+  color: #E2E8F0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+@media (max-width: 1023px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  color: var(--admin-sidebar-text);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.15s ease;
+  margin: 2px 12px;
+  position: relative;
+}
+
+.admin-nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--admin-sidebar-hover);
+}
+
+.admin-nav-item.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.admin-nav-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #64748B;
+  transition: color 0.15s ease;
+}
+
+.admin-nav-item:hover svg {
+  color: #CBD5E1;
+}
+
+.admin-nav-item.active svg {
+  color: #34D399; /* Vibrant mint green icon */
+}
+
+/* Section Header in Sidebar */
+.admin-nav-heading {
+  padding: 14px 24px 6px 24px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748B;
+}
+
+/* ====================================================================
+   Admin Main Content Wrapper & Topbar
+   ==================================================================== */
+.admin-main-wrap {
+  margin-left: var(--admin-sidebar-width);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.25s ease;
+}
+
+@media (max-width: 1023px) {
+  .admin-main-wrap {
+    margin-left: 0;
+  }
+}
+
+.admin-topbar {
+  height: var(--admin-header-height);
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+/* ====================================================================
+   Stat Cards & Dashboard Widgets
+   ==================================================================== */
+.stat-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.stat-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* ====================================================================
+   Admin Data Table (Modern Clean SaaS Grid)
+   ==================================================================== */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.admin-table th {
+  background: #F8FAFC;
+  text-align: left;
+  padding: 12px 18px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #475569;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.admin-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid #F1F5F9;
+  vertical-align: middle;
+  color: #1E293B;
+}
+
+.admin-table tr:hover td {
+  background: #F8FAFC;
+}
+
+/* Status Badges */
+.status-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+.status-active, .status-paid, .status-delivered {
+  background: #ECFDF5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
+}
+
+.status-pending, .status-framing {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.status-shipped {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.status-cancelled, .status-sold_out {
+  background: #FEF2F2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+}
+
+/* Admin Tabs */
+.admin-tab-btn {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748B;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.admin-tab-btn.active {
+  color: #0F172A;
+  border-bottom-color: #0F172A;
+  font-weight: 700;
+}
+
+/* ====================================================================
+   Strict SVG & Icon Size Containment (Prevents SVG Viewport Blowouts)
+   ==================================================================== */
+svg {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+svg.w-3, svg[class*="w-3"] { width: 12px !important; height: 12px !important; min-width: 12px !important; max-width: 12px !important; }
+svg.w-3\.5, svg[class*="w-3.5"] { width: 14px !important; height: 14px !important; min-width: 14px !important; max-width: 14px !important; }
+svg.w-4, svg[class*="w-4"] { width: 16px !important; height: 16px !important; min-width: 16px !important; max-width: 16px !important; }
+svg.w-5, svg[class*="w-5"] { width: 20px !important; height: 20px !important; min-width: 20px !important; max-width: 20px !important; }
+svg.w-6, svg[class*="w-6"] { width: 24px !important; height: 24px !important; min-width: 24px !important; max-width: 24px !important; }
+svg.w-7, svg[class*="w-7"] { width: 28px !important; height: 28px !important; min-width: 28px !important; max-width: 28px !important; }
+svg.w-8, svg[class*="w-8"] { width: 32px !important; height: 32px !important; min-width: 32px !important; max-width: 32px !important; }
+
+/* Ad Slot Spec Cards */
+.ad-slot-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ad-slot-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.ad-preview-wrap {
+  background: #F8FAFC;
+  border: 1px dashed #CBD5E1;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+

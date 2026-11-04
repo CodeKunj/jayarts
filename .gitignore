@@ -1,0 +1,68 @@
+# ==============================================================================
+# JayArt Git Ignore File (Production & Security Oriented)
+# ==============================================================================
+
+# 1. Environment Secrets & Local Overrides (CRITICAL)
+.env
+.env.backup
+.env.production
+.env.staging
+.env.local
+.env.*.local
+
+# 2. Redis-like Cache Files & Runtime Storage
+storage/cache/*.cache
+storage/cache/.stats.json
+storage/logs/*.log
+storage/sessions/*
+!storage/cache/.htaccess
+!storage/cache/index.php
+!storage/.htaccess
+
+# 3. Dynamic Runtime Uploads (Keep folder structure & seed files)
+uploads/invoices/*
+uploads/payments/*
+uploads/avatars/*
+uploads/ads/*
+!uploads/.htaccess
+!uploads/products/
+!uploads/blog/
+
+# 4. OS & Editor Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# 5. IDE & Tooling
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# 6. Local Agent Workspaces & Scratch Folders
+.agents/
+.claude/
+skills-lock.json
+scratch/
+test_*.php
+
+# 7. Package Managers (if applicable)
+vendor/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 8. Temporary & Backup Files
+*.bak
+*.tmp
+*.temp
+*.orig

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+    <defs>
+        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1b2a47;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#3a506b;stop-opacity:1" />
+        </linearGradient>
+        <radialGradient id="glow" cx="50%" cy="40%" r="50%">
+            <stop offset="0%" style="stop-color:#e0a96d;stop-opacity:0.35" />
+            <stop offset="100%" style="stop-color:#1b2a47;stop-opacity:0" />
+        </radialGradient>
+    </defs>
+    <rect width="800" height="1000" fill="url(#grad)" />
+    <circle cx="400" cy="400" r="320" fill="url(#glow)" />
+    <path d="M100 200 C300 150 500 280 700 220" stroke="#e0a96d" stroke-width="3" fill="none" opacity="0.4" />
+    <path d="M80 450 C280 380 480 500 720 420" stroke="#e0a96d" stroke-width="4" fill="none" opacity="0.5" />
+    <path d="M120 700 C350 620 520 760 680 690" stroke="#e0a96d" stroke-width="2" fill="none" opacity="0.3" />
+    <circle cx="400" cy="820" r="38" fill="none" stroke="#e0a96d" stroke-width="2" opacity="0.7" />
+    <text x="400" y="826" fill="#e0a96d" font-family="Georgia,serif" font-size="14" text-anchor="middle" opacity="0.9" letter-spacing="2">JAYART</text>
+    <text x="400" y="880" fill="#ffffff" font-family="Georgia,serif" font-size="24" text-anchor="middle" font-weight="600" opacity="0.95">Echoes of Twilight Valley</text>
+    <text x="400" y="915" fill="#e0a96d" font-family="sans-serif" font-size="14" text-anchor="middle" letter-spacing="3" opacity="0.8">RAJESHWAR SHARMA</text>
+    </svg>

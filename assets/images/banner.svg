@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400">
+<rect width="1200" height="400" fill="#1b4332" />
+<circle cx="1000" cy="200" r="250" fill="#c59a58" opacity="0.15" />
+<text x="80" y="160" fill="#c59a58" font-family="sans-serif" font-size="16" letter-spacing="4">EXHIBITION SALON 2026</text>
+<text x="80" y="230" fill="#ffffff" font-family="Georgia,serif" font-size="48" font-weight="bold">Masterworks in Oil &amp; Gold</text>
+<text x="80" y="280" fill="#e8e4df" font-family="sans-serif" font-size="18">Original certified fine art pieces directly from master atelier artists</text>
+</svg>

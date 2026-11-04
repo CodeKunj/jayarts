@@ -1,0 +1,78 @@
+/* ====================================================================
+   JayArt Refined Modern E-Commerce Design Tokens
+   Outfit + Plus Jakarta Sans Typography & Deep Emerald Jewel Theme
+   ==================================================================== */
+
+:root {
+  /* Surfaces & Backgrounds */
+  --color-bg: #FFFFFF;              /* Crisp pure white */
+  --color-surface: #FFFFFF;         /* White card ground */
+  --color-surface-soft: #F7F7F5;    /* Clean warm atelier stone ground */
+  --color-surface-hover: #EAE8E3;   /* Hover state */
+  --color-banner-bg: #E5E4E0;       /* Atelier Bento stone card ground */
+
+  /* Text & Ink */
+  --color-ink: #18181B;             /* Atelier Obsidian Ink */
+  --color-ink-light: #27272A;       /* Deep slate reading text */
+  --color-muted: #52525B;           /* Neutral 600 for secondary details */
+  --color-subtle: #71717A;          /* Neutral 500 for borders & placeholders */
+
+  /* Refined Theme Colors: Nordic Atelier Obsidian & Warm Amber Accent */
+  --color-primary: #18181B;         /* Obsidian Ink */
+  --color-primary-hover: #000000;   /* Deep Jet Black */
+  --color-primary-light: #F4F4F2;   /* Soft warm stone tint */
+  --color-accent-gold: #D97706;     /* Luxury Warm Gold for rating stars & badges */
+
+  /* Hairlines & Borders */
+  --color-border: #E2E8F0;          /* Clean Slate 200 hairline */
+  --color-border-dark: #CBD5E1;     /* Active pill border */
+
+  /* Modern Font Family */
+  --font-heading: 'Outfit', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 9999px;
+
+  --touch-target: 48px;
+  --mobile-nav-height: 64px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-ink-light);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-ink);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
