@@ -6,14 +6,14 @@
 ?>
 
 <!-- 1. Signature Architectural Bento Hero Grid (Matching Reference Image 2 UI) -->
-<section class="w-full pt-1 pb-6 sm:pb-8">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5">
+<section class="w-full pt-1 pb-4 sm:pb-8">
+    <!-- Horizontal Snap Slider on Mobile (< lg), Full 12-Col Bento Grid on Desktop (lg+) -->
+    <div id="mobileBentoSlider" class="flex lg:grid lg:grid-cols-12 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scrollbar-none gap-3.5 sm:gap-5 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 pb-2">
         
         <!-- ============================================================== -->
-        <!-- 1. COLUMN 1 (Left): Tall Card ("New Deals" / "Master Solo")     -->
-        <!--    Matching the long chair card with floating price badge       -->
+        <!-- 1. COLUMN 1 / SLIDE 1: Tall Card ("New Deals" / "Master Solo") -->
         <!-- ============================================================== -->
-        <div class="lg:col-span-4 bento-stone-1 rounded-[28px] sm:rounded-[34px] p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden min-h-[500px] sm:min-h-[560px] shadow-xs group">
+        <div class="w-[88vw] max-w-[360px] sm:w-[420px] sm:max-w-none flex-shrink-0 snap-center lg:w-auto lg:flex-shrink lg:col-span-4 bento-stone-1 rounded-[28px] sm:rounded-[34px] p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden min-h-[460px] sm:min-h-[560px] shadow-xs group">
             
             <!-- Card Header -->
             <div class="relative z-10">
@@ -25,7 +25,7 @@
             </div>
 
             <!-- Center: Floating Glassmorphic Artwork Card (Matching Reference Card) -->
-            <div id="bentoHeroCarousel" class="relative z-10 w-full max-w-[280px] sm:max-w-[290px] mx-auto my-4">
+            <div id="bentoHeroCarousel" class="relative z-10 w-full max-w-[280px] sm:max-w-[290px] mx-auto my-3 sm:my-4">
                 <?php 
                 $carouselArt = array_slice($featuredPaintings, 0, 4);
                 foreach ($carouselArt as $idx => $art): 
@@ -78,13 +78,13 @@
         </div>
 
         <!-- ============================================================== -->
-        <!-- 2. COLUMN 2 (Center): Stacked Bento Cards                       -->
+        <!-- 2. COLUMN 2 / SLIDE 2: Stacked Bento Cards                      -->
         <!--    Top: "Great Value Deals" | Bottom: "EXCLUSIVE PureSpace Duo" -->
         <!-- ============================================================== -->
-        <div class="lg:col-span-5 flex flex-col gap-4 sm:gap-5">
+        <div class="w-[88vw] max-w-[360px] sm:w-[420px] sm:max-w-none flex-shrink-0 snap-center lg:w-auto lg:flex-shrink lg:col-span-5 flex flex-col justify-between gap-3 sm:gap-5">
             
             <!-- Top Card: Great Value Deals (Matching Big Center Card in Reference) -->
-            <div class="bento-stone-2 rounded-[28px] sm:rounded-[34px] p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden min-h-[320px] sm:min-h-[340px] shadow-xs group">
+            <div class="bento-stone-2 rounded-[28px] sm:rounded-[34px] p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden min-h-[270px] sm:min-h-[340px] shadow-xs group flex-1">
                 <div>
                     <h2 class="text-2xl sm:text-3xl font-heading font-semibold text-[#18181B] tracking-tight leading-tight">
                         Great Value Deals
@@ -93,15 +93,15 @@
                 </div>
 
                 <!-- Center Large Featured Artwork with Soft Drop Shadow -->
-                <div class="my-3 flex items-center justify-center relative">
+                <div class="my-2 sm:my-3 flex items-center justify-center relative">
                     <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($featuredPaintings[1]['slug'] ?? 'symphony-in-ochre-and-gold') ?>" class="block transform group-hover:scale-105 transition-transform duration-300">
-                        <img src="<?= htmlspecialchars($featuredPaintings[1]['primary_image'] ?? 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600') ?>" alt="Featured Art Deal" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600';" class="max-h-48 sm:max-h-52 w-auto object-contain rounded-2xl drop-shadow-2xl">
+                        <img src="<?= htmlspecialchars($featuredPaintings[1]['primary_image'] ?? 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600') ?>" alt="Featured Art Deal" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600';" class="max-h-44 sm:max-h-52 w-auto object-contain rounded-2xl drop-shadow-2xl">
                     </a>
                 </div>
 
                 <!-- Bottom Tag Pill & Action -->
-                <div class="flex items-center justify-between">
-                    <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-stone-800 bg-white/90 backdrop-blur-xs px-3.5 py-1.5 rounded-full shadow-xs">
+                <div class="flex items-center justify-between pt-1">
+                    <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-stone-800 bg-white/90 backdrop-blur-xs px-3 sm:px-3.5 py-1.5 rounded-full shadow-xs">
                         <svg class="w-3.5 h-3.5 text-amber-500 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                         <span>4.9 Authenticated Provenance</span>
                     </span>
@@ -112,43 +112,42 @@
             </div>
 
             <!-- Bottom Split Card: "EXCLUSIVE PureSpace Focus Duo" (Matching Split in Reference) -->
-            <div class="bento-stone-3 rounded-[28px] sm:rounded-[34px] p-5 sm:p-6 flex items-center justify-between gap-4 shadow-xs">
+            <div class="bento-stone-3 rounded-[28px] sm:rounded-[34px] p-4 sm:p-6 flex items-center justify-between gap-3 sm:gap-4 shadow-xs">
                 <div class="max-w-[58%]">
                     <span class="text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-[#18181B] shadow-xs inline-block mb-1.5">
                         EXCLUSIVE
                     </span>
-                    <h3 class="font-heading font-bold text-base sm:text-lg text-[#18181B] leading-snug">
+                    <h3 class="font-heading font-bold text-sm sm:text-lg text-[#18181B] leading-snug">
                         <?= htmlspecialchars($featuredPaintings[2]['title'] ?? 'Morning Ghats of Banaras') ?>
                     </h3>
-                    <p class="text-[11px] text-stone-500 mt-1 line-clamp-2">
+                    <p class="text-[11px] text-stone-500 mt-0.5 sm:mt-1 line-clamp-2">
                         Archival museum watercolor on French Arches cotton rag.
                     </p>
                 </div>
 
                 <!-- Right Artwork Thumbnail with Heart & "Open ↗" pill -->
                 <div class="relative flex-shrink-0">
-                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-white shadow-md relative group">
+                    <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-white shadow-md relative group">
                         <img src="<?= htmlspecialchars($featuredPaintings[2]['primary_image'] ?? 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300') ?>" alt="Exclusive" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300';" class="w-full h-full object-cover">
-                        <button type="button" onclick="toggleWishlist(<?= $featuredPaintings[2]['id'] ?? 3 ?>, this)" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 text-red-500 flex items-center justify-center text-xs shadow-xs" title="Wishlist">
+                        <button type="button" onclick="toggleWishlist(<?= $featuredPaintings[2]['id'] ?? 3 ?>, this)" class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-6 h-6 rounded-full bg-white/90 text-red-500 flex items-center justify-center text-xs shadow-xs" title="Wishlist">
                             <svg class="w-3.5 h-3.5 text-red-500 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
                         </button>
                     </div>
-                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($featuredPaintings[2]['slug'] ?? 'morning-ghats-of-banaras') ?>" class="absolute -bottom-2 -left-2 bg-[#18181B] hover:bg-black text-white text-[10px] font-bold pl-3 pr-2 py-1 rounded-full flex items-center gap-1.5 shadow-md transition-colors">
+                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($featuredPaintings[2]['slug'] ?? 'morning-ghats-of-banaras') ?>" class="absolute -bottom-2 -left-2 bg-[#18181B] hover:bg-black text-white text-[10px] font-bold pl-2.5 sm:pl-3 pr-2 py-0.5 sm:py-1 rounded-full flex items-center gap-1 shadow-md transition-colors">
                         <span>Open</span>
-                        <span class="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center text-[10px]">↗</span>
+                        <span class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-white/20 flex items-center justify-center text-[9px] sm:text-[10px]">↗</span>
                     </a>
                 </div>
             </div>
         </div>
 
         <!-- ============================================================== -->
-        <!-- 3. COLUMN 3 (Right): Modular 3-Widget Stack & Revenue Engine    -->
-        <!--    Matching: OUR TEAM | GET A BONUS | OUR ATELIER / PARTNER ADS -->
+        <!-- 3. COLUMN 3 / SLIDE 3: Modular 3-Widget Stack & Revenue Engine -->
         <!-- ============================================================== -->
-        <div class="lg:col-span-3 flex flex-col gap-3.5 sm:gap-4">
+        <div class="w-[88vw] max-w-[360px] sm:w-[420px] sm:max-w-none flex-shrink-0 snap-center lg:w-auto lg:flex-shrink lg:col-span-3 flex flex-col justify-between gap-2.5 sm:gap-4">
             
             <!-- Widget 1: OUR TEAM / CURATORS (Matching Reference Widget 1) -->
-            <div class="bg-white rounded-[24px] p-5 border border-black/[0.05] shadow-xs flex flex-col justify-between h-[165px] hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-[24px] p-4 sm:p-5 border border-black/[0.05] shadow-xs flex flex-col justify-between h-[135px] sm:h-[165px] hover:shadow-md transition-shadow">
                 <div class="flex items-center justify-between">
                     <span class="text-[10px] font-extrabold uppercase tracking-wider text-stone-400">OUR CURATORS</span>
                     <a href="<?= SITE_URL ?>/about" class="w-5 h-5 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 hover:text-black transition-colors" title="Learn more">↗</a>
@@ -174,7 +173,7 @@
             </div>
 
             <!-- Widget 2: GET A BONUS (VIP Voucher & Coupon Integration) -->
-            <div class="bg-white rounded-[24px] p-5 border border-black/[0.05] shadow-xs flex flex-col justify-between h-[175px] hover:shadow-md transition-shadow">
+            <div class="bg-white rounded-[24px] p-4 sm:p-5 border border-black/[0.05] shadow-xs flex flex-col justify-between h-[145px] sm:h-[175px] hover:shadow-md transition-shadow">
                 <div class="flex items-center justify-between">
                     <span class="text-[10px] font-extrabold uppercase tracking-wider text-stone-400">GET A BONUS</span>
                     <a href="<?= SITE_URL ?>/offers" class="w-5 h-5 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 hover:text-black transition-colors" title="View all offers">↗</a>
@@ -194,7 +193,6 @@
             </div>
 
             <!-- Widget 3: SPONSORED EXHIBITION / AD MONETIZATION ENGINE (Matches Reference Widget 3) -->
-            <!-- Direct revenue generation slot integrated into the museum aesthetic -->
             <?php 
             $headerAd = Ad::getSlot('header_billboard');
             $adTitle = !empty($headerAd['title']) ? htmlspecialchars($headerAd['title']) : 'Spring Art Salon 2026';
@@ -202,7 +200,7 @@
             $adUrl = !empty($headerAd['target_url']) ? htmlspecialchars($headerAd['target_url']) : SITE_URL . '/shop?filter=deals';
             $adThumb = !empty($headerAd['banner_desktop']) ? htmlspecialchars($headerAd['banner_desktop']) : 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=120';
             ?>
-            <div class="bg-white rounded-[24px] p-5 border border-black/[0.06] shadow-xs flex flex-col justify-between h-[175px] hover:shadow-md transition-shadow relative overflow-hidden">
+            <div class="bg-white rounded-[24px] p-4 sm:p-5 border border-black/[0.06] shadow-xs flex flex-col justify-between h-[145px] sm:h-[175px] hover:shadow-md transition-shadow relative overflow-hidden">
                 <div class="flex items-center justify-between">
                     <span class="text-[10px] font-extrabold uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
                         <span class="w-1.5 h-1.5 rounded-full bg-[#18181B]"></span>
@@ -225,6 +223,13 @@
 
         </div>
     </div>
+
+    <!-- Mobile Slider Pagination Indicator Dots (Visible ONLY on mobile/tablet < lg) -->
+    <div class="flex lg:hidden items-center justify-center gap-1.5 pt-3 pb-1" id="bentoSliderDots">
+        <button type="button" onclick="scrollBentoToSlide(0)" class="bento-dot w-6 h-1.5 rounded-full bg-[#18181B] transition-all cursor-pointer" aria-label="Go to slide 1"></button>
+        <button type="button" onclick="scrollBentoToSlide(1)" class="bento-dot w-2 h-1.5 rounded-full bg-stone-300 transition-all cursor-pointer" aria-label="Go to slide 2"></button>
+        <button type="button" onclick="scrollBentoToSlide(2)" class="bento-dot w-2 h-1.5 rounded-full bg-stone-300 transition-all cursor-pointer" aria-label="Go to slide 3"></button>
+    </div>
 </section>
 
 <script>
@@ -233,6 +238,41 @@ function changeBentoSlide(dir) {
     const slides = document.querySelectorAll('.bento-slide');
     if (!slides || slides.length === 0) return;
     slides[currentBentoSlide].classList.add('hidden');
+    currentBentoSlide = (currentBentoSlide + dir + slides.length) % slides.length;
+    slides[currentBentoSlide].classList.remove('hidden');
+}
+
+function scrollBentoToSlide(index) {
+    const slider = document.getElementById('mobileBentoSlider');
+    if (!slider) return;
+    const slides = slider.children;
+    if (slides[index]) {
+        slides[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const bentoSlider = document.getElementById('mobileBentoSlider');
+    if (bentoSlider) {
+        bentoSlider.addEventListener('scroll', function() {
+            const dots = document.querySelectorAll('#bentoSliderDots .bento-dot');
+            if (!dots.length) return;
+            const scrollLeft = bentoSlider.scrollLeft;
+            const cardWidth = bentoSlider.children[0] ? bentoSlider.children[0].offsetWidth : bentoSlider.offsetWidth * 0.85;
+            const activeIdx = Math.min(dots.length - 1, Math.max(0, Math.round(scrollLeft / cardWidth)));
+            dots.forEach((dot, idx) => {
+                if (idx === activeIdx) {
+                    dot.classList.remove('w-2', 'bg-stone-300');
+                    dot.classList.add('w-6', 'bg-[#18181B]');
+                } else {
+                    dot.classList.remove('w-6', 'bg-[#18181B]');
+                    dot.classList.add('w-2', 'bg-stone-300');
+                }
+            });
+        }, { passive: true });
+    }
+});
+</script>
     currentBentoSlide = (currentBentoSlide + dir + slides.length) % slides.length;
     slides[currentBentoSlide].classList.remove('hidden');
 }
