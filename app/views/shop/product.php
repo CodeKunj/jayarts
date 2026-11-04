@@ -140,7 +140,7 @@ $primaryImg = !empty($product['primary_image']) ? $product['primary_image'] : AS
                 </div>
 
                 <!-- Quantity Pill & Scarcity Note (Exact Shopcart design) -->
-                <div class="flex items-center gap-6 pt-2">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-6 pt-2">
                     <!-- Pill Quantity Stepper -->
                     <div class="inline-flex items-center bg-stone-100 rounded-full px-4 py-2 border border-stone-200">
                         <button type="button" onclick="decrementQty()" class="text-stone-600 hover:text-black font-extrabold text-base px-2 cursor-pointer">-</button>

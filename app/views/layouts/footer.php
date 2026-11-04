@@ -87,13 +87,13 @@
     <?php require_once APP_PATH . '/views/layouts/bottom_nav.php'; ?>
 
     <!-- Customer Care Floating Chatbox Widget -->
-    <div id="curatorChatWidget" class="fixed bottom-20 sm:bottom-8 right-5 z-40">
+    <div id="curatorChatWidget" class="fixed bottom-[74px] sm:bottom-8 right-3.5 sm:right-6 z-40">
         <!-- Chat Trigger Floating Button -->
-        <button id="chatToggleBtn" type="button" class="w-14 h-14 p-3.5 rounded-full bg-[#18181B] hover:bg-black text-white shadow-2xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 border-2 border-white" aria-label="Customer Care Live Chat">
-            <svg id="chatIconOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-            <svg id="chatIconClose" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <button id="chatToggleBtn" type="button" class="w-12 h-12 sm:w-14 sm:h-14 p-3 sm:p-3.5 rounded-full bg-[#18181B] hover:bg-black text-white shadow-2xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 border-2 border-white" aria-label="Customer Care Live Chat">
+            <svg id="chatIconOpen" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            <svg id="chatIconClose" class="w-5 h-5 sm:w-6 sm:h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             <!-- Online status badge -->
-            <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-full"></span>
+            <span class="absolute top-0 right-0 w-3 h-3 sm:w-3.5 sm:h-3.5 bg-amber-400 border-2 border-white rounded-full"></span>
         </button>
 
         <!-- Floating Chatbox Modal -->

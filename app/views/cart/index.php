@@ -12,13 +12,13 @@ $total = (float)($total ?? max(0.0, $subtotal - $discountAmount + $shippingFee +
 $items = is_array($items ?? null) ? $items : [];
 ?>
 
-<div class="w-full space-y-6">
-    <div class="flex items-center justify-between pb-5 border-b border-stone-200">
+<div class="w-full space-y-6 pb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-5 border-b border-stone-200">
         <div>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-[#18181B] tracking-tight">Shopping Cart</h1>
             <p class="text-xs text-stone-500 mt-1">Review your curated original paintings and fine art acquisitions</p>
         </div>
-        <a href="<?= SITE_URL ?>/shop" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#18181B] hover:text-stone-600 transition-colors">
+        <a href="<?= SITE_URL ?>/shop" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#18181B] hover:text-stone-600 transition-colors self-start sm:self-auto py-1">
             &larr; <span>Continue Exploring</span>
         </a>
     </div>
@@ -48,37 +48,42 @@ $items = is_array($items ?? null) ? $items : [];
                         $qty = (int)($item['quantity'] ?? 1);
                         $lineTotal = $unitPrice * $qty;
                     ?>
-                        <div class="py-5 first:pt-0 last:pb-0 flex items-center gap-4 sm:gap-6">
+                        <div class="py-5 first:pt-0 last:pb-0 flex items-start sm:items-center gap-3.5 sm:gap-6">
                             <!-- Thumbnail in stone box -->
-                            <div class="w-20 h-20 sm:w-24 sm:h-24 bg-stone-100 rounded-2xl p-2 flex items-center justify-center flex-shrink-0" style="width: 80px; height: 80px; min-width: 80px;">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 bg-stone-100 rounded-2xl p-2 flex items-center justify-center flex-shrink-0 border border-stone-200/50" style="width: 76px; height: 76px; min-width: 76px;">
                                 <img src="<?= htmlspecialchars($itemImg) ?>" alt="<?= htmlspecialchars($item['title'] ?? 'Artwork') ?>" class="max-h-full max-w-full object-contain">
                             </div>
 
                             <!-- Details -->
                             <div class="flex-1 min-w-0">
-                                <div class="flex items-start justify-between gap-2">
-                                    <div>
-                                        <h3 class="text-sm sm:text-base font-bold text-[#18181B] truncate">
+                                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-2">
+                                    <div class="min-w-0 flex-1">
+                                        <h3 class="text-sm sm:text-base font-bold text-[#18181B] leading-snug line-clamp-2">
                                             <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($item['slug'] ?? '') ?>" class="hover:text-stone-600 transition-colors">
                                                 <?= htmlspecialchars($item['title'] ?? 'Artwork') ?>
                                             </a>
                                         </h3>
-                                        <p class="text-xs text-stone-400 mt-0.5">Frame: <span class="font-semibold text-stone-700"><?= htmlspecialchars($item['frame_chosen'] ?? 'Rolled Canvas') ?></span></p>
+                                        <p class="text-[11px] sm:text-xs text-stone-500 mt-0.5">Frame: <span class="font-semibold text-stone-700"><?= htmlspecialchars($item['frame_chosen'] ?? 'Rolled Canvas') ?></span></p>
                                     </div>
-                                    <span class="text-sm sm:text-base font-extrabold text-[#18181B] whitespace-nowrap">
-                                        <?= Validator::formatPrice($lineTotal) ?>
-                                    </span>
+                                    <div class="sm:text-right mt-1 sm:mt-0 flex-shrink-0">
+                                        <span class="text-sm sm:text-base font-extrabold text-[#18181B] block">
+                                            <?= Validator::formatPrice($lineTotal) ?>
+                                        </span>
+                                        <?php if ($qty > 1): ?>
+                                            <span class="text-[10px] text-stone-400 block"><?= Validator::formatPrice($unitPrice) ?> each</span>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
 
                                 <!-- Actions Row: Quantity Pill + Remove -->
-                                <div class="flex items-center justify-between mt-3">
-                                    <div class="inline-flex items-center bg-stone-100 rounded-full px-3 py-1 border border-stone-200">
+                                <div class="flex items-center justify-between mt-3 pt-1">
+                                    <div class="inline-flex items-center bg-stone-100 rounded-full px-2.5 py-1 border border-stone-200">
                                         <button type="button" onclick="updateCartQty('<?= htmlspecialchars($itemKey, ENT_QUOTES) ?>', <?= max(1, $qty - 1) ?>)" class="text-stone-600 hover:text-black font-extrabold text-sm px-1.5 cursor-pointer">-</button>
                                         <span class="w-6 text-center text-xs font-bold text-[#18181B]"><?= $qty ?></span>
                                         <button type="button" onclick="updateCartQty('<?= htmlspecialchars($itemKey, ENT_QUOTES) ?>', <?= min(10, $qty + 1) ?>)" class="text-stone-600 hover:text-black font-extrabold text-sm px-1.5 cursor-pointer">+</button>
                                     </div>
 
-                                    <button type="button" onclick="removeCartItem('<?= htmlspecialchars($itemKey, ENT_QUOTES) ?>')" class="text-xs text-stone-400 hover:text-red-600 font-semibold flex items-center gap-1 transition-colors cursor-pointer">
+                                    <button type="button" onclick="removeCartItem('<?= htmlspecialchars($itemKey, ENT_QUOTES) ?>')" class="text-xs text-stone-400 hover:text-red-600 font-semibold flex items-center gap-1 transition-colors cursor-pointer py-1 px-2 rounded-lg hover:bg-stone-50">
                                         <svg width="14" height="14" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         <span>Remove</span>
                                     </button>
@@ -97,8 +102,8 @@ $items = is_array($items ?? null) ? $items : [];
                     <!-- Coupon Code Input -->
                     <div>
                         <div class="flex items-center gap-2">
-                            <input type="text" id="cartCouponInput" placeholder="Enter Coupon Code" class="form-input text-xs uppercase font-mono tracking-wider flex-1 rounded-full px-4 py-2.5 border border-stone-300">
-                            <button type="button" onclick="applyCartCoupon()" class="px-5 py-2.5 bg-[#18181B] hover:bg-black text-white text-xs font-bold rounded-full transition-colors whitespace-nowrap shadow-xs cursor-pointer">
+                            <input type="text" id="cartCouponInput" placeholder="ENTER COUPON CODE" class="form-input text-xs uppercase font-mono tracking-wider flex-1 min-w-0 rounded-full px-4 py-2.5 border border-stone-300 bg-white">
+                            <button type="button" onclick="applyCartCoupon()" class="px-4 sm:px-5 py-2.5 bg-[#18181B] hover:bg-black text-white text-xs font-bold rounded-full transition-colors whitespace-nowrap shadow-xs cursor-pointer flex-shrink-0">
                                 Apply
                             </button>
                         </div>

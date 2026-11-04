@@ -345,6 +345,13 @@ header.site-sticky-header,
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
+@media (max-width: 640px) {
+  .category-capsule-pill {
+    padding: 6px 13px;
+    font-size: 12px;
+  }
+}
+
 /* Bento Card Colors */
 .bento-stone-1 {
   background-color: #E5E4E0;

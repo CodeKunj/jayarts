@@ -151,19 +151,19 @@ $selectedSort = $filters['sort'] ?? '';
                             <div class="pt-3 pb-1 flex-1 flex flex-col justify-between">
                                 <div>
                                     <!-- Title & Price -->
-                                    <div class="flex items-start justify-between gap-2">
-                                        <h3 class="font-bold text-sm text-[#18181B] group-hover:text-black transition-colors line-clamp-1 flex-1">
+                                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
+                                        <h3 class="font-bold text-xs sm:text-sm text-[#18181B] group-hover:text-black transition-colors line-clamp-1 min-w-0 flex-1">
                                             <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($p['slug']) ?>">
                                                 <?= htmlspecialchars($p['title']) ?>
                                             </a>
                                         </h3>
-                                        <span class="font-extrabold text-sm sm:text-base text-[#18181B] whitespace-nowrap">
+                                        <span class="font-extrabold text-xs sm:text-sm md:text-base text-[#18181B] whitespace-nowrap flex-shrink-0 sm:text-right">
                                             <?= Validator::formatPrice((float)($p['discount_price'] ?? $p['price'])) ?>
                                         </span>
                                     </div>
 
                                     <!-- Subtitle -->
-                                    <p class="text-xs text-stone-500 mt-1 line-clamp-1">
+                                    <p class="text-[11px] sm:text-xs text-stone-500 mt-1 line-clamp-1">
                                         <?= htmlspecialchars($p['medium']) ?> &bull; <?= htmlspecialchars($p['dimensions']) ?>
                                     </p>
 
@@ -172,16 +172,16 @@ $selectedSort = $filters['sort'] ?? '';
                                         <div class="text-amber-400 text-xs">
                                             <span>★★★★★</span>
                                         </div>
-                                        <span class="text-xs font-bold text-stone-600">(<?= 100 + ($p['id'] * 7) ?>)</span>
+                                        <span class="text-[11px] sm:text-xs font-bold text-stone-600">(<?= 100 + ($p['id'] * 7) ?>)</span>
                                     </div>
                                 </div>
 
                                 <!-- Add to Cart & Buy Now Pills -->
-                                <div class="mt-4 grid grid-cols-2 gap-2">
-                                    <button type="button" onclick="quickAddToCart(<?= $p['id'] ?>)" class="w-full py-2 px-2 border border-stone-800 text-[#18181B] hover:bg-stone-100 rounded-full text-xs font-bold transition-all flex items-center justify-center text-center cursor-pointer">
+                                <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-1.5 sm:gap-2">
+                                    <button type="button" onclick="quickAddToCart(<?= $p['id'] ?>)" class="w-full py-2 px-1 sm:px-2 border border-stone-800 text-[#18181B] hover:bg-stone-100 rounded-full text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center text-center cursor-pointer whitespace-nowrap leading-tight">
                                         <span>Add to Cart</span>
                                     </button>
-                                    <button type="button" onclick="quickBuyNow(<?= $p['id'] ?>)" class="w-full py-2 px-2 bg-[#18181B] hover:bg-black text-white rounded-full text-xs font-bold transition-all shadow-xs flex items-center justify-center text-center cursor-pointer">
+                                    <button type="button" onclick="quickBuyNow(<?= $p['id'] ?>)" class="w-full py-2 px-1 sm:px-2 bg-[#18181B] hover:bg-black text-white rounded-full text-[11px] sm:text-xs font-bold transition-all shadow-xs flex items-center justify-center text-center cursor-pointer whitespace-nowrap leading-tight">
                                         <span>Buy Now</span>
                                     </button>
                                 </div>

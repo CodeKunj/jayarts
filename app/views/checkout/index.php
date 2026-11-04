@@ -18,14 +18,14 @@ if (!empty($upi['upi_vpa'])) {
 }
 ?>
 
-<div class="w-full space-y-6">
+<div class="w-full space-y-6 pb-12 sm:pb-8">
     
-    <div class="flex items-center justify-between pb-5 border-b border-stone-200">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-5 border-b border-stone-200">
         <div>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-[#18181B] tracking-tight">Checkout</h1>
             <p class="text-xs text-stone-500 mt-1">Review your fine art acquisition and insured delivery details</p>
         </div>
-        <a href="<?= SITE_URL ?>/cart" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#18181B] hover:text-stone-600 transition-colors">
+        <a href="<?= SITE_URL ?>/cart" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#18181B] hover:text-stone-600 transition-colors self-start sm:self-auto py-1">
             &larr; <span>Back to Cart</span>
         </a>
     </div>
@@ -45,7 +45,7 @@ if (!empty($upi['upi_vpa'])) {
             <div class="lg:col-span-7 space-y-6">
                 
                 <!-- 1. Review Item And Shipping Card -->
-                <div class="bg-white border border-stone-200/80 rounded-3xl p-6 sm:p-7 shadow-xs">
+                <div class="bg-white border border-stone-200/80 rounded-3xl p-5 sm:p-7 shadow-xs">
                     <h2 class="text-base font-extrabold text-[#18181B] mb-4">Review Items &amp; Packaging</h2>
                     
                     <div class="divide-y divide-stone-100">
@@ -55,23 +55,23 @@ if (!empty($upi['upi_vpa'])) {
                             $unitPrice = (float)($item['price'] ?? $item['final_unit_price'] ?? 0.0);
                             $qty = (int)($item['quantity'] ?? 1);
                         ?>
-                            <div class="py-4 first:pt-0 last:pb-0 flex items-center gap-4">
+                            <div class="py-4 first:pt-0 last:pb-0 flex items-start sm:items-center gap-3.5 sm:gap-4">
                                 <!-- Thumbnail in stone box -->
-                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 p-2 flex items-center justify-center flex-shrink-0" style="width: 64px; height: 64px; min-width: 64px;">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 p-2 flex items-center justify-center flex-shrink-0 border border-stone-200/50" style="width: 64px; height: 64px; min-width: 64px;">
                                     <img src="<?= htmlspecialchars($itemImg) ?>" alt="<?= htmlspecialchars($item['title'] ?? 'Artwork') ?>" class="max-h-full max-w-full object-contain">
                                 </div>
                                 
-                                <div class="flex-1 flex flex-col justify-between">
-                                    <div class="flex items-start justify-between gap-2">
-                                        <div>
-                                            <h3 class="text-sm font-bold text-[#18181B]"><?= htmlspecialchars($item['title'] ?? 'Original Painting') ?></h3>
-                                            <p class="text-xs text-stone-400 mt-0.5">Frame: <span class="font-semibold text-stone-700"><?= htmlspecialchars($frameName) ?></span></p>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-2">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="text-sm font-bold text-[#18181B] leading-snug line-clamp-2"><?= htmlspecialchars($item['title'] ?? 'Original Painting') ?></h3>
+                                            <p class="text-[11px] sm:text-xs text-stone-500 mt-0.5">Frame: <span class="font-semibold text-stone-700"><?= htmlspecialchars($frameName) ?></span></p>
                                         </div>
-                                        <div class="text-right">
-                                            <span class="text-sm font-extrabold text-[#18181B]">
+                                        <div class="sm:text-right mt-1 sm:mt-0 flex-shrink-0">
+                                            <span class="text-sm font-extrabold text-[#18181B] block">
                                                 <?= Validator::formatPrice($unitPrice * $qty) ?>
                                             </span>
-                                            <p class="text-xs text-stone-400 mt-0.5">Quantity: <?= sprintf('%02d', $qty) ?></p>
+                                            <p class="text-[10px] sm:text-xs text-stone-400 mt-0.5">Quantity: <?= sprintf('%02d', $qty) ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +81,7 @@ if (!empty($upi['upi_vpa'])) {
                 </div>
 
                 <!-- 2. Delivery Information Card -->
-                <div class="bg-white border border-stone-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
+                <div class="bg-white border border-stone-200/80 rounded-3xl p-5 sm:p-7 shadow-xs space-y-4">
                     <div class="flex items-center justify-between pb-2">
                         <h2 class="text-base font-extrabold text-[#18181B]">Delivery Information</h2>
                         <span class="text-xs text-[#18181B] font-bold">Secure Insured Crating</span>
@@ -130,15 +130,15 @@ if (!empty($upi['upi_vpa'])) {
             <div class="lg:col-span-5 space-y-6">
                 
                 <!-- Order Summary Card with Coupon Input -->
-                <div class="bg-white border border-stone-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
+                <div class="bg-white border border-stone-200/80 rounded-3xl p-5 sm:p-7 shadow-xs space-y-4">
                     <h2 class="text-base font-extrabold text-[#18181B]">Order Summary</h2>
 
                     <!-- Coupon Code Input with Obsidian Pill Button -->
                     <div>
                         <div class="flex items-center gap-2">
-                            <input type="text" id="couponCodeInput" placeholder="Enter Coupon Code" class="form-input text-xs uppercase font-mono tracking-wider flex-1 rounded-full px-4 py-2.5 border border-stone-300">
-                            <button type="button" onclick="applyCouponCode()" class="px-5 py-2.5 bg-[#18181B] hover:bg-black text-white text-xs font-bold rounded-full transition-colors whitespace-nowrap shadow-sm cursor-pointer">
-                                Apply Coupon
+                            <input type="text" id="couponCodeInput" placeholder="ENTER COUPON CODE" class="form-input text-xs uppercase font-mono tracking-wider flex-1 min-w-0 rounded-full px-4 py-2.5 border border-stone-300 bg-white">
+                            <button type="button" onclick="applyCouponCode()" class="px-4 sm:px-5 py-2.5 bg-[#18181B] hover:bg-black text-white text-xs font-bold rounded-full transition-colors whitespace-nowrap shadow-xs cursor-pointer flex-shrink-0">
+                                Apply
                             </button>
                         </div>
                         <div id="couponMessage" class="text-xs font-semibold hidden mt-1.5"></div>
@@ -191,18 +191,18 @@ if (!empty($upi['upi_vpa'])) {
                 </div>
 
                 <!-- Payment Details Card (Shopcart style with Radio buttons) -->
-                <div class="bg-white border border-stone-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
+                <div class="bg-white border border-stone-200/80 rounded-3xl p-5 sm:p-7 shadow-xs space-y-4">
                     <h2 class="text-base font-extrabold text-[#18181B]">Payment Details</h2>
 
                     <div class="space-y-3">
                         <!-- 1. Razorpay Option -->
                         <?php if (!empty($gateways['razorpay']['is_enabled'])): ?>
-                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <input type="radio" name="payment_method" value="razorpay" checked onchange="togglePaymentBox('razorpay')" class="text-[#18181B] focus:ring-[#18181B]">
-                                    <span class="text-xs font-bold text-[#18181B]">Credit / Debit Card (Razorpay)</span>
+                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors gap-2">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <input type="radio" name="payment_method" value="razorpay" checked onchange="togglePaymentBox('razorpay')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
+                                    <span class="text-xs font-bold text-[#18181B] truncate">Credit / Debit Card (Razorpay)</span>
                                 </div>
-                                <div class="flex items-center gap-1.5 opacity-80">
+                                <div class="flex items-center gap-1.5 opacity-80 flex-shrink-0">
                                     <span class="text-[10px] font-bold text-stone-400">VISA / MC</span>
                                 </div>
                             </label>
@@ -210,19 +210,19 @@ if (!empty($upi['upi_vpa'])) {
 
                         <!-- 2. Direct Dynamic UPI QR Option -->
                         <?php if (!empty($gateways['upi']['is_enabled'])): ?>
-                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <input type="radio" name="payment_method" value="upi" onchange="togglePaymentBox('upi')" class="text-[#18181B] focus:ring-[#18181B]">
-                                    <span class="text-xs font-bold text-[#18181B]">Direct UPI QR (GPay, PhonePe, Paytm)</span>
+                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors gap-2">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <input type="radio" name="payment_method" value="upi" onchange="togglePaymentBox('upi')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
+                                    <span class="text-xs font-bold text-[#18181B] truncate">Direct UPI QR (GPay, PhonePe)</span>
                                 </div>
-                                <span class="text-[10px] bg-stone-100 text-[#18181B] font-bold px-2 py-0.5 rounded-full border border-stone-200">Instant</span>
+                                <span class="text-[10px] bg-stone-100 text-[#18181B] font-bold px-2 py-0.5 rounded-full border border-stone-200 flex-shrink-0">Instant</span>
                             </label>
 
                             <!-- Dynamic UPI Expandable Box -->
                             <div id="upiBox" class="hidden p-4 bg-stone-50 rounded-2xl space-y-3 text-xs border border-stone-200">
                                 <?php if ($upiData): ?>
                                     <div class="text-center">
-                                        <p class="font-bold text-[#18181B] mb-2">Scan & Pay ₹<?= number_format($total, 2) ?></p>
+                                        <p class="font-bold text-[#18181B] mb-2">Scan & Pay <?= Validator::formatPrice($total) ?></p>
                                         <img src="<?= htmlspecialchars($upiData['qr_image']) ?>" alt="UPI QR" class="w-40 h-40 mx-auto rounded-xl border border-stone-200 shadow-sm">
                                         <p class="text-[11px] text-stone-500 mt-2 font-mono">UPI ID: <strong><?= htmlspecialchars($upiData['vpa']) ?></strong></p>
                                     </div>
@@ -236,20 +236,20 @@ if (!empty($upi['upi_vpa'])) {
 
                         <!-- 3. Cash on Delivery (COD) -->
                         <?php if (!empty($gateways['cod']['is_enabled'])): ?>
-                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <input type="radio" name="payment_method" value="cod" onchange="togglePaymentBox('cod')" class="text-[#18181B] focus:ring-[#18181B]">
-                                    <span class="text-xs font-bold text-[#18181B]">Cash on Delivery (COD)</span>
+                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors gap-2">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <input type="radio" name="payment_method" value="cod" onchange="togglePaymentBox('cod')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
+                                    <span class="text-xs font-bold text-[#18181B] truncate">Cash on Delivery (COD)</span>
                                 </div>
                             </label>
                         <?php endif; ?>
 
                         <!-- 4. Direct Bank Transfer -->
                         <?php if (!empty($gateways['bank']['is_enabled'])): ?>
-                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <input type="radio" name="payment_method" value="bank" onchange="togglePaymentBox('bank')" class="text-[#18181B] focus:ring-[#18181B]">
-                                    <span class="text-xs font-bold text-[#18181B]">Direct Bank Wire (NEFT / RTGS)</span>
+                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors gap-2">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <input type="radio" name="payment_method" value="bank" onchange="togglePaymentBox('bank')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
+                                    <span class="text-xs font-bold text-[#18181B] truncate">Direct Bank Wire (NEFT / RTGS)</span>
                                 </div>
                             </label>
                         <?php endif; ?>
@@ -257,7 +257,7 @@ if (!empty($upi['upi_vpa'])) {
 
                     <!-- Final Submission Button -->
                     <div class="pt-4">
-                        <button type="submit" class="w-full py-4 px-8 bg-[#18181B] hover:bg-black text-white rounded-full font-extrabold text-sm uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2">
+                        <button type="submit" class="w-full py-3.5 sm:py-4 px-4 sm:px-8 bg-[#18181B] hover:bg-black text-white rounded-full font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2">
                             <span>Confirm and Pay <?= Validator::formatPrice($total) ?></span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </button>
