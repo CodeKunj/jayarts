@@ -178,10 +178,11 @@ $selectedSort = $filters['sort'] ?? '';
 
                                 <!-- Add to Cart & Buy Now Pills -->
                                 <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-1.5 sm:gap-2">
-                                    <button type="button" onclick="quickAddToCart(<?= $p['id'] ?>)" class="w-full py-2 px-1 sm:px-2 border border-stone-800 text-[#18181B] hover:bg-stone-100 rounded-full text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center text-center cursor-pointer whitespace-nowrap leading-tight">
-                                        <span>Add to Cart</span>
+                                    <button type="button" onclick="quickAddToCart(<?= $p['id'] ?>)" class="w-full py-1.5 sm:py-2 px-1 sm:px-2 border border-stone-800 text-[#18181B] hover:bg-stone-100 rounded-full text-[10px] sm:text-xs font-bold transition-all flex items-center justify-center text-center cursor-pointer whitespace-nowrap leading-tight">
+                                        <span class="sm:hidden">+ Cart</span>
+                                        <span class="hidden sm:inline">Add to Cart</span>
                                     </button>
-                                    <button type="button" onclick="quickBuyNow(<?= $p['id'] ?>)" class="w-full py-2 px-1 sm:px-2 bg-[#18181B] hover:bg-black text-white rounded-full text-[11px] sm:text-xs font-bold transition-all shadow-xs flex items-center justify-center text-center cursor-pointer whitespace-nowrap leading-tight">
+                                    <button type="button" onclick="quickBuyNow(<?= $p['id'] ?>)" class="w-full py-1.5 sm:py-2 px-1 sm:px-2 bg-[#18181B] hover:bg-black text-white rounded-full text-[10px] sm:text-xs font-bold transition-all shadow-xs flex items-center justify-center text-center cursor-pointer whitespace-nowrap leading-tight">
                                         <span>Buy Now</span>
                                     </button>
                                 </div>
