@@ -180,6 +180,31 @@ class Cart {
     }
 
     /**
+     * Remove Applied Coupon Code
+     */
+    public static function removeCoupon(): array {
+        unset($_SESSION['applied_coupon']);
+
+        $subtotal = self::getSubtotal();
+        $discountAmount = self::getDiscountAmount();
+        $shipping = self::getShippingFee();
+        $total = self::getTotal();
+
+        return [
+            'success'            => true,
+            'message'            => 'Coupon removed successfully.',
+            'discount'           => $discountAmount,
+            'discount_formatted' => Validator::formatPrice($discountAmount),
+            'subtotal'           => $subtotal,
+            'subtotal_formatted' => Validator::formatPrice($subtotal),
+            'shipping'           => $shipping,
+            'shipping_formatted' => ($shipping > 0) ? Validator::formatPrice($shipping) : 'FREE',
+            'total'              => $total,
+            'total_formatted'    => Validator::formatPrice($total),
+        ];
+    }
+
+    /**
      * Calculate Discount Amount from Applied Coupon
      */
     public static function getDiscountAmount(): float {
@@ -221,4 +246,3 @@ class Cart {
         return max(0.00, $subtotal - $discount + $shipping);
     }
 }
-

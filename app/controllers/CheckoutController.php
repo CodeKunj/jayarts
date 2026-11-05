@@ -45,6 +45,7 @@ class CheckoutController extends Controller {
             'shippingFee'    => $shipping,
             'taxAmount'      => 0.00,
             'total'          => $total,
+            'appliedCoupon'  => $_SESSION['applied_coupon'] ?? null,
             'gateways'       => $gateways,
             'currentUser'    => $currentUser,
             'savedAddresses' => $savedAddresses,

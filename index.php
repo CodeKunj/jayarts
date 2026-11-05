@@ -41,6 +41,7 @@ Router::post('/cart/add', [CartController::class, 'add']);
 Router::post('/cart/update', [CartController::class, 'update']);
 Router::post('/cart/remove', [CartController::class, 'remove']);
 Router::post('/cart/apply-coupon', [CartController::class, 'applyCoupon']);
+Router::post('/cart/remove-coupon', [CartController::class, 'removeCoupon']);
 
 // Checkout & Multi-Payment Routes
 Router::get('/checkout', [CheckoutController::class, 'index']);

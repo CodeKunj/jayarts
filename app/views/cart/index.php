@@ -99,31 +99,60 @@ $items = is_array($items ?? null) ? $items : [];
                 <div class="bg-white border border-stone-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
                     <h2 class="text-base font-extrabold text-[#18181B]">Order Summary</h2>
 
-                    <!-- Coupon Code Input -->
+                    <!-- Coupon Code Input / Applied Badge -->
                     <div>
-                        <div class="flex items-center gap-2">
-                            <input type="text" id="cartCouponInput" placeholder="ENTER COUPON CODE" class="form-input text-xs uppercase font-mono tracking-wider flex-1 min-w-0 rounded-full px-4 py-2.5 border border-stone-300 bg-white">
-                            <button type="button" onclick="applyCartCoupon()" class="px-4 sm:px-5 py-2.5 bg-[#18181B] hover:bg-black text-white text-xs font-bold rounded-full transition-colors whitespace-nowrap shadow-xs cursor-pointer flex-shrink-0">
-                                Apply
-                            </button>
-                        </div>
-                        <?php 
-                        $activeCoupons = Coupon::allActive(); 
-                        if (!empty($activeCoupons)): 
-                        ?>
-                            <div class="mt-2.5">
-                                <span class="text-[11px] text-stone-500 font-semibold block mb-1.5">Available Offers (Click to apply):</span>
-                                <div class="flex flex-wrap gap-1.5">
-                                    <?php foreach (array_slice($activeCoupons, 0, 4) as $ac): ?>
-                                        <button type="button" onclick="selectCouponCode('<?= htmlspecialchars($ac['code']) ?>')" class="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-[#18181B] border border-dashed border-stone-300 rounded-lg text-[10px] font-mono font-bold transition-colors cursor-pointer" title="<?= htmlspecialchars($ac['title'] ?? '') ?>">
-                                            <?= htmlspecialchars($ac['code']) ?> (<?= $ac['discount_type'] === 'percentage' ? ((float)$ac['discount_value'] . '%') : (CURRENCY_SYMBOL . ' ' . number_format((float)$ac['discount_value'])) ?>)
-                                        </button>
-                                    <?php endforeach; ?>
+                        <?php if (!empty($appliedCoupon)): ?>
+                            <!-- Active Applied Coupon Box with Remove Option -->
+                            <div class="bg-emerald-50/80 border border-emerald-200/90 rounded-2xl p-3 sm:p-3.5 flex items-center justify-between gap-3 shadow-2xs">
+                                <div class="flex items-center gap-2.5 min-w-0">
+                                    <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                                        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-mono font-extrabold text-xs text-emerald-950 tracking-wider">
+                                                <?= htmlspecialchars($appliedCoupon['code']) ?>
+                                            </span>
+                                            <span class="text-[9px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">
+                                                Applied
+                                            </span>
+                                        </div>
+                                        <p class="text-[11px] text-emerald-700 font-medium truncate mt-0.5">
+                                            Saving <?= Validator::formatPrice($discountAmount) ?> on your acquisition
+                                        </p>
+                                    </div>
                                 </div>
-                                <a href="<?= SITE_URL ?>/offers" target="_blank" class="text-[10px] text-[#18181B] hover:underline block mt-1.5 font-bold">
-                                    View All Offers &amp; Terms &rarr;
-                                </a>
+                                <button type="button" 
+                                        onclick="removeCartCoupon()" 
+                                        class="px-3 py-1.5 rounded-full text-xs font-bold text-red-600 hover:text-red-700 bg-white hover:bg-red-50 border border-red-200 hover:border-red-300 transition-all cursor-pointer flex-shrink-0 shadow-2xs">
+                                    Remove
+                                </button>
                             </div>
+                        <?php else: ?>
+                            <div class="flex items-center gap-2">
+                                <input type="text" id="cartCouponInput" placeholder="ENTER COUPON CODE" class="form-input text-xs uppercase font-mono tracking-wider flex-1 min-w-0 rounded-full px-4 py-2.5 border border-stone-300 bg-white">
+                                <button type="button" onclick="applyCartCoupon()" class="px-4 sm:px-5 py-2.5 bg-[#18181B] hover:bg-black text-white text-xs font-bold rounded-full transition-colors whitespace-nowrap shadow-xs cursor-pointer flex-shrink-0">
+                                    Apply
+                                </button>
+                            </div>
+                            <?php 
+                            $activeCoupons = Coupon::allActive(); 
+                            if (!empty($activeCoupons)): 
+                            ?>
+                                <div class="mt-2.5">
+                                    <span class="text-[11px] text-stone-500 font-semibold block mb-1.5">Available Offers (Click to apply):</span>
+                                    <div class="flex flex-wrap gap-1.5">
+                                        <?php foreach (array_slice($activeCoupons, 0, 4) as $ac): ?>
+                                            <button type="button" onclick="selectCouponCode('<?= htmlspecialchars($ac['code']) ?>')" class="px-2.5 py-1 bg-stone-100 hover:bg-stone-200 text-[#18181B] border border-dashed border-stone-300 rounded-lg text-[10px] font-mono font-bold transition-colors cursor-pointer" title="<?= htmlspecialchars($ac['title'] ?? '') ?>">
+                                                <?= htmlspecialchars($ac['code']) ?> (<?= $ac['discount_type'] === 'percentage' ? ((float)$ac['discount_value'] . '%') : (CURRENCY_SYMBOL . ' ' . number_format((float)$ac['discount_value'])) ?>)
+                                            </button>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <a href="<?= SITE_URL ?>/offers" target="_blank" class="text-[10px] text-[#18181B] hover:underline block mt-1.5 font-bold">
+                                        View All Offers &amp; Terms &rarr;
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
 
@@ -135,8 +164,13 @@ $items = is_array($items ?? null) ? $items : [];
                             <span class="font-bold text-[#18181B]"><?= Validator::formatPrice($subtotal) ?></span>
                         </div>
                         <?php if ($discountAmount > 0): ?>
-                            <div class="flex justify-between text-amber-600 font-bold">
-                                <span>Discount</span>
+                            <div class="flex justify-between text-emerald-700 font-bold bg-emerald-50/60 px-2.5 py-1.5 rounded-xl border border-emerald-100">
+                                <span class="flex items-center gap-1.5">
+                                    <span>Discount</span>
+                                    <?php if (!empty($appliedCoupon['code'])): ?>
+                                        <span class="font-mono text-[10px] bg-emerald-100 px-1.5 py-0.5 rounded text-emerald-800"><?= htmlspecialchars($appliedCoupon['code']) ?></span>
+                                    <?php endif; ?>
+                                </span>
                                 <span>-<?= Validator::formatPrice($discountAmount) ?></span>
                             </div>
                         <?php endif; ?>
@@ -225,5 +259,35 @@ function applyCartCoupon() {
             showToast('Could not apply coupon. Please try again.', 'error');
         }
     });
+}
+
+async function removeCartCoupon() {
+    let confirmed = true;
+    if (typeof showConfirmModal === 'function') {
+        confirmed = await showConfirmModal({
+            title: 'Remove Coupon',
+            message: 'Are you sure you want to remove the applied discount coupon from your order?',
+            confirmText: 'Remove Coupon',
+            cancelText: 'Keep Coupon',
+            type: 'warning'
+        });
+    }
+
+    if (!confirmed) return;
+
+    fetch('<?= SITE_URL ?>/cart/remove-coupon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data && data.success) {
+            if (typeof showToast === 'function') {
+                showToast('Coupon removed successfully.', 'info');
+            }
+            window.location.reload();
+        }
+    })
+    .catch(() => window.location.reload());
 }
 </script>

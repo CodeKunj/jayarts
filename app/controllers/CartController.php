@@ -69,5 +69,10 @@ class CartController extends Controller {
         $res = Cart::applyCoupon($code);
         $this->json($res);
     }
+
+    public function removeCoupon(): void {
+        $res = Cart::removeCoupon();
+        $this->json($res);
+    }
 }
 
