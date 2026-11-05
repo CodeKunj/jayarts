@@ -235,15 +235,19 @@ class Product extends Model {
 
         return Cache::remember($cacheKey, $ttl, function() use ($limit) {
             if ($this->db !== null) {
-                $sql = "SELECT p.*, c.name as category_name,
-                               (SELECT image_path FROM `product_images` WHERE `product_id` = p.id AND `is_primary` = 1 LIMIT 1) as primary_image
-                        FROM `products` p
-                        LEFT JOIN `categories` c ON p.category_id = c.id
-                        WHERE p.status = 'active' AND p.is_featured = 1
-                        ORDER BY p.id DESC LIMIT {$limit}";
-                $res = $this->fetchAll($sql);
-                if (!empty($res)) {
-                    return array_map([self::class, 'formatProduct'], $res);
+                try {
+                    $sql = "SELECT p.*, c.name as category_name,
+                                   (SELECT image_path FROM `product_images` WHERE `product_id` = p.id AND `is_primary` = 1 LIMIT 1) as primary_image
+                            FROM `products` p
+                            LEFT JOIN `categories` c ON p.category_id = c.id
+                            WHERE p.status = 'active' AND p.is_featured = 1
+                            ORDER BY p.id DESC LIMIT {$limit}";
+                    $res = $this->fetchAll($sql);
+                    if (!empty($res)) {
+                        return array_map([self::class, 'formatProduct'], $res);
+                    }
+                } catch (Throwable $e) {
+                    error_log('getFeatured DB notice: ' . $e->getMessage());
                 }
             }
 

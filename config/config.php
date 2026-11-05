@@ -60,21 +60,21 @@ if (!empty($envAppUrl)) {
     }
     define('SITE_URL', rtrim($protocol . $host . $basePath, '/'));
 }
-define('ADMIN_URL', SITE_URL . '/admin');
-define('ASSETS_URL', SITE_URL . '/assets');
-define('UPLOADS_URL', SITE_URL . '/uploads');
+if (!defined('ADMIN_URL')) define('ADMIN_URL', SITE_URL . '/admin');
+if (!defined('ASSETS_URL')) define('ASSETS_URL', SITE_URL . '/assets');
+if (!defined('UPLOADS_URL')) define('UPLOADS_URL', SITE_URL . '/uploads');
 
 // Store Branding & General Defaults
-define('APP_NAME', 'JayArt');
-define('APP_TAGLINE', 'Original Paintings & Fine Art Gallery');
-define('APP_VERSION', '1.0.0');
+if (!defined('APP_NAME')) define('APP_NAME', 'JayArt');
+if (!defined('APP_TAGLINE')) define('APP_TAGLINE', 'Original Paintings & Fine Art Gallery');
+if (!defined('APP_VERSION')) define('APP_VERSION', '1.0.0');
 
 // Currency Defaults
-define('CURRENCY_SYMBOL', '₹');
-define('CURRENCY_CODE', 'INR');
+if (!defined('CURRENCY_SYMBOL')) define('CURRENCY_SYMBOL', '₹');
+if (!defined('CURRENCY_CODE')) define('CURRENCY_CODE', 'INR');
 
 // Session Settings
-if (session_status() === PHP_SESSION_NONE) {
+if (!headers_sent() && session_status() === PHP_SESSION_NONE) {
     session_start([
         'cookie_httponly' => true,
         'cookie_samesite' => 'Lax',

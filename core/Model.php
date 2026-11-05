@@ -29,9 +29,19 @@ abstract class Model {
             return $stmt;
         } catch (PDOException $e) {
             error_log("Database Query Error [{$sql}]: " . $e->getMessage());
-            if (defined('APP_ENV') && APP_ENV === 'development') {
-                throw $e;
+
+            // If table does not exist (1146 / 42S02), trigger auto-migration and retry once
+            if ($e->getCode() === '42S02' || str_contains($e->getMessage(), "doesn't exist")) {
+                Database::autoMigrateIfEmpty($this->db);
+                try {
+                    $stmt = $this->db->prepare($sql);
+                    $stmt->execute($params);
+                    return $stmt;
+                } catch (Throwable $retryEx) {
+                    error_log("Query retry failed after autoMigrate: " . $retryEx->getMessage());
+                }
             }
+
             return null;
         }
     }

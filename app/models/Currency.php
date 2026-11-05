@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
+
 /**
  * JayArt Multi-Currency Model
  * Handles Global FX Rates, Currency Conversion, Dynamic Formatting & Admin Management
  */
-
-declare(strict_types=1);
 
 class Currency extends Model {
     protected string $table = 'currencies';

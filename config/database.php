@@ -52,10 +52,48 @@ class Database {
         try {
             self::$pdo = new PDO($dsn, $user, $pass, $options);
             self::$pdo->exec("SET NAMES {$charset} COLLATE utf8mb4_unicode_ci");
+            self::autoMigrateIfEmpty(self::$pdo);
             return self::$pdo;
         } catch (Throwable $e) {
             error_log('Database Connection Notice: ' . $e->getMessage());
             return null;
+        }
+    }
+
+    /**
+     * Auto-migrate schema and initial seeds if database is empty (cPanel self-healing)
+     */
+    public static function autoMigrateIfEmpty(?PDO $pdo = null): void {
+        static $checked = false;
+        if ($checked) return;
+        $checked = true;
+
+        $db = $pdo ?? self::$pdo;
+        if (!$db) return;
+
+        try {
+            $check = $db->query("SHOW TABLES LIKE 'products'");
+            if ($check && $check->rowCount() > 0) {
+                return; // Products table already exists
+            }
+
+            $schemaFile = defined('ROOT_PATH') ? ROOT_PATH . '/database/schema.sql' : dirname(__DIR__) . '/database/schema.sql';
+            if (file_exists($schemaFile)) {
+                $schemaSql = file_get_contents($schemaFile);
+                if ($schemaSql) {
+                    $db->exec($schemaSql);
+                }
+            }
+
+            $seedFile = defined('ROOT_PATH') ? ROOT_PATH . '/database/seed.sql' : dirname(__DIR__) . '/database/seed.sql';
+            if (file_exists($seedFile)) {
+                $seedSql = file_get_contents($seedFile);
+                if ($seedSql) {
+                    $db->exec($seedSql);
+                }
+            }
+        } catch (Throwable $e) {
+            error_log('Database auto-migrate notice: ' . $e->getMessage());
         }
     }
 
