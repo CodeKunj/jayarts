@@ -191,4 +191,25 @@
             </button>
         </div>
     </form>
+
+    <!-- 6. Database Maintenance & Clean Dummy Data (Danger Zone) -->
+    <div class="bg-red-50/60 border border-red-200/80 rounded-2xl p-6 space-y-4">
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-red-600 bg-red-100/80 px-2.5 py-0.5 rounded-full inline-block mb-1.5">Danger Zone</span>
+                <h3 class="text-sm font-heading font-bold text-slate-900">Purge Sample &amp; Dummy Data</h3>
+                <p class="text-xs text-slate-600 mt-1 max-w-2xl leading-relaxed">
+                    Permanently truncate all sample paintings, product images, demo blog articles, mock customer reviews, demo orders, and dummy wishlists from your database.
+                    <br><strong class="text-slate-800">Preserved safely:</strong> Your Administrator login, art medium categories, system currencies, and payment settings remain 100% untouched.
+                </p>
+            </div>
+            <form method="POST" action="<?= ADMIN_URL ?>/settings/clean-dummy-data" onsubmit="return confirm('CRITICAL WARNING: This will permanently delete all paintings, blog articles, reviews, and test orders from the database. Are you absolutely sure you want to clean all dummy data?');">
+                <?= Validator::csrfField() ?>
+                <button type="submit" class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition-all shadow-xs flex items-center gap-2 whitespace-nowrap cursor-pointer">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    Clean All Dummy Data
+                </button>
+            </form>
+        </div>
+    </div>
 </div>

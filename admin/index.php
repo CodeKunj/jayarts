@@ -97,6 +97,7 @@ Router::post('/admin/ads/delete/{id}', [AdminAdController::class, 'delete']);
 // General Site Settings
 Router::get('/admin/settings', [AdminSettingController::class, 'index']);
 Router::post('/admin/settings/update', [AdminSettingController::class, 'update']);
+Router::post('/admin/settings/clean-dummy-data', [AdminSettingController::class, 'cleanDummyData']);
 
 // Multi-Currency & FX Exchange Rates
 Router::get('/admin/currencies', [AdminCurrencyController::class, 'index']);

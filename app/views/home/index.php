@@ -27,8 +27,9 @@
             <!-- Center: Floating Glassmorphic Artwork Card (Matching Reference Card) -->
             <div id="bentoHeroCarousel" class="relative z-10 w-full max-w-[280px] sm:max-w-[290px] mx-auto my-3 sm:my-4">
                 <?php 
-                $carouselArt = array_slice($featuredPaintings, 0, 4);
-                foreach ($carouselArt as $idx => $art): 
+                $carouselArt = !empty($featuredPaintings) ? array_slice($featuredPaintings, 0, 4) : [];
+                if (!empty($carouselArt)):
+                    foreach ($carouselArt as $idx => $art): 
                 ?>
                 <div class="bento-slide <?= $idx === 0 ? '' : 'hidden' ?> bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-4.5 shadow-xl border border-white/80 transition-all duration-300" data-slide-index="<?= $idx ?>">
                     <div class="flex items-center justify-between mb-1.5">
@@ -40,29 +41,39 @@
                             4.9
                         </span>
                     </div>
-                    <p class="text-[11px] text-stone-500 font-medium mb-3 truncate"><?= htmlspecialchars($art['medium']) ?></p>
+                    <p class="text-[11px] text-stone-500 font-medium mb-3 truncate"><?= htmlspecialchars($art['medium'] ?? 'Original Artwork') ?></p>
                     
                     <!-- Artwork Image -->
                     <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-stone-100 mb-3 relative flex items-center justify-center p-2">
-                        <img src="<?= htmlspecialchars($art['primary_image']) ?>" alt="<?= htmlspecialchars($art['title']) ?>" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';" style="max-height: 220px; max-width: 100%; object-fit: contain;" class="max-h-full max-w-full object-contain drop-shadow-md rounded-lg">
+                        <img src="<?= htmlspecialchars($art['primary_image'] ?? '') ?>" alt="<?= htmlspecialchars($art['title'] ?? 'Art') ?>" class="max-h-full max-w-full object-contain drop-shadow-md rounded-lg">
                     </div>
 
                     <div class="flex items-center justify-between pt-1">
                         <div class="max-w-[65%]">
-                            <h4 class="font-bold text-xs text-[#18181B] line-clamp-1"><?= htmlspecialchars($art['title']) ?></h4>
-                            <p class="text-[10px] text-stone-400 truncate"><?= htmlspecialchars($art['artist_name']) ?></p>
+                            <h4 class="font-bold text-xs text-[#18181B] line-clamp-1"><?= htmlspecialchars($art['title'] ?? '') ?></h4>
+                            <p class="text-[10px] text-stone-400 truncate"><?= htmlspecialchars($art['artist_name'] ?? 'JayArt Master') ?></p>
                         </div>
                         <div class="flex items-center gap-1.5 flex-shrink-0">
-                            <button type="button" onclick="toggleWishlist(<?= $art['id'] ?>, this)" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-red-50 text-stone-600 hover:text-red-500 flex items-center justify-center transition-colors shadow-xs" title="Save to Wishlist">
+                            <button type="button" onclick="toggleWishlist(<?= $art['id'] ?? 0 ?>, this)" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-red-50 text-stone-600 hover:text-red-500 flex items-center justify-center transition-colors shadow-xs" title="Save to Wishlist">
                                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                             </button>
-                            <button type="button" onclick="quickAddToCart(<?= $art['id'] ?>)" class="w-8 h-8 rounded-full bg-[#18181B] hover:bg-black text-white flex items-center justify-center transition-transform active:scale-90 shadow-xs" title="Add to Bag">
+                            <button type="button" onclick="quickAddToCart(<?= $art['id'] ?? 0 ?>)" class="w-8 h-8 rounded-full bg-[#18181B] hover:bg-black text-white flex items-center justify-center transition-transform active:scale-90 shadow-xs" title="Add to Bag">
                                 <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                             </button>
                         </div>
                     </div>
                 </div>
                 <?php endforeach; ?>
+                <?php else: ?>
+                <div class="bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/80 text-center flex flex-col items-center justify-center min-h-[260px]">
+                    <div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center mb-3 text-stone-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    </div>
+                    <h4 class="font-bold text-xs text-[#18181B] mb-1">New Collection Unveiling</h4>
+                    <p class="text-[11px] text-stone-500 mb-3">Original atelier pieces are being cataloged by our curatorial team.</p>
+                    <a href="<?= SITE_URL ?>/shop" class="text-[11px] font-bold text-[#18181B] bg-stone-100 hover:bg-stone-200 px-4 py-1.5 rounded-full transition-colors">Explore Gallery</a>
+                </div>
+                <?php endif; ?>
             </div>
 
             <!-- Bottom Navigation Bar (Matching Reference Image 2: "← Slide left and right →") -->
@@ -92,10 +103,13 @@
                     <p class="text-xs text-stone-600 mt-1">Acquire curated originals on sale with 30 &ndash; 50% discount</p>
                 </div>
 
+                <?php if (!empty($featuredPaintings[1])): 
+                    $dealArt = $featuredPaintings[1];
+                ?>
                 <!-- Center Large Featured Artwork with Soft Drop Shadow -->
                 <div class="my-2 sm:my-3 flex items-center justify-center relative">
-                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($featuredPaintings[1]['slug'] ?? 'symphony-in-ochre-and-gold') ?>" class="block transform group-hover:scale-105 transition-transform duration-300">
-                        <img src="<?= htmlspecialchars($featuredPaintings[1]['primary_image'] ?? 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600') ?>" alt="Featured Art Deal" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600';" class="max-h-44 sm:max-h-52 w-auto object-contain rounded-2xl drop-shadow-2xl">
+                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($dealArt['slug'] ?? '') ?>" class="block transform group-hover:scale-105 transition-transform duration-300">
+                        <img src="<?= htmlspecialchars($dealArt['primary_image'] ?? '') ?>" alt="Featured Art Deal" class="max-h-44 sm:max-h-52 w-auto object-contain rounded-2xl drop-shadow-2xl">
                     </a>
                 </div>
 
@@ -109,35 +123,66 @@
                         Explore Deals &rarr;
                     </a>
                 </div>
+                <?php else: ?>
+                <div class="my-auto py-8 text-center flex flex-col items-center justify-center">
+                    <div class="w-12 h-12 rounded-full bg-white/60 flex items-center justify-center mb-2 text-stone-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V4a2 2 0 10-2 2h2m0 13a2 2 0 100-4 2 2 0 000 4zm0 0a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                    </div>
+                    <p class="text-xs text-stone-600 font-medium">Curated seasonal exhibition deals will appear here</p>
+                </div>
+                <div class="flex items-center justify-between pt-1">
+                    <span class="text-[11px] font-bold text-stone-600 bg-white/70 px-3 py-1 rounded-full">JayArt Atelier Provenance</span>
+                    <a href="<?= SITE_URL ?>/shop" class="text-xs font-bold text-[#18181B] hover:underline">Browse Catalog &rarr;</a>
+                </div>
+                <?php endif; ?>
             </div>
 
             <!-- Bottom Split Card: "EXCLUSIVE PureSpace Focus Duo" (Matching Split in Reference) -->
             <div class="bento-stone-3 rounded-[28px] sm:rounded-[34px] p-4 sm:p-6 flex items-center justify-between gap-3 sm:gap-4 shadow-xs">
+                <?php if (!empty($featuredPaintings[2])): 
+                    $splitArt = $featuredPaintings[2];
+                ?>
                 <div class="max-w-[58%]">
                     <span class="text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-[#18181B] shadow-xs inline-block mb-1.5">
                         EXCLUSIVE
                     </span>
                     <h3 class="font-heading font-bold text-sm sm:text-lg text-[#18181B] leading-snug">
-                        <?= htmlspecialchars($featuredPaintings[2]['title'] ?? 'Morning Ghats of Banaras') ?>
+                        <?= htmlspecialchars($splitArt['title'] ?? '') ?>
                     </h3>
                     <p class="text-[11px] text-stone-500 mt-0.5 sm:mt-1 line-clamp-2">
-                        Archival museum watercolor on French Arches cotton rag.
+                        <?= htmlspecialchars($splitArt['medium'] ?? 'Original Masterpiece') ?>
                     </p>
                 </div>
 
                 <!-- Right Artwork Thumbnail with Heart & "Open ↗" pill -->
                 <div class="relative flex-shrink-0">
                     <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-white shadow-md relative group">
-                        <img src="<?= htmlspecialchars($featuredPaintings[2]['primary_image'] ?? 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300') ?>" alt="Exclusive" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300';" class="w-full h-full object-cover">
-                        <button type="button" onclick="toggleWishlist(<?= $featuredPaintings[2]['id'] ?? 3 ?>, this)" class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-6 h-6 rounded-full bg-white/90 text-red-500 flex items-center justify-center text-xs shadow-xs" title="Wishlist">
+                        <img src="<?= htmlspecialchars($splitArt['primary_image'] ?? '') ?>" alt="Exclusive" class="w-full h-full object-cover">
+                        <button type="button" onclick="toggleWishlist(<?= $splitArt['id'] ?? 0 ?>, this)" class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-6 h-6 rounded-full bg-white/90 text-red-500 flex items-center justify-center text-xs shadow-xs" title="Wishlist">
                             <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 text-red-500 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
                         </button>
                     </div>
-                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($featuredPaintings[2]['slug'] ?? 'morning-ghats-of-banaras') ?>" class="absolute -bottom-2 -left-2 bg-[#18181B] hover:bg-black text-white text-[10px] font-bold pl-2.5 sm:pl-3 pr-2 py-0.5 sm:py-1 rounded-full flex items-center gap-1 shadow-md transition-colors">
+                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($splitArt['slug'] ?? '') ?>" class="absolute -bottom-2 -left-2 bg-[#18181B] hover:bg-black text-white text-[10px] font-bold pl-2.5 sm:pl-3 pr-2 py-0.5 sm:py-1 rounded-full flex items-center gap-1 shadow-md transition-colors">
                         <span>Open</span>
                         <span class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-white/20 flex items-center justify-center text-[9px] sm:text-[10px]">↗</span>
                     </a>
                 </div>
+                <?php else: ?>
+                <div class="max-w-[70%]">
+                    <span class="text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-[#18181B] shadow-xs inline-block mb-1.5">
+                        ATELIER
+                    </span>
+                    <h3 class="font-heading font-bold text-sm sm:text-base text-[#18181B] leading-snug">
+                        Museum Grade Fine Art
+                    </h3>
+                    <p class="text-[11px] text-stone-500 mt-0.5 line-clamp-2">
+                        Archival certified originals crafted by studio masters across India.
+                    </p>
+                </div>
+                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/70 border border-stone-200/60 flex items-center justify-center text-stone-400">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -497,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <section class="w-full pt-4 pb-2" id="catalogSection">
     <div class="flex items-center justify-between">
         <h2 id="catalogHeading" class="text-2xl sm:text-3xl font-extrabold text-[#111827] tracking-tight">Paintings For You!</h2>
-        <span id="filteredCountBadge" class="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Showing 8 artworks</span>
+        <span id="filteredCountBadge" class="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Showing <?= count($featuredProducts ?? []) ?> artworks</span>
     </div>
 </section>
 
@@ -624,6 +669,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 <?php endif; ?>
 
             <?php endforeach; ?>
+        <?php else: ?>
+            <div class="col-span-2 md:col-span-3 lg:col-span-4 bg-stone-50 border border-stone-200/80 rounded-3xl p-12 text-center my-6">
+                <div class="w-16 h-16 rounded-2xl bg-white shadow-xs border border-stone-200 text-stone-400 mx-auto flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <h3 class="font-heading font-semibold text-stone-900 text-lg mb-2">Art Gallery Collection Being Prepared</h3>
+                <p class="text-xs text-stone-500 mb-6 max-w-md mx-auto">Original masterworks and certified paintings will appear here as soon as they are published from the studio catalogue.</p>
+                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                    <a href="<?= SITE_URL ?>/admin/products/create" class="inline-flex items-center gap-2 px-6 py-3 bg-[#18181B] hover:bg-black text-white text-xs font-bold rounded-full transition-colors shadow-xs">
+                        <span>+ Add First Painting</span>
+                    </a>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
 
         <!-- Zero Results Empty State -->

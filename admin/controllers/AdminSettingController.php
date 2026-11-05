@@ -62,5 +62,61 @@ class AdminSettingController extends Controller {
         header('Location: ' . ADMIN_URL . '/settings');
         exit;
     }
+
+    /**
+     * Purge all dummy catalog, reviews, orders, and demo content
+     */
+    public function cleanDummyData(): void {
+        Validator::validateCsrf();
+
+        try {
+            $db = Database::connect();
+            if ($db !== null) {
+                $db->exec("SET FOREIGN_KEY_CHECKS = 0;");
+                $tables = [
+                    'products',
+                    'product_images',
+                    'product_seo',
+                    'blogs',
+                    'blog_seo',
+                    'orders',
+                    'order_items',
+                    'delivery_tracking',
+                    'delivery_milestones',
+                    'reviews',
+                    'wishlists',
+                    'inventory_logs',
+                    'support_tickets',
+                    'ticket_messages',
+                    'addresses',
+                ];
+
+                foreach ($tables as $t) {
+                    try {
+                        $db->exec("TRUNCATE TABLE `{$t}`;");
+                    } catch (Throwable $e) {
+                        // ignore if table doesn't exist yet
+                    }
+                }
+
+                // Remove demo non-admin users
+                try {
+                    $db->exec("DELETE FROM `users` WHERE `role` != 'admin';");
+                } catch (Throwable $e) {}
+
+                $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
+            }
+
+            // Flush all file/Redis caches
+            Cache::clear();
+
+            Auth::setFlash('success', 'Database cleaned successfully! All dummy products, reviews, orders, and blogs have been removed.');
+        } catch (Throwable $e) {
+            Auth::setFlash('error', 'Database cleanup error: ' . $e->getMessage());
+        }
+
+        header('Location: ' . ADMIN_URL . '/settings');
+        exit;
+    }
 }
 
