@@ -115,3 +115,22 @@ function showToast(message, type = 'success') {
     }, 3500);
 }
 
+/**
+ * Header Currency Switcher Dropdown
+ */
+window.toggleCurrencyDropdown = function(e) {
+    if (e) e.stopPropagation();
+    const menu = document.getElementById('siteCurrencyMenu');
+    if (menu) {
+        menu.classList.toggle('hidden');
+    }
+};
+
+document.addEventListener('click', (e) => {
+    const wrap = document.getElementById('siteCurrencyDropdown');
+    const menu = document.getElementById('siteCurrencyMenu');
+    if (menu && !menu.classList.contains('hidden') && wrap && !wrap.contains(e.target)) {
+        menu.classList.add('hidden');
+    }
+});
+

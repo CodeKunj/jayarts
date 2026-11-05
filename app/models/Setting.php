@@ -68,6 +68,9 @@ class Setting extends Model {
                     foreach ($rows as $row) {
                         $settings[$row['setting_key']] = $row['setting_value'];
                     }
+                    if (isset($settings['currency_symbol'])) {
+                        $settings['currency_symbol'] = Currency::cleanSymbol($settings['currency_code'] ?? 'INR', $settings['currency_symbol']);
+                    }
                 }
             }
         } catch (Throwable $e) {

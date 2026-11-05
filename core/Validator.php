@@ -82,11 +82,10 @@ class Validator {
     }
 
     /**
-     * Format Price in Indian Rupee / Currency Format
+     * Format Price in Multi-Currency Format (Default Base: Indian Rupee)
      */
-    public static function formatPrice(mixed $amount = 0.0): string {
-        $num = (float)($amount ?? 0.0);
-        return CURRENCY_SYMBOL . ' ' . number_format($num, 2);
+    public static function formatPrice(mixed $amount = 0.0, ?string $currencyCode = null): string {
+        return Currency::format($amount, $currencyCode);
     }
 
     /**

@@ -54,6 +54,7 @@ INSERT INTO `analytics_settings` (`id`, `google_analytics_id`, `google_search_co
 (1, 'G-DEMO123456', '', '', '')
 ON DUPLICATE KEY UPDATE `id` = 1;
 
+
 -- 7. Payment Gateway Settings (Multi-Gateway Ready)
 INSERT INTO `payment_settings` (`id`, `gateway_code`, `display_name`, `is_enabled`, `mode`, `key_id`, `key_secret`, `upi_vpa`, `upi_merchant_name`, `bank_details`, `instructions`, `sort_order`) VALUES
 (1, 'razorpay', 'Razorpay (Cards, NetBanking, Wallets)', 1, 'test', 'rzp_test_YourKeyIDHere', 'YourKeySecretHere', NULL, NULL, NULL, 'Pay securely via Credit Card, Debit Card, NetBanking, or digital wallet.', 1),
@@ -83,3 +84,15 @@ ON DUPLICATE KEY UPDATE `blog_id` = `blog_id`;
 INSERT INTO `smtp_settings` (`id`, `host`, `port`, `encryption`, `username`, `password`, `from_email`, `from_name`, `is_enabled`) VALUES
 (1, 'mail.jayartgallery.com', 465, 'ssl', 'notifications@jayartgallery.com', '', 'notifications@jayartgallery.com', 'JayArt Gallery Orders', 0)
 ON DUPLICATE KEY UPDATE `id` = 1;
+
+-- 8. Multi-Currency Starter Seed (Base: Indian Rupee)
+INSERT INTO `currencies` (`id`, `code`, `name`, `symbol`, `html_entity`, `exchange_rate`, `is_base`, `is_enabled`, `decimal_places`, `symbol_position`, `sort_order`) VALUES
+(1, 'INR', 'Indian Rupee', '₹', '&#8377;', 1.000000, 1, 1, 2, 'before', 1),
+(2, 'USD', 'US Dollar', '$', '&#36;', 0.012000, 0, 1, 2, 'before', 2),
+(3, 'EUR', 'Euro', '€', '&euro;', 0.011000, 0, 1, 2, 'before', 3),
+(4, 'GBP', 'British Pound', '£', '&pound;', 0.009400, 0, 1, 2, 'before', 4),
+(5, 'AED', 'UAE Dirham', 'AED', 'AED', 0.044000, 0, 1, 2, 'before', 5),
+(6, 'CAD', 'Canadian Dollar', 'CA$', 'CA&#36;', 0.016300, 0, 1, 2, 'before', 6),
+(7, 'AUD', 'Australian Dollar', 'AU$', 'AU&#36;', 0.018200, 0, 1, 2, 'before', 7)
+ON DUPLICATE KEY UPDATE `name` = VALUES(`name`);
+

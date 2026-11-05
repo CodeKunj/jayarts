@@ -98,6 +98,14 @@ Router::post('/admin/ads/delete/{id}', [AdminAdController::class, 'delete']);
 Router::get('/admin/settings', [AdminSettingController::class, 'index']);
 Router::post('/admin/settings/update', [AdminSettingController::class, 'update']);
 
+// Multi-Currency & FX Exchange Rates
+Router::get('/admin/currencies', [AdminCurrencyController::class, 'index']);
+Router::post('/admin/currencies/store', [AdminCurrencyController::class, 'store']);
+Router::post('/admin/currencies/update/{id}', [AdminCurrencyController::class, 'update']);
+Router::post('/admin/currencies/toggle/{id}', [AdminCurrencyController::class, 'toggle']);
+Router::post('/admin/currencies/set-base/{id}', [AdminCurrencyController::class, 'setBase']);
+Router::post('/admin/currencies/delete/{id}', [AdminCurrencyController::class, 'delete']);
+
 // Cache Engine Management (Redis-like Telemetry & Invalidation)
 Router::get('/admin/cache', [AdminCacheController::class, 'index']);
 Router::post('/admin/cache/clear-all', [AdminCacheController::class, 'clearAll']);

@@ -51,6 +51,9 @@ class AdminSettingController extends Controller {
         foreach ($allowedKeys as $key) {
             if (isset($_POST[$key])) {
                 $val = trim((string)$_POST[$key]);
+                if ($key === 'currency_symbol') {
+                    $val = Currency::cleanSymbol((string)($_POST['currency_code'] ?? 'INR'), $val);
+                }
                 Setting::set($key, $val);
             }
         }

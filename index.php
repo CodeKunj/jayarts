@@ -35,6 +35,10 @@ Router::get('/shop', [ShopController::class, 'index']);
 Router::get('/product/{slug}', [ProductController::class, 'view']);
 Router::get('/offers', [OfferController::class, 'index']);
 
+// Multi-Currency Switcher Routes
+Router::get('/currency/switch/{code}', [CurrencyController::class, 'switchGet']);
+Router::post('/currency/switch', [CurrencyController::class, 'switch']);
+
 // Cart Routes (AJAX and Standard)
 Router::get('/cart', [CartController::class, 'index']);
 Router::post('/cart/add', [CartController::class, 'add']);

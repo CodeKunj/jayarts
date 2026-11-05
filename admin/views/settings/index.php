@@ -102,11 +102,11 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5">Currency Code</label>
-                    <input type="text" name="currency_code" value="<?= htmlspecialchars($settings['currency_code'] ?? 'INR') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
+                    <input type="text" name="currency_code" value="<?= htmlspecialchars($settings['currency_code'] ?? 'INR') ?>" autocomplete="off" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5">Currency Symbol</label>
-                    <input type="text" name="currency_symbol" value="<?= htmlspecialchars($settings['currency_symbol'] ?? '₹') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
+                    <input type="text" name="currency_symbol" value="<?= htmlspecialchars(Currency::cleanSymbol($settings['currency_code'] ?? 'INR', $settings['currency_symbol'] ?? '₹')) ?>" autocomplete="off" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5">Tax / GST Rate (%)</label>
@@ -116,6 +116,12 @@
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5">Standard Crate Fee (₹)</label>
                     <input type="number" step="0.01" name="standard_shipping_fee" value="<?= htmlspecialchars($settings['standard_shipping_fee'] ?? '0') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
                 </div>
+            </div>
+            <div class="pt-1">
+                <a href="<?= ADMIN_URL ?>/currencies" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 hover:text-emerald-700 hover:underline">
+                    <span>Manage All Currencies &amp; Real-Time FX Conversion Rates</span>
+                    <span>&rarr;</span>
+                </a>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
