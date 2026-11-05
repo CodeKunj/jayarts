@@ -50,3 +50,4 @@ class CurrencyController extends Controller {
             || (isset($_SERVER['CONTENT_TYPE']) && str_contains($_SERVER['CONTENT_TYPE'], 'application/json'));
     }
 }
+
