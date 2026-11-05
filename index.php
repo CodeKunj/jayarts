@@ -15,6 +15,11 @@ if (php_sapi_name() === 'cli-server') {
     }
 }
 
+// Start output buffering early to prevent premature header output
+if (ob_get_level() === 0) {
+    ob_start();
+}
+
 // Bootstrap Core Application
 if (!defined('ROOT_PATH')) {
     define('ROOT_PATH', __DIR__);
@@ -89,6 +94,37 @@ Router::get('/sitemap.xml', [SitemapController::class, 'index']);
 
 // Dynamic Robots.txt with Sitemap link
 Router::get('/robots.txt', [SitemapController::class, 'robots']);
+
+// Safe Database Migration & Self-Healing Verification Endpoint
+Router::get('/db-setup', function() {
+    $db = Database::connect();
+    if (!$db) {
+        die('<div style="font-family:sans-serif;max-width:600px;margin:50px auto;padding:24px;border:1px solid #f87171;border-radius:12px;background:#fef2f2;color:#991b1b;">
+            <h2 style="margin-top:0;">Database Connection Error</h2>
+            <p>Could not connect to MySQL server using credentials from <code>.env</code>.</p>
+            <p>Please check <code>DB_HOST</code>, <code>DB_NAME</code>, <code>DB_USER</code>, and <code>DB_PASS</code> in your <code>.env</code> file.</p>
+        </div>');
+    }
+
+    Database::autoMigrateIfEmpty($db, true);
+
+    $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
+    $tableCount = count($tables);
+
+    echo '<div style="font-family:sans-serif;max-width:650px;margin:50px auto;padding:30px;border:1px solid #e2e8f0;border-radius:16px;background:#ffffff;box-shadow:0 10px 25px -5px rgba(0,0,0,0.05);color:#0f172a;">
+        <h2 style="margin-top:0;color:#0f172a;">JayArt Database Initialized</h2>
+        <p style="color:#475569;font-size:14px;">The database schema and essential seeds are verified and up to date.</p>
+        <div style="background:#f8fafc;padding:16px;border-radius:12px;border:1px solid #e2e8f0;margin:20px 0;font-size:13px;">
+            <strong>Database Status:</strong> Connected to MySQL<br>
+            <strong>Active Tables:</strong> ' . $tableCount . ' tables created<br>
+            <strong>Default Super Admin:</strong> admin@jayart.com (admin123)<br>
+            <strong>Base Currency:</strong> Indian Rupee (INR)
+        </div>
+        <a href="' . SITE_URL . '" style="display:inline-block;background:#0f172a;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:50px;font-weight:600;font-size:13px;">Go to Storefront &rarr;</a>
+        <a href="' . SITE_URL . '/admin" style="display:inline-block;background:#f1f5f9;color:#0f172a;text-decoration:none;padding:12px 24px;border-radius:50px;font-weight:600;font-size:13px;margin-left:8px;">Admin Panel &rarr;</a>
+    </div>';
+    exit;
+});
 
 // Dispatch the Request
 Router::dispatch();

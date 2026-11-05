@@ -33,6 +33,9 @@ $navCategories = $categoryModel->getActiveWithCounts();
     <!-- Dynamic Site Global Configuration -->
     <script>
         window.SITE_URL = '<?= SITE_URL ?>';
+        if (window.location.protocol === 'https:' && window.SITE_URL.startsWith('http:')) {
+            window.SITE_URL = window.SITE_URL.replace(/^http:/, 'https:');
+        }
     </script>
 </head>
 <body class="bg-[#FBFBFA] text-[#18181B] min-h-screen flex flex-col font-sans antialiased overflow-x-clip selection:bg-[#18181B] selection:text-white">

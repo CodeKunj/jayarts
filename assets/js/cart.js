@@ -3,6 +3,15 @@
  * Instant Add-to-Cart, Quantity Adjustment, Coupon Validation
  */
 
+function getCartApiUrl(path) {
+    let base = (typeof window.SITE_URL !== 'undefined' && window.SITE_URL) ? window.SITE_URL.replace(/\/$/, '') : '';
+    if (window.location.protocol === 'https:' && base.startsWith('http:')) {
+        base = base.replace(/^http:/, 'https:');
+    }
+    const cleanPath = path.replace(/^\//, '');
+    return base ? `${base}/${cleanPath}` : `/${cleanPath}`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initQuickAddButtons();
 });
@@ -39,11 +48,17 @@ async function handleAddToCart(productId, quantity = 1, frameChosen = 'Rolled Ca
         formData.append('quantity', quantity);
         formData.append('frame_chosen', frameChosen);
 
-        const response = await fetch(`${SITE_URL}/cart/add`, {
+        const response = await fetch(getCartApiUrl('cart/add'), {
             method: 'POST',
             body: formData,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         });
+
+        if (!response.ok) {
+            console.error('Cart add failed HTTP:', response.status);
+            showToast('Unable to connect to gallery server (' + response.status + ').', 'error');
+            return;
+        }
 
         const data = await response.json();
 
@@ -54,6 +69,7 @@ async function handleAddToCart(productId, quantity = 1, frameChosen = 'Rolled Ca
             showToast(data.message || 'Unable to add painting to cart.', 'error');
         }
     } catch (err) {
+        console.error('Error communicating with gallery server:', err);
         showToast('Error communicating with gallery server.', 'error');
     } finally {
         if (btnElement) {
@@ -81,19 +97,26 @@ async function quickBuyNow(productId, quantity = 1, frameChosen = 'Rolled Canvas
         formData.append('quantity', quantity);
         formData.append('frame_chosen', frameChosen);
 
-        const response = await fetch(`${SITE_URL}/cart/add`, {
+        const response = await fetch(getCartApiUrl('cart/add'), {
             method: 'POST',
             body: formData,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         });
 
+        if (!response.ok) {
+            console.error('Buy Now failed HTTP:', response.status);
+            showToast('Unable to proceed to checkout (' + response.status + ').', 'error');
+            return;
+        }
+
         const data = await response.json();
         if (data.success) {
-            window.location.href = `${SITE_URL}/checkout`;
+            window.location.href = getCartApiUrl('checkout');
         } else {
             showToast(data.message || 'Unable to proceed to checkout.', 'error');
         }
     } catch (err) {
+        console.error('Error redirecting to checkout:', err);
         showToast('Error redirecting to checkout.', 'error');
     }
 }
@@ -128,7 +151,7 @@ async function updateCartItem(itemKey, newQty) {
         formData.append('item_key', itemKey);
         formData.append('quantity', newQty);
 
-        const response = await fetch(`${SITE_URL}/cart/update`, {
+        const response = await fetch(getCartApiUrl('cart/update'), {
             method: 'POST',
             body: formData,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -168,7 +191,7 @@ async function removeCartItem(itemKey) {
         const formData = new FormData();
         formData.append('item_key', itemKey);
 
-        const response = await fetch(`${SITE_URL}/cart/remove`, {
+        const response = await fetch(getCartApiUrl('cart/remove'), {
             method: 'POST',
             body: formData,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }

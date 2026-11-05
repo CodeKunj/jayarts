@@ -26,8 +26,7 @@ try {
     $schemaFile = __DIR__ . '/schema.sql';
     if (file_exists($schemaFile)) {
         echo "Importing schema from {$schemaFile}...\n";
-        $schemaSql = file_get_contents($schemaFile);
-        $pdo->exec($schemaSql);
+        Database::executeSqlFile($pdo, $schemaFile);
         echo "✓ Schema imported successfully.\n";
     }
 
@@ -35,8 +34,7 @@ try {
     $seedFile = __DIR__ . '/seed.sql';
     if (file_exists($seedFile)) {
         echo "Importing seed data from {$seedFile}...\n";
-        $seedSql = file_get_contents($seedFile);
-        $pdo->exec($seedSql);
+        Database::executeSqlFile($pdo, $seedFile);
         echo "✓ Seed data imported successfully.\n";
     }
 

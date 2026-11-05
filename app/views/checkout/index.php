@@ -330,7 +330,8 @@ function applyCouponCode() {
     const msg = document.getElementById('couponMessage');
     if (!code) return;
 
-    fetch('<?= SITE_URL ?>/cart/apply-coupon', {
+    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/apply-coupon';
+    fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'coupon_code=' + encodeURIComponent(code) + '&code=' + encodeURIComponent(code)
@@ -381,7 +382,8 @@ async function removeCheckoutCoupon() {
 
     if (!confirmed) return;
 
-    fetch('<?= SITE_URL ?>/cart/remove-coupon', {
+    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/remove-coupon';
+    fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     })

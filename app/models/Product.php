@@ -15,8 +15,7 @@ class Product extends Model {
         return [];
     }
 
-    /**
-     * public function findBySlug(string $slug): ?array {
+    public function findBySlug(string $slug): ?array {
         $ttl = (int)Cache::getConfig()['product_ttl'];
         $cacheKey = 'products:detail:slug:' . $slug;
 

@@ -46,8 +46,12 @@ class Database {
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
-            PDO::ATTR_TIMEOUT            => 1, // Max 1 second timeout to keep site ultra-fast
+            PDO::ATTR_TIMEOUT            => 5, // 5s timeout for reliable shared hosting
         ];
+
+        if (defined('PDO::MYSQL_ATTR_MULTI_STATEMENTS')) {
+            $options[PDO::MYSQL_ATTR_MULTI_STATEMENTS] = true;
+        }
 
         try {
             self::$pdo = new PDO($dsn, $user, $pass, $options);
@@ -63,38 +67,70 @@ class Database {
     /**
      * Auto-migrate schema and initial seeds if database is empty (cPanel self-healing)
      */
-    public static function autoMigrateIfEmpty(?PDO $pdo = null): void {
+    public static function autoMigrateIfEmpty(?PDO $pdo = null, bool $force = false): void {
         static $checked = false;
-        if ($checked) return;
+        if ($checked && !$force) return;
         $checked = true;
 
         $db = $pdo ?? self::$pdo;
         if (!$db) return;
 
         try {
-            $check = $db->query("SHOW TABLES LIKE 'products'");
-            if ($check && $check->rowCount() > 0) {
-                return; // Products table already exists
+            if (!$force) {
+                $check = $db->query("SHOW TABLES LIKE 'products'");
+                if ($check && $check->rowCount() > 0) {
+                    return; // Products table already exists
+                }
             }
 
             $schemaFile = defined('ROOT_PATH') ? ROOT_PATH . '/database/schema.sql' : dirname(__DIR__) . '/database/schema.sql';
-            if (file_exists($schemaFile)) {
-                $schemaSql = file_get_contents($schemaFile);
-                if ($schemaSql) {
-                    $db->exec($schemaSql);
-                }
-            }
+            self::executeSqlFile($db, $schemaFile);
 
             $seedFile = defined('ROOT_PATH') ? ROOT_PATH . '/database/seed.sql' : dirname(__DIR__) . '/database/seed.sql';
-            if (file_exists($seedFile)) {
-                $seedSql = file_get_contents($seedFile);
-                if ($seedSql) {
-                    $db->exec($seedSql);
-                }
-            }
+            self::executeSqlFile($db, $seedFile);
         } catch (Throwable $e) {
             error_log('Database auto-migrate notice: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Execute SQL file splitting statements cleanly and ignoring comments
+     */
+    public static function executeSqlFile(PDO $db, string $filePath): bool {
+        if (!file_exists($filePath)) {
+            return false;
+        }
+
+        $content = file_get_contents($filePath);
+        if ($content === false || trim($content) === '') {
+            return false;
+        }
+
+        // Clean single line comments
+        $content = preg_replace('/^--[^\r\n]*/m', '', $content);
+        // Clean block comments
+        $content = preg_replace('/\/\*.*?\*\//s', '', $content);
+
+        // Split statements by semicolon
+        $statements = preg_split('/;\s*[\r\n]+/', $content);
+        if (!$statements) {
+            $statements = explode(';', $content);
+        }
+
+        $db->exec("SET FOREIGN_KEY_CHECKS = 0;");
+        foreach ($statements as $stmt) {
+            $sql = trim($stmt);
+            if ($sql === '') {
+                continue;
+            }
+            try {
+                $db->exec($sql);
+            } catch (Throwable $e) {
+                error_log("SQL auto-exec notice: " . $e->getMessage());
+            }
+        }
+        $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
+        return true;
     }
 
     /**

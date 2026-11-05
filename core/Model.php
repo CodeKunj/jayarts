@@ -32,7 +32,7 @@ abstract class Model {
 
             // If table does not exist (1146 / 42S02), trigger auto-migration and retry once
             if ($e->getCode() === '42S02' || str_contains($e->getMessage(), "doesn't exist")) {
-                Database::autoMigrateIfEmpty($this->db);
+                Database::autoMigrateIfEmpty($this->db, true);
                 try {
                     $stmt = $this->db->prepare($sql);
                     $stmt->execute($params);

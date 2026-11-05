@@ -202,7 +202,8 @@ $items = is_array($items ?? null) ? $items : [];
 
 <script>
 function updateCartQty(itemKey, newQty) {
-    fetch('<?= SITE_URL ?>/cart/update', {
+    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/update';
+    fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'item_key=' + encodeURIComponent(itemKey) + '&quantity=' + encodeURIComponent(newQty)
@@ -230,7 +231,8 @@ function applyCartCoupon() {
     const code = input ? input.value.trim() : '';
     if (!code) return;
 
-    fetch('<?= SITE_URL ?>/cart/apply-coupon', {
+    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/apply-coupon';
+    fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'coupon_code=' + encodeURIComponent(code) + '&code=' + encodeURIComponent(code)
@@ -275,7 +277,8 @@ async function removeCartCoupon() {
 
     if (!confirmed) return;
 
-    fetch('<?= SITE_URL ?>/cart/remove-coupon', {
+    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/remove-coupon';
+    fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     })
