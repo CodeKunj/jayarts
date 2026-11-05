@@ -6,6 +6,42 @@
 @import url('tokens.css');
 @import url('mobile.css');
 
+/* ====================================================================
+   Defensive Media & SVG Constraints (Guarantees Stable Dimensions)
+   ==================================================================== */
+img, svg, video, canvas {
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+  display: block;
+}
+
+svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+svg:not([width]):not([height]) {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* Constrain Bento Hero Carousel & Artwork Images */
+#bentoHeroCarousel,
+.bento-slide {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.bento-slide img {
+  max-width: 100% !important;
+  max-height: 220px !important;
+  object-fit: contain !important;
+}
+
 /* Clean Pill Buttons */
 .btn-primary-pill {
   background-color: var(--color-primary);

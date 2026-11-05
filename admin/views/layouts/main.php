@@ -10,31 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS with Professional Executive Theme -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        admin: {
-                            sidebar: '#0B0F19',
-                            dark: '#0F172A',
-                            primary: '#0F172A',
-                            accent: '#10B981',
-                            surface: '#F8FAFC',
-                            border: '#E2E8F0',
-                        }
-                    },
-                    fontFamily: {
-                        heading: ['"Outfit"', 'sans-serif'],
-                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace']
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Local Production Compiled Tailwind CSS (Fast, 100% Offline, cPanel Ready, Zero-CDN Dependency) -->
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/tailwind.min.css?v=<?= APP_VERSION ?>">
     
     <!-- Chart.js for Admin Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

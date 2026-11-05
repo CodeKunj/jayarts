@@ -10,22 +10,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JayArt Administration — Sign In</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Local Production Compiled Tailwind CSS (Fast, 100% Offline, cPanel Ready, Zero-CDN Dependency) -->
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/tailwind.min.css?v=<?= APP_VERSION ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        heading: ['"Outfit"', 'sans-serif'],
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="bg-[#0B0F19] min-h-screen flex items-center justify-center p-4 antialiased font-sans text-slate-100 relative overflow-hidden">
 

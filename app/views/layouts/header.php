@@ -24,40 +24,16 @@ $navCategories = $categoryModel->getActiveWithCounts();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        atelier: {
-                            stone: '#EAE8E3',
-                            frame: '#F7F7F5',
-                            card1: '#E5E4E0',
-                            card2: '#E1DFDB',
-                            card3: '#ECEAE6',
-                            ink: '#18181B',
-                            charcoal: '#18181B'
-                        }
-                    },
-                    fontFamily: {
-                        heading: ['"Outfit"', 'sans-serif'],
-                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace']
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Local Production Compiled Tailwind CSS (Fast, 100% Offline, cPanel Ready, Zero-CDN Dependency) -->
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/tailwind.min.css?v=<?= APP_VERSION ?>">
+
+    <!-- Master Stylesheet -->
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/style.css?v=<?= APP_VERSION ?>">
 
     <!-- Dynamic Site Global Configuration -->
     <script>
         window.SITE_URL = '<?= SITE_URL ?>';
     </script>
-
-    <!-- Master Stylesheet -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/style.css?v=<?= APP_VERSION ?>">
 </head>
 <body class="bg-[#FBFBFA] text-[#18181B] min-h-screen flex flex-col font-sans antialiased overflow-x-clip selection:bg-[#18181B] selection:text-white">
 
