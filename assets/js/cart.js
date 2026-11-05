@@ -146,10 +146,21 @@ async function updateCartItem(itemKey, newQty) {
 }
 
 /**
- * Remove Item from Cart
+ * Remove Item from Cart with Custom JayArt Confirmation Modal
  */
 async function removeCartItem(itemKey) {
-    if (!confirm('Are you sure you want to remove this painting from your cart?')) {
+    let confirmed = true;
+    if (typeof showConfirmModal === 'function') {
+        confirmed = await showConfirmModal({
+            title: 'Remove Artwork',
+            message: 'Are you sure you want to remove this original painting from your collection cart?',
+            confirmText: 'Remove Artwork',
+            cancelText: 'Keep in Cart',
+            type: 'danger'
+        });
+    }
+
+    if (!confirmed) {
         return;
     }
 
@@ -166,9 +177,15 @@ async function removeCartItem(itemKey) {
         const data = await response.json();
         if (data.success) {
             window.location.reload();
+        } else {
+            if (typeof showToast === 'function') {
+                showToast(data.message || 'Could not remove artwork', 'error');
+            }
         }
     } catch (err) {
-        showToast('Error removing artwork', 'error');
+        if (typeof showToast === 'function') {
+            showToast('Error removing artwork from cart', 'error');
+        }
     }
 }
 

@@ -168,6 +168,9 @@
     <!-- Global Coupon Celebration & Discount Modal -->
     <?php require_once __DIR__ . '/coupon_modal.php'; ?>
 
+    <!-- Global Custom Confirmation & Alert Modal -->
+    <?php require_once __DIR__ . '/confirm_modal.php'; ?>
+
     <!-- Scripts -->
     <script src="<?= ASSETS_URL ?>/js/app.js?v=<?= APP_VERSION ?>"></script>
     <script src="<?= ASSETS_URL ?>/js/cart.js?v=<?= APP_VERSION ?>"></script>

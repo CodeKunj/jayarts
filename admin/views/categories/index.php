@@ -65,7 +65,7 @@
                                 </span>
                             </td>
                             <td style="text-align: right;">
-                                <form action="<?= ADMIN_URL ?>/categories/delete/<?= (int)$cat['id'] ?>" method="POST" class="inline" onsubmit="return confirm('Delete this category?')">
+                                <form action="<?= ADMIN_URL ?>/categories/delete/<?= (int)$cat['id'] ?>" method="POST" class="inline" data-confirm="Are you sure you want to delete category '<?= htmlspecialchars($cat['name'] ?? '', ENT_QUOTES) ?>'?" data-confirm-title="Delete Category" data-confirm-btn="Delete Category">
                                     <button type="submit" class="text-xs text-red-600 hover:text-red-700 font-semibold px-2 py-1">
                                         Delete
                                     </button>

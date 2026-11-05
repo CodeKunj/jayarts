@@ -67,7 +67,7 @@
                                 <a href="<?= ADMIN_URL ?>/blog/edit/<?= (int)$b['id'] ?>" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-semibold mr-1">
                                     Edit
                                 </a>
-                                <form action="<?= ADMIN_URL ?>/blog/delete/<?= (int)$b['id'] ?>" method="POST" class="inline" onsubmit="return confirm('Delete this story?')">
+                                <form action="<?= ADMIN_URL ?>/blog/delete/<?= (int)$b['id'] ?>" method="POST" class="inline" data-confirm="Are you sure you want to delete the story '<?= htmlspecialchars($b['title'] ?? '', ENT_QUOTES) ?>'?" data-confirm-title="Delete Story" data-confirm-btn="Delete Story">
                                     <button type="submit" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded text-xs font-semibold">
                                         Delete
                                     </button>

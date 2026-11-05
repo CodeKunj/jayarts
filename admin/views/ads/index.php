@@ -922,9 +922,20 @@ function copyCodeSnippet(key, btn) {
     });
 }
 
-// Confirm & Submit Delete Slot
-function confirmDeleteSlot(slotId, slotName) {
-    if (confirm('Are you sure you want to delete the ad slot "' + slotName + '"?')) {
+// Confirm & Submit Delete Slot with Custom JayArt Modal
+async function confirmDeleteSlot(slotId, slotName) {
+    let ok = true;
+    if (typeof showConfirmModal === 'function') {
+        ok = await showConfirmModal({
+            title: 'Delete Ad Slot',
+            message: 'Are you sure you want to delete the ad slot "' + slotName + '"? All banner configurations for this slot will be permanently removed.',
+            confirmText: 'Delete Slot',
+            cancelText: 'Cancel',
+            type: 'danger'
+        });
+    }
+
+    if (ok) {
         const form = document.getElementById('delete-slot-form');
         if (form) {
             form.action = '<?= ADMIN_URL ?>/ads/delete/' + slotId;

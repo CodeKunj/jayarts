@@ -133,7 +133,7 @@ $stats = $stats ?? [
                                     <span class="font-mono font-bold text-[#0F172A] bg-emerald-50 px-2.5 py-1 rounded-md border border-dashed border-emerald-300 text-xs tracking-wider">
                                         <?= htmlspecialchars($c['code']) ?>
                                     </span>
-                                    <button type="button" onclick="navigator.clipboard.writeText('<?= htmlspecialchars($c['code']) ?>'); alert('Code <?= htmlspecialchars($c['code']) ?> copied!');" title="Copy code" class="text-slate-400 hover:text-slate-700 p-1">
+                                    <button type="button" onclick="navigator.clipboard.writeText('<?= htmlspecialchars($c['code']) ?>'); if(typeof showToast === 'function') { showToast('Code <?= htmlspecialchars($c['code']) ?> copied to clipboard!', 'success'); } else { showAlertModal({ title: 'Code Copied', message: 'Coupon code <?= htmlspecialchars($c['code']) ?> copied to clipboard!' }); }" title="Copy code" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                                     </button>
                                 </div>
@@ -214,7 +214,7 @@ $stats = $stats ?? [
                                     </button>
 
                                     <!-- Delete Button -->
-                                    <form action="<?= ADMIN_URL ?>/coupons/delete/<?= $c['id'] ?>" method="POST" onsubmit="return confirm('Are you sure you want to delete coupon <?= htmlspecialchars($c['code']) ?>?');" class="inline">
+                                    <form action="<?= ADMIN_URL ?>/coupons/delete/<?= $c['id'] ?>" method="POST" data-confirm="Are you sure you want to delete coupon '<?= htmlspecialchars($c['code']) ?>'?" data-confirm-title="Delete Coupon" data-confirm-btn="Delete Coupon" class="inline">
                                         <button type="submit" class="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors" title="Delete Coupon">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>

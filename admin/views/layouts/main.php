@@ -70,6 +70,9 @@
         </footer>
     </div>
 
+    <!-- Global Custom Confirmation & Alert Modal -->
+    <?php require_once ROOT_PATH . '/app/views/layouts/confirm_modal.php'; ?>
+
     <script src="<?= ASSETS_URL ?>/js/admin.js?v=<?= APP_VERSION ?>"></script>
 </body>
 </html>

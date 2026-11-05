@@ -162,7 +162,7 @@ $recentKeys = $stats['recent_keys'] ?? [];
                     <p class="text-[11px] text-rose-700/80 mt-1">Deletes all cached files and resets runtime metrics. Clean slate reset.</p>
                     <span class="inline-block mt-2 text-[10px] font-mono text-rose-500">Pattern: * (Complete Flush)</span>
                 </div>
-                <form method="POST" action="<?= ADMIN_URL ?>/cache/clear-all" class="mt-4 mb-0" onsubmit="return confirm('Flush all cache files from disk?');">
+                <form method="POST" action="<?= ADMIN_URL ?>/cache/clear-all" class="mt-4 mb-0" data-confirm="Are you sure you want to flush all cache files from disk? Cache will regenerate automatically as users visit pages." data-confirm-title="Flush Cache" data-confirm-btn="Flush Entire Cache">
                     <?= Validator::csrfField() ?>
                     <button type="submit" class="w-full py-2 px-3 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold transition-all shadow-xs">
                         Flush Entire Cache

@@ -182,20 +182,6 @@ function updateCartQty(itemKey, newQty) {
     .catch(() => window.location.reload());
 }
 
-function removeCartItem(itemKey) {
-    fetch('<?= SITE_URL ?>/cart/remove', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'item_key=' + encodeURIComponent(itemKey)
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data && data.success) {
-            window.location.reload();
-        }
-    })
-    .catch(() => window.location.reload());
-}
 
 function selectCouponCode(code) {
     const input = document.getElementById('cartCouponInput');
