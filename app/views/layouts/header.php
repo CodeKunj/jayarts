@@ -27,8 +27,15 @@ $navCategories = $categoryModel->getActiveWithCounts();
     <!-- Local Production Compiled Tailwind CSS (Fast, 100% Offline, cPanel Ready, Zero-CDN Dependency) -->
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/tailwind.min.css?v=<?= APP_VERSION ?>">
 
-    <!-- Master Stylesheet -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/style.css?v=<?= APP_VERSION ?>">
+    <!-- Master Stylesheet (With automatic filemtime cache-busting) -->
+    <?php 
+    $styleVer = defined('APP_VERSION') ? APP_VERSION : '1.0.2';
+    $styleFile = ROOT_PATH . '/assets/css/style.css';
+    if (file_exists($styleFile)) {
+        $styleVer .= '.' . filemtime($styleFile);
+    }
+    ?>
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/style.css?v=<?= $styleVer ?>">
 
     <!-- Dynamic Site Global Configuration -->
     <script>
@@ -37,16 +44,176 @@ $navCategories = $categoryModel->getActiveWithCounts();
             window.SITE_URL = window.SITE_URL.replace(/^http:/, 'https:');
         }
     </script>
+
+    <!-- Critical Inlined Preloader CSS (Zero FOUC, Instant Full-Screen Render) -->
+    <style id="jayartPreloaderCritical">
+        #jayartPreloader {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 99999999 !important;
+            background: #FBFBFA !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            pointer-events: all !important;
+            user-select: none !important;
+        }
+        #jayartPreloader.preloader-hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+        .sculpture-loader-content {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            padding: 24px !important;
+            box-sizing: border-box !important;
+            animation: sculptureFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+        }
+        .sculpture-wrapper {
+            position: relative !important;
+            width: 100px !important;
+            height: 120px !important;
+            margin: 0 auto 16px auto !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        .sculpture-ambient-glow {
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 140px !important;
+            height: 140px !important;
+            background: radial-gradient(circle, rgba(197, 154, 88, 0.25) 0%, rgba(197, 154, 88, 0.05) 50%, transparent 70%) !important;
+            border-radius: 9999px !important;
+            filter: blur(8px) !important;
+            animation: sculpturePulse 2.4s ease-in-out infinite !important;
+            pointer-events: none !important;
+        }
+        .sculpture-svg {
+            width: 100px !important;
+            height: 120px !important;
+            display: block !important;
+            filter: drop-shadow(0 6px 14px rgba(24, 24, 27, 0.08)) !important;
+            animation: sculptureFloat 3s ease-in-out infinite !important;
+        }
+        .sculpture-halo {
+            animation: sculptureSpin 16s linear infinite !important;
+            transform-origin: 100px 105px !important;
+        }
+        .sculpture-chisel-line {
+            stroke-dasharray: 120 !important;
+            stroke-dashoffset: 120 !important;
+            animation: sculptureDraw 2.4s ease-in-out infinite alternate !important;
+        }
+        .sculpture-base-line {
+            width: 50px !important;
+            height: 2px !important;
+            background: linear-gradient(90deg, transparent, #C59A58, transparent) !important;
+            margin: 6px auto 0 auto !important;
+        }
+        .sculpture-brand {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 2px !important;
+            margin: 0 auto 14px auto !important;
+        }
+        .sculpture-brand-title {
+            font-family: 'Outfit', -apple-system, sans-serif !important;
+            font-weight: 800 !important;
+            font-size: 1.15rem !important;
+            letter-spacing: 0.1em !important;
+            text-transform: uppercase !important;
+            color: #18181B !important;
+            line-height: 1.2 !important;
+        }
+        .sculpture-brand-sub {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 0.65rem !important;
+            letter-spacing: 0.16em !important;
+            text-transform: uppercase !important;
+            color: #71717A !important;
+            font-weight: 600 !important;
+        }
+        .sculpture-progress-track {
+            width: 130px !important;
+            height: 2px !important;
+            background: rgba(24, 24, 27, 0.08) !important;
+            border-radius: 9999px !important;
+            overflow: hidden !important;
+            position: relative !important;
+            margin: 0 auto 10px auto !important;
+        }
+        .sculpture-progress-bar {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            height: 100% !important;
+            width: 40% !important;
+            background: linear-gradient(90deg, #C59A58, #E5C388, #C59A58) !important;
+            border-radius: 9999px !important;
+            animation: sculptureTrack 1.5s ease-in-out infinite !important;
+        }
+        .sculpture-status-text {
+            font-size: 0.65rem !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            color: #A1A1AA !important;
+            letter-spacing: 0.06em !important;
+            text-transform: uppercase !important;
+            font-weight: 500 !important;
+        }
+        @keyframes sculptureFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        @keyframes sculpturePulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+        }
+        @keyframes sculptureDraw {
+            0% { stroke-dashoffset: 120; opacity: 0.3; }
+            50% { stroke-dashoffset: 0; opacity: 1; }
+            100% { stroke-dashoffset: -120; opacity: 0.3; }
+        }
+        @keyframes sculptureSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes sculptureTrack {
+            0% { left: -40%; width: 30%; }
+            50% { left: 35%; width: 50%; }
+            100% { left: 100%; width: 30%; }
+        }
+        @keyframes sculptureFadeUp {
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="bg-[#FBFBFA] text-[#18181B] min-h-screen flex flex-col font-sans antialiased overflow-x-clip selection:bg-[#18181B] selection:text-white">
 
     <!-- Classical Sculpture Atelier Preloader -->
-    <div id="jayartPreloader" class="jayart-preloader" aria-hidden="true">
-        <div class="sculpture-loader-content">
-            <div class="sculpture-wrapper">
+    <div id="jayartPreloader" class="jayart-preloader" aria-hidden="true" style="position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;background:#FBFBFA;z-index:99999999;display:flex;align-items:center;justify-content:center;margin:0;padding:0;">
+        <div class="sculpture-loader-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+            <div class="sculpture-wrapper" style="position:relative;width:100px;height:120px;margin:0 auto 16px auto;">
                 <div class="sculpture-ambient-glow"></div>
                 <!-- Inline Classical Sculpture SVG -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none" class="sculpture-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none" class="sculpture-svg" width="100" height="120" style="width:100px;height:120px;display:block;">
                     <defs>
                         <linearGradient id="sculptureGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stop-color="#C59A58" />
@@ -133,20 +300,21 @@ $navCategories = $categoryModel->getActiveWithCounts();
             var startTime = Date.now();
             function closeEarly() {
                 var p = document.getElementById('jayartPreloader');
-                if (p && !p.classList.contains('preloader-hidden')) {
-                    var diff = Date.now() - startTime;
-                    var delay = Math.max(0, 320 - diff);
-                    setTimeout(function() {
-                        p.classList.add('preloader-hidden');
-                        setTimeout(function() { if (p && p.parentNode) p.parentNode.removeChild(p); }, 500);
-                    }, delay);
-                }
+                if (!p) return;
+                var diff = Date.now() - startTime;
+                var delay = Math.max(0, 320 - diff);
+                setTimeout(function() {
+                    p.classList.add('preloader-hidden');
+                    p.style.opacity = '0';
+                    p.style.pointerEvents = 'none';
+                    setTimeout(function() { if (p && p.parentNode) p.parentNode.removeChild(p); }, 450);
+                }, delay);
             }
             if (document.readyState === 'complete') {
                 closeEarly();
             } else {
                 window.addEventListener('load', closeEarly);
-                setTimeout(closeEarly, 2000);
+                setTimeout(closeEarly, 1600);
             }
         })();
     </script>
