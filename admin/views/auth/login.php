@@ -24,12 +24,9 @@
 
     <div class="max-w-md w-full bg-white text-slate-900 rounded-3xl p-8 sm:p-10 shadow-2xl border border-slate-800/20 relative z-10">
         <div class="text-center mb-8">
-            <div class="inline-flex items-center gap-2 mb-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-[#0F172A] text-white flex items-center justify-center font-heading font-extrabold text-sm shadow-sm">
-                    JA
-                </div>
-                <span class="font-heading font-extrabold text-2xl tracking-tight text-slate-900">Jay<span class="text-emerald-700">Art</span></span>
-                <span class="text-[9px] bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider ml-1">Admin</span>
+            <div class="flex flex-col items-center justify-center gap-1.5 mb-3">
+                <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-9 w-auto object-contain">
+                <span class="text-[9px] bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider">Admin</span>
             </div>
             <h1 class="text-sm font-bold text-slate-800">Gallery Administration Console</h1>
             <p class="text-xs text-slate-400 mt-1">Authorized curators and managers only</p>

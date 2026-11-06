@@ -8,11 +8,8 @@ $adminUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
 <aside id="adminSidebar" class="admin-sidebar">
     <!-- Brand / Header -->
     <div class="h-16 flex items-center justify-between px-6 border-b border-[#1E293B]">
-        <a href="<?= ADMIN_URL ?>" class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-[#0F172A] text-white flex items-center justify-center font-heading font-extrabold text-xs shadow-sm">
-                JA
-            </div>
-            <span class="font-heading font-extrabold text-lg text-white tracking-tight">Jay<span class="text-emerald-400">Art</span></span>
+        <a href="<?= ADMIN_URL ?>" class="flex items-center gap-2.5" title="JayArt Administration Console">
+            <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-7 w-auto brightness-0 invert">
             <span class="text-[9px] bg-slate-800/80 text-slate-300 border border-slate-700/80 px-2 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider ml-1">Admin</span>
         </a>
     </div>

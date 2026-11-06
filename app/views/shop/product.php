@@ -255,11 +255,8 @@ function submitAddToCart(productId) {
     quickAddToCart(productId, qty, selectedFrameName);
 }
 
-function submitBuyNow(productId) {
+async function submitBuyNow(productId) {
     const qty = parseInt(document.getElementById('productQty').value) || 1;
-    quickAddToCart(productId, qty, selectedFrameName);
-    setTimeout(() => {
-        window.location.href = '<?= SITE_URL ?>/checkout';
-    }, 400);
+    await quickBuyNow(productId, qty, selectedFrameName);
 }
 </script>

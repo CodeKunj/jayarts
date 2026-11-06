@@ -340,13 +340,29 @@ function togglePaymentBox(method) {
     }
 }
 
+function getCheckoutActionUrl(path) {
+    const clean = path.replace(/^\//, '');
+    let base = (typeof window.SITE_URL !== 'undefined' && window.SITE_URL) ? window.SITE_URL.replace(/\/$/, '') : '';
+    if (window.location.protocol === 'https:' && base.startsWith('http:')) {
+        base = base.replace(/^http:/, 'https:');
+    }
+    if (base && (base.includes(window.location.host) || base.startsWith('/'))) {
+        try {
+            const parsed = new URL(base, window.location.origin);
+            const prefix = parsed.pathname.replace(/\/$/, '');
+            return prefix ? `${prefix}/${clean}` : `/${clean}`;
+        } catch (e) {}
+    }
+    return base ? `${base}/${clean}` : `/${clean}`;
+}
+
 function applyCouponCode() {
     const input = document.getElementById('couponCodeInput');
     const code = input ? input.value.trim() : '';
     const msg = document.getElementById('couponMessage');
     if (!code) return;
 
-    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/apply-coupon';
+    const url = getCheckoutActionUrl('cart/apply-coupon');
     fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -398,7 +414,7 @@ async function removeCheckoutCoupon() {
 
     if (!confirmed) return;
 
-    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/remove-coupon';
+    const url = getCheckoutActionUrl('cart/remove-coupon');
     fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }

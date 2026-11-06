@@ -281,7 +281,7 @@ $navCategories = $categoryModel->getActiveWithCounts();
             </div>
 
             <div class="sculpture-brand">
-                <span class="sculpture-brand-title">JayArt</span>
+                <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-8 w-auto object-contain mx-auto mb-1">
                 <span class="sculpture-brand-sub">Fine Art Atelier • 2026</span>
             </div>
 
@@ -329,11 +329,8 @@ $navCategories = $categoryModel->getActiveWithCounts();
                 <!-- Left: Brand Capsule + Collection Capsule -->
                 <div class="flex items-center gap-2 sm:gap-2.5">
                     <!-- Brand Capsule -->
-                    <a href="<?= SITE_URL ?>" class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-white hover:bg-stone-50 border border-black/[0.06] rounded-full shadow-xs transition-transform active:scale-95 group">
-                        <div class="w-5 h-5 rounded-full bg-[#18181B] text-white flex items-center justify-center font-bold text-[10px] shadow-xs">
-                            <span>✦</span>
-                        </div>
-                        <span class="font-heading font-extrabold text-sm sm:text-base tracking-tight text-[#18181B]">JayArt</span>
+                    <a href="<?= SITE_URL ?>" class="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-white hover:bg-stone-50 border border-black/[0.06] rounded-full shadow-xs transition-transform active:scale-95 group" title="JayArt Fine Art Atelier">
+                        <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-6 sm:h-7 w-auto object-contain">
                     </a>
 
                     <!-- Collection / Breadcrumb Capsule -->

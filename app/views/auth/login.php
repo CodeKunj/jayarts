@@ -8,7 +8,9 @@
     <div class="bg-white border border-linen rounded-2xl p-8 shadow-sm">
         
         <div class="text-center mb-6">
-            <span class="w-10 h-10 rounded-full bg-forest/10 text-forest font-display font-bold flex items-center justify-center mx-auto mb-3">JA</span>
+            <a href="<?= SITE_URL ?>" class="inline-block mb-3" title="Back to JayArt Gallery">
+                <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-9 w-auto mx-auto object-contain">
+            </a>
             <h1 class="font-serif text-2xl font-bold text-ink">Collector Sign In</h1>
             <p class="text-xs text-muted mt-1">Access your saved artworks, order history, and invoices</p>
         </div>

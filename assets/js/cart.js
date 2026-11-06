@@ -4,11 +4,20 @@
  */
 
 function getCartApiUrl(path) {
+    const cleanPath = path.replace(/^\//, '');
     let base = (typeof window.SITE_URL !== 'undefined' && window.SITE_URL) ? window.SITE_URL.replace(/\/$/, '') : '';
     if (window.location.protocol === 'https:' && base.startsWith('http:')) {
         base = base.replace(/^http:/, 'https:');
     }
-    const cleanPath = path.replace(/^\//, '');
+    if (base && (base.includes(window.location.host) || base.startsWith('/'))) {
+        try {
+            const parsed = new URL(base, window.location.origin);
+            const prefix = parsed.pathname.replace(/\/$/, '');
+            return prefix ? `${prefix}/${cleanPath}` : `/${cleanPath}`;
+        } catch (e) {
+            // fallback to base string
+        }
+    }
     return base ? `${base}/${cleanPath}` : `/${cleanPath}`;
 }
 
@@ -60,13 +69,20 @@ async function handleAddToCart(productId, quantity = 1, frameChosen = 'Rolled Ca
             return;
         }
 
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch (jsonErr) {
+            console.error('Non-JSON response from gallery server:', jsonErr);
+            showToast('Unexpected server response. Please try again.', 'error');
+            return;
+        }
 
-        if (data.success) {
+        if (data && data.success) {
             updateCartBadges(data.cart_count);
             showToast(data.message || 'Painting added to collection cart.', 'success');
         } else {
-            showToast(data.message || 'Unable to add painting to cart.', 'error');
+            showToast((data && data.message) ? data.message : 'Unable to add painting to cart.', 'error');
         }
     } catch (err) {
         console.error('Error communicating with gallery server:', err);
@@ -109,11 +125,19 @@ async function quickBuyNow(productId, quantity = 1, frameChosen = 'Rolled Canvas
             return;
         }
 
-        const data = await response.json();
-        if (data.success) {
+        let data;
+        try {
+            data = await response.json();
+        } catch (jsonErr) {
+            console.error('Non-JSON response from gallery server:', jsonErr);
+            showToast('Unable to proceed to checkout. Please try again.', 'error');
+            return;
+        }
+
+        if (data && data.success) {
             window.location.href = getCartApiUrl('checkout');
         } else {
-            showToast(data.message || 'Unable to proceed to checkout.', 'error');
+            showToast((data && data.message) ? data.message : 'Unable to proceed to checkout.', 'error');
         }
     } catch (err) {
         console.error('Error redirecting to checkout:', err);

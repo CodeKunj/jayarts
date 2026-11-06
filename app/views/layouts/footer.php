@@ -14,11 +14,8 @@
                 
                 <!-- Col 1: Brand & Philosophy -->
                 <div class="lg:col-span-2">
-                    <a href="<?= SITE_URL ?>" class="flex items-center gap-2 mb-4 group">
-                        <div class="w-8 h-8 rounded-lg bg-[#18181B] text-white flex items-center justify-center font-bold text-base border border-stone-700">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                        </div>
-                        <span class="text-2xl font-extrabold tracking-tight text-white">Jay<span class="text-stone-400">Art</span></span>
+                    <a href="<?= SITE_URL ?>" class="inline-block mb-4 group" title="JayArt Fine Art Gallery">
+                        <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-9 w-auto brightness-0 invert opacity-95 group-hover:opacity-100 transition-opacity">
                     </a>
                     <p class="text-xs text-gray-400 leading-relaxed max-w-sm mb-6">
                         An acclaimed online gallery connecting art lovers with certified original paintings, modern acrylics, and fine art watercolors. Every piece arrives with an authenticated physical provenance certificate.

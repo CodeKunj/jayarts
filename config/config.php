@@ -48,6 +48,16 @@ if ($appDebug) {
 $envAppUrl = env('APP_URL');
 $currentHost = $_SERVER['HTTP_HOST'] ?? '';
 
+// Comprehensive HTTPS Detection (Direct, cPanel, Cloudflare, Reverse Proxies)
+$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+           (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443) ||
+           (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') ||
+           (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') ||
+           (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && (int)$_SERVER['HTTP_X_FORWARDED_PORT'] === 443) ||
+           (isset($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower((string)$_SERVER['HTTP_FRONT_END_HTTPS']) === 'on') ||
+           (isset($_SERVER['REQUEST_SCHEME']) && strtolower((string)$_SERVER['REQUEST_SCHEME']) === 'https') ||
+           (isset($_SERVER['HTTP_CF_VISITOR']) && str_contains($_SERVER['HTTP_CF_VISITOR'], 'https'));
+
 // If accessed via a real domain/host (not localhost), ignore localhost APP_URL from dev .env
 if (!empty($envAppUrl) && !empty($currentHost)) {
     $parsedHost = parse_url((string)$envAppUrl, PHP_URL_HOST);
@@ -56,15 +66,14 @@ if (!empty($envAppUrl) && !empty($currentHost)) {
     }
 }
 
+// Upgrade HTTP to HTTPS in APP_URL if accessed over HTTPS
+if ($isHttps && !empty($envAppUrl) && str_starts_with((string)$envAppUrl, 'http://')) {
+    $envAppUrl = 'https://' . substr((string)$envAppUrl, 7);
+}
+
 if (!empty($envAppUrl)) {
     define('SITE_URL', rtrim((string)$envAppUrl, '/'));
 } else {
-    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
-               (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443) ||
-               (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') ||
-               (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') ||
-               (isset($_SERVER['HTTP_CF_VISITOR']) && str_contains($_SERVER['HTTP_CF_VISITOR'], 'https'));
-
     $protocol = $isHttps ? 'https://' : 'http://';
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $rawScript = $_SERVER['SCRIPT_NAME'] ?? '';
@@ -83,7 +92,7 @@ if (!defined('UPLOADS_URL')) define('UPLOADS_URL', SITE_URL . '/uploads');
 // Store Branding & General Defaults
 if (!defined('APP_NAME')) define('APP_NAME', 'JayArt');
 if (!defined('APP_TAGLINE')) define('APP_TAGLINE', 'Original Paintings & Fine Art Gallery');
-if (!defined('APP_VERSION')) define('APP_VERSION', '1.0.2');
+if (!defined('APP_VERSION')) define('APP_VERSION', '1.0.3');
 
 // Currency Defaults
 if (!defined('CURRENCY_SYMBOL')) define('CURRENCY_SYMBOL', '₹');

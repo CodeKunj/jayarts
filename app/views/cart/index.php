@@ -201,8 +201,24 @@ $items = is_array($items ?? null) ? $items : [];
 </div>
 
 <script>
+function getCartActionUrl(path) {
+    const clean = path.replace(/^\//, '');
+    let base = (typeof window.SITE_URL !== 'undefined' && window.SITE_URL) ? window.SITE_URL.replace(/\/$/, '') : '';
+    if (window.location.protocol === 'https:' && base.startsWith('http:')) {
+        base = base.replace(/^http:/, 'https:');
+    }
+    if (base && (base.includes(window.location.host) || base.startsWith('/'))) {
+        try {
+            const parsed = new URL(base, window.location.origin);
+            const prefix = parsed.pathname.replace(/\/$/, '');
+            return prefix ? `${prefix}/${clean}` : `/${clean}`;
+        } catch (e) {}
+    }
+    return base ? `${base}/${clean}` : `/${clean}`;
+}
+
 function updateCartQty(itemKey, newQty) {
-    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/update';
+    const url = getCartActionUrl('cart/update');
     fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -231,7 +247,7 @@ function applyCartCoupon() {
     const code = input ? input.value.trim() : '';
     if (!code) return;
 
-    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/apply-coupon';
+    const url = getCartActionUrl('cart/apply-coupon');
     fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -277,7 +293,7 @@ async function removeCartCoupon() {
 
     if (!confirmed) return;
 
-    const url = (window.SITE_URL || '').replace(/\/$/, '') + '/cart/remove-coupon';
+    const url = getCartActionUrl('cart/remove-coupon');
     fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
