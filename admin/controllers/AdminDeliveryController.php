@@ -25,7 +25,8 @@ class AdminDeliveryController extends Controller {
         ]);
     }
 
-    public function update(int $orderId): void {
+    public function update(int $orderId = 0, ?int $order_id = null): void {
+        $orderId = $orderId > 0 ? $orderId : (int)($order_id ?? 0);
         $courierName    = trim((string)($_POST['courier_name'] ?? 'Fine Art Express'));
         $trackingNumber = trim((string)($_POST['tracking_number'] ?? ''));
         $currentStatus  = trim((string)($_POST['current_status'] ?? 'In Transit'));

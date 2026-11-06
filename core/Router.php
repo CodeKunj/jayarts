@@ -141,8 +141,11 @@ class Router {
      * Execute Controller Action or Callable Closure
      */
     private static function executeHandler(array|callable $handler, array $params): void {
+        // Pass arguments positionally via array_values to eliminate PHP 8 named parameter mismatches
+        $args = array_values($params);
+
         if (is_callable($handler)) {
-            call_user_func_array($handler, $params);
+            call_user_func_array($handler, $args);
             return;
         }
 
@@ -152,7 +155,7 @@ class Router {
             if (class_exists($controllerClass)) {
                 $controller = new $controllerClass();
                 if (method_exists($controller, $method)) {
-                    call_user_func_array([$controller, $method], $params);
+                    call_user_func_array([$controller, $method], $args);
                     return;
                 }
                 throw new RuntimeException("Method {$method} does not exist in controller {$controllerClass}");

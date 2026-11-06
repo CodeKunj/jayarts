@@ -167,7 +167,8 @@ class CheckoutController extends Controller {
         $this->redirect('/checkout/success/' . $orderNumber);
     }
 
-    public function success(string $orderNumber): void {
+    public function success(string $orderNumber = '', ?string $order_number = null): void {
+        $orderNumber = !empty($orderNumber) ? $orderNumber : ($order_number ?? '');
         $orderModel = new Order();
         $order = $orderModel->findByOrderNumber($orderNumber);
 

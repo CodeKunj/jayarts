@@ -20,7 +20,8 @@ class TrackingController extends Controller {
         ]);
     }
 
-    public function search(string $orderNumber): void {
+    public function search(string $orderNumber = '', ?string $order_number = null): void {
+        $orderNumber = !empty($orderNumber) ? $orderNumber : ($order_number ?? '');
         $orderModel = new Order();
         $order = $orderModel->findByOrderNumber($orderNumber);
 
