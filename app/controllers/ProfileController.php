@@ -66,7 +66,8 @@ class ProfileController extends Controller {
         ]);
     }
 
-    public function orderDetail(int $id): void {
+    public function orderDetail(int|string $id): void {
+        $id = (int)$id;
         $orderModel = new Order();
         $order = $orderModel->find($id);
 
@@ -86,7 +87,8 @@ class ProfileController extends Controller {
         ]);
     }
 
-    public function downloadInvoice(int $id): void {
+    public function downloadInvoice(int|string $id): void {
+        $id = (int)$id;
         $orderModel = new Order();
         $order = $orderModel->find($id);
 
@@ -257,7 +259,8 @@ class ProfileController extends Controller {
         $this->redirect('/profile/ticket/' . $ticketId);
     }
 
-    public function viewTicket(int $id): void {
+    public function viewTicket(int|string $id): void {
+        $id = (int)$id;
         $ticketModel = new Ticket();
         $ticket = $ticketModel->find($id);
 
@@ -275,7 +278,8 @@ class ProfileController extends Controller {
         ]);
     }
 
-    public function replyTicket(int $id): void {
+    public function replyTicket(int|string $id): void {
+        $id = (int)$id;
         $this->validateCSRF();
 
         $ticketModel = new Ticket();

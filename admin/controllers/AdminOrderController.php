@@ -31,7 +31,8 @@ class AdminOrderController extends Controller {
         ]);
     }
 
-    public function view(int $id): void {
+    public function view(int|string $id): void {
+        $id = (int)$id;
         $orderModel = new Order();
         $order = $orderModel->find($id);
 
@@ -53,7 +54,8 @@ class AdminOrderController extends Controller {
         ]);
     }
 
-    public function updateStatus(int $id): void {
+    public function updateStatus(int|string $id): void {
+        $id = (int)$id;
         $orderModel = new Order();
         $order = $orderModel->find($id);
 
@@ -85,7 +87,8 @@ class AdminOrderController extends Controller {
         exit;
     }
 
-    public function invoice(int $id): void {
+    public function invoice(int|string $id): void {
+        $id = (int)$id;
         $orderModel = new Order();
         $order = $orderModel->find($id);
 

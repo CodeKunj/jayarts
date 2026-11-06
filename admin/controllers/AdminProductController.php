@@ -112,7 +112,8 @@ class AdminProductController extends Controller {
         exit;
     }
 
-    public function edit(int $id): void {
+    public function edit(int|string $id): void {
+        $id = (int)$id;
         $productModel = new Product();
         $product = $productModel->find($id);
 
@@ -141,7 +142,8 @@ class AdminProductController extends Controller {
         ]);
     }
 
-    public function update(int $id): void {
+    public function update(int|string $id): void {
+        $id = (int)$id;
         $productModel = new Product();
         $product = $productModel->find($id);
 
@@ -218,7 +220,8 @@ class AdminProductController extends Controller {
         exit;
     }
 
-    public function delete(int $id): void {
+    public function delete(int|string $id): void {
+        $id = (int)$id;
         $productModel = new Product();
         $productModel->delete($id);
 

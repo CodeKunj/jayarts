@@ -141,27 +141,84 @@ class Router {
      * Execute Controller Action or Callable Closure
      */
     private static function executeHandler(array|callable $handler, array $params): void {
-        // Pass arguments positionally via array_values to eliminate PHP 8 named parameter mismatches
-        $args = array_values($params);
-
-        if (is_callable($handler)) {
-            call_user_func_array($handler, $args);
-            return;
-        }
+        $reflection = null;
+        $callable = null;
 
         if (is_array($handler) && count($handler) === 2) {
             [$controllerClass, $method] = $handler;
 
-            if (class_exists($controllerClass)) {
-                $controller = new $controllerClass();
-                if (method_exists($controller, $method)) {
-                    call_user_func_array([$controller, $method], $args);
-                    return;
-                }
+            if (!class_exists($controllerClass)) {
+                throw new RuntimeException("Controller class {$controllerClass} not found");
+            }
+
+            $controller = new $controllerClass();
+            if (!method_exists($controller, $method)) {
                 throw new RuntimeException("Method {$method} does not exist in controller {$controllerClass}");
             }
-            throw new RuntimeException("Controller class {$controllerClass} not found");
+
+            $reflection = new ReflectionMethod($controller, $method);
+            $callable = [$controller, $method];
+        } elseif (is_callable($handler)) {
+            $reflection = is_object($handler) && !($handler instanceof Closure) 
+                ? new ReflectionMethod($handler, '__invoke') 
+                : new ReflectionFunction($handler);
+            $callable = $handler;
+        } else {
+            return;
         }
+
+        // Align and cast parameters to eliminate PHP 8 strict-type errors (e.g. string '1' -> int 1)
+        $rawArgs = array_values($params);
+        $finalArgs = [];
+
+        if ($reflection !== null) {
+            $refParams = $reflection->getParameters();
+            foreach ($refParams as $index => $param) {
+                if (isset($rawArgs[$index])) {
+                    $val = $rawArgs[$index];
+                    $type = $param->getType();
+
+                    if ($type instanceof ReflectionNamedType) {
+                        $typeName = $type->getName();
+                        if ($typeName === 'int' && is_numeric($val)) {
+                            $val = (int)$val;
+                        } elseif ($typeName === 'float' && is_numeric($val)) {
+                            $val = (float)$val;
+                        } elseif ($typeName === 'bool') {
+                            $val = filter_var($val, FILTER_VALIDATE_BOOLEAN);
+                        } elseif ($typeName === 'string') {
+                            $val = (string)$val;
+                        }
+                    } elseif ($type instanceof ReflectionUnionType) {
+                        $types = array_map(fn($t) => $t->getName(), $type->getTypes());
+                        if (in_array('int', $types, true) && is_numeric($val) && !in_array('string', $types, true)) {
+                            $val = (int)$val;
+                        }
+                    }
+
+                    $finalArgs[] = $val;
+                } elseif ($param->isDefaultValueAvailable()) {
+                    $finalArgs[] = $param->getDefaultValue();
+                } else {
+                    $finalArgs[] = null;
+                }
+            }
+
+            // Append any leftover arguments if method accepts variadics
+            if (count($rawArgs) > count($finalArgs)) {
+                for ($i = count($finalArgs); $i < count($rawArgs); $i++) {
+                    $val = $rawArgs[$i];
+                    if (is_numeric($val) && (string)(int)$val === (string)$val) {
+                        $val = (int)$val;
+                    }
+                    $finalArgs[] = $val;
+                }
+            }
+        } else {
+            $finalArgs = $rawArgs;
+        }
+
+        call_user_func_array($callable, $finalArgs);
     }
 }
 
