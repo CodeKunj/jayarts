@@ -7,7 +7,7 @@
 $isDiscounted = !empty($product['discount_price']) && (float)$product['discount_price'] < (float)$product['price'];
 $basePrice = $isDiscounted ? (float)$product['discount_price'] : (float)$product['price'];
 $frames = array_map('trim', explode(',', $product['frame_options'] ?: 'Rolled Canvas,Stretched Canvas,Floating Matte Black Frame,Antique Gold Museum Frame'));
-$primaryImg = !empty($product['primary_image']) ? $product['primary_image'] : ASSETS_URL . '/images/banner.jpg';
+$primaryImg = Product::imageUrl($product['primary_image'] ?? null);
 ?>
 
 <!-- Breadcrumbs (Exact Shopcart style) -->
@@ -48,7 +48,7 @@ $primaryImg = !empty($product['primary_image']) ? $product['primary_image'] : AS
                 </button>
                 <?php if (!empty($product['images'])): ?>
                     <?php foreach ($product['images'] as $img): ?>
-                        <?php $imgPath = SITE_URL . '/' . $img['image_path']; ?>
+                        <?php $imgPath = Product::imageUrl($img['image_path'] ?? null); ?>
                         <button type="button" onclick="document.getElementById('mainProductImage').src = '<?= htmlspecialchars($imgPath) ?>'" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 p-2 border-2 border-transparent hover:border-stone-400 flex items-center justify-center flex-shrink-0 transition-colors cursor-pointer">
                             <img src="<?= htmlspecialchars($imgPath) ?>" class="max-h-full max-w-full object-contain" alt="Angle View">
                         </button>

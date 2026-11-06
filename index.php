@@ -106,22 +106,41 @@ Router::get('/db-setup', function() {
         </div>');
     }
 
+    if (isset($_GET['clean']) && $_GET['clean'] === '1') {
+        $cleanFile = ROOT_PATH . '/database/clean_dummy_data.sql';
+        if (file_exists($cleanFile)) {
+            Database::executeSqlFile($db, $cleanFile);
+        }
+    }
+
     Database::autoMigrateIfEmpty($db, true);
+    Cache::clear();
 
     $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
     $tableCount = count($tables);
 
+    $productCount = 0;
+    try {
+        $productCount = (int)$db->query("SELECT COUNT(*) FROM `products`")->fetchColumn();
+    } catch (Throwable $e) {}
+
     echo '<div style="font-family:sans-serif;max-width:650px;margin:50px auto;padding:30px;border:1px solid #e2e8f0;border-radius:16px;background:#ffffff;box-shadow:0 10px 25px -5px rgba(0,0,0,0.05);color:#0f172a;">
         <h2 style="margin-top:0;color:#0f172a;">JayArt Database Initialized</h2>
-        <p style="color:#475569;font-size:14px;">The database schema and essential seeds are verified and up to date.</p>
-        <div style="background:#f8fafc;padding:16px;border-radius:12px;border:1px solid #e2e8f0;margin:20px 0;font-size:13px;">
+        <p style="color:#475569;font-size:14px;">The database schema and caches have been flushed and verified.</p>
+        ' . (isset($_GET['clean']) ? '<div style="background:#ecfdf5;color:#065f46;padding:12px;border-radius:8px;margin-bottom:16px;font-size:13px;font-weight:600;">All sample paintings, dummy reviews, and demo orders have been purged!</div>' : '') . '
+        <div style="background:#f8fafc;padding:16px;border-radius:12px;border:1px solid #e2e8f0;margin:20px 0;font-size:13px;line-height:1.7;">
             <strong>Database Status:</strong> Connected to MySQL<br>
             <strong>Active Tables:</strong> ' . $tableCount . ' tables created<br>
+            <strong>Total Paintings in Catalog:</strong> ' . $productCount . '<br>
+            <strong>System Cache:</strong> Cleared and Fresh<br>
             <strong>Default Super Admin:</strong> admin@jayart.com (admin123)<br>
             <strong>Base Currency:</strong> Indian Rupee (INR)
         </div>
-        <a href="' . SITE_URL . '" style="display:inline-block;background:#0f172a;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:50px;font-weight:600;font-size:13px;">Go to Storefront &rarr;</a>
-        <a href="' . SITE_URL . '/admin" style="display:inline-block;background:#f1f5f9;color:#0f172a;text-decoration:none;padding:12px 24px;border-radius:50px;font-weight:600;font-size:13px;margin-left:8px;">Admin Panel &rarr;</a>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;">
+            <a href="' . SITE_URL . '" style="background:#0f172a;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:50px;font-weight:600;font-size:13px;">Go to Storefront &rarr;</a>
+            <a href="' . SITE_URL . '/admin" style="background:#f1f5f9;color:#0f172a;text-decoration:none;padding:12px 24px;border-radius:50px;font-weight:600;font-size:13px;">Admin Panel &rarr;</a>
+            <a href="' . SITE_URL . '/db-setup?clean=1" onclick="return confirm(\'Are you sure you want to clean all dummy data from the database?\');" style="background:#fef2f2;color:#dc2626;text-decoration:none;padding:12px 20px;border-radius:50px;font-weight:600;font-size:13px;border:1px solid #fecaca;">Purge Dummy Data Now</a>
+        </div>
     </div>';
     exit;
 });

@@ -34,6 +34,20 @@ class App {
         require_once $root . '/config/database.php';
         require_once $root . '/core/Cache.php';
 
+        // Auto-flush cache if site moved from localhost to live domain
+        $lastHostFile = defined('STORAGE_PATH') ? STORAGE_PATH . '/cache/.last_host' : $root . '/storage/cache/.last_host';
+        $currentHost = $_SERVER['HTTP_HOST'] ?? 'cli';
+        if (file_exists($lastHostFile)) {
+            $lastHost = trim((string)@file_get_contents($lastHostFile));
+            if ($lastHost !== '' && $lastHost !== $currentHost) {
+                Cache::clear();
+                @file_put_contents($lastHostFile, $currentHost);
+            }
+        } else {
+            Cache::clear();
+            @file_put_contents($lastHostFile, $currentHost);
+        }
+
         // Register class autoloader
         spl_autoload_register([self::class, 'autoload']);
 

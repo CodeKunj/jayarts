@@ -45,7 +45,7 @@
                     
                     <!-- Artwork Image -->
                     <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-stone-100 mb-3 relative flex items-center justify-center p-2">
-                        <img src="<?= htmlspecialchars($art['primary_image'] ?? '') ?>" alt="<?= htmlspecialchars($art['title'] ?? 'Art') ?>" class="max-h-full max-w-full object-contain drop-shadow-md rounded-lg">
+                        <img src="<?= htmlspecialchars(Product::imageUrl($art['primary_image'] ?? '')) ?>" alt="<?= htmlspecialchars($art['title'] ?? 'Art') ?>" class="max-h-full max-w-full object-contain drop-shadow-md rounded-lg">
                     </div>
 
                     <div class="flex items-center justify-between pt-1">
@@ -109,7 +109,7 @@
                 <!-- Center Large Featured Artwork with Soft Drop Shadow -->
                 <div class="my-2 sm:my-3 flex items-center justify-center relative">
                     <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($dealArt['slug'] ?? '') ?>" class="block transform group-hover:scale-105 transition-transform duration-300">
-                        <img src="<?= htmlspecialchars($dealArt['primary_image'] ?? '') ?>" alt="Featured Art Deal" class="max-h-44 sm:max-h-52 w-auto object-contain rounded-2xl drop-shadow-2xl">
+                        <img src="<?= htmlspecialchars(Product::imageUrl($dealArt['primary_image'] ?? '')) ?>" alt="Featured Art Deal" class="max-h-44 sm:max-h-52 w-auto object-contain rounded-2xl drop-shadow-2xl">
                     </a>
                 </div>
 
@@ -157,7 +157,7 @@
                 <!-- Right Artwork Thumbnail with Heart & "Open ↗" pill -->
                 <div class="relative flex-shrink-0">
                     <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-white shadow-md relative group">
-                        <img src="<?= htmlspecialchars($splitArt['primary_image'] ?? '') ?>" alt="Exclusive" class="w-full h-full object-cover">
+                        <img src="<?= htmlspecialchars(Product::imageUrl($splitArt['primary_image'] ?? '')) ?>" alt="Exclusive" class="w-full h-full object-cover">
                         <button type="button" onclick="toggleWishlist(<?= $splitArt['id'] ?? 0 ?>, this)" class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-6 h-6 rounded-full bg-white/90 text-red-500 flex items-center justify-center text-xs shadow-xs" title="Wishlist">
                             <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 text-red-500 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
                         </button>
@@ -603,7 +603,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </button>
 
                             <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($p['slug']) ?>" class="w-full h-full flex items-center justify-center">
-                                <img src="<?= htmlspecialchars($p['primary_image']) ?>" alt="<?= htmlspecialchars($p['title']) ?>" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';" class="max-h-full max-w-full object-contain transform group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                                <img src="<?= htmlspecialchars(Product::imageUrl($p['primary_image'] ?? '')) ?>" alt="<?= htmlspecialchars($p['title']) ?>" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';" class="max-h-full max-w-full object-contain transform group-hover:scale-105 transition-transform duration-300" loading="lazy">
                             </a>
                         </div>
 

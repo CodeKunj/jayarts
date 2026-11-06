@@ -48,23 +48,28 @@ class Product extends Model {
     }
 
     /**
+     * Resolve image URL: converts localhost links to current SITE_URL or fallback
+     */
+    public static function imageUrl(?string $url): string {
+        if (empty($url)) {
+            return 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';
+        }
+        $url = trim($url);
+        if (str_contains($url, 'localhost') || str_contains($url, '127.0.0.1')) {
+            $path = preg_replace('#^https?://[^/]+#', '', $url);
+            return (defined('SITE_URL') ? SITE_URL : '') . '/' . ltrim($path, '/');
+        }
+        if (!str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+            return (defined('SITE_URL') ? SITE_URL : '') . '/' . ltrim($url, '/');
+        }
+        return $url;
+    }
+
+    /**
      * Format product data (ensures valid absolute image URLs & fallbacks)
      */
     public static function formatProduct(array $p): array {
-        if (!empty($p['primary_image'])) {
-            $img = $p['primary_image'];
-            // If stored URL had localhost from local testing, convert to current SITE_URL
-            if (str_contains($img, 'localhost:8000') || str_contains($img, '127.0.0.1')) {
-                $img = preg_replace('#^https?://[^/]+#', '', $img);
-            }
-            if (!str_starts_with($img, 'http://') && !str_starts_with($img, 'https://')) {
-                $p['primary_image'] = (defined('SITE_URL') ? SITE_URL : '') . '/' . ltrim($img, '/');
-            } else {
-                $p['primary_image'] = $img;
-            }
-        } else {
-            $p['primary_image'] = 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&q=80';
-        }
+        $p['primary_image'] = self::imageUrl($p['primary_image'] ?? null);
         return $p;
     }
 

@@ -131,7 +131,8 @@ $selectedSort = $filters['sort'] ?? '';
             <?php else: ?>
                 <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
                     <?php foreach ($products as $index => $p): 
-                        $cardImg = !empty($p['primary_image']) ? $p['primary_image'] : (!empty($p['image']) ? $p['image'] : (!empty($p['image_path']) ? $p['image_path'] : ASSETS_URL . '/images/banner.jpg'));
+                        $rawImg = !empty($p['primary_image']) ? $p['primary_image'] : (!empty($p['image']) ? $p['image'] : (!empty($p['image_path']) ? $p['image_path'] : ''));
+                        $cardImg = Product::imageUrl($rawImg);
                     ?>
                         
                         <!-- Product Card -->
