@@ -69,16 +69,17 @@ class CheckoutController extends Controller {
         $customerName  = trim((string)($_POST['customer_name'] ?? ''));
         $customerEmail = trim((string)($_POST['customer_email'] ?? ''));
         $customerPhone = trim((string)($_POST['customer_phone'] ?? ''));
-        $address1      = trim((string)($_POST['address_line1'] ?? ''));
+        $address1      = trim((string)($_POST['address_line1'] ?? $_POST['address'] ?? ''));
         $address2      = trim((string)($_POST['address_line2'] ?? ''));
         $city          = trim((string)($_POST['city'] ?? ''));
         $state         = trim((string)($_POST['state'] ?? ''));
-        $postalCode    = trim((string)($_POST['postal_code'] ?? ''));
+        $postalCode    = trim((string)($_POST['postal_code'] ?? $_POST['pincode'] ?? ''));
         $country       = trim((string)($_POST['country'] ?? 'India'));
         $paymentMethod = trim((string)($_POST['payment_method'] ?? 'cod'));
         $orderNotes    = trim((string)($_POST['notes'] ?? ''));
 
         if (empty($customerName) || empty($customerEmail) || empty($customerPhone) || empty($address1) || empty($city) || empty($postalCode)) {
+            $_SESSION['old_checkout'] = $_POST;
             $_SESSION['flash_error'] = 'Please complete all required shipping fields.';
             $this->redirect('/checkout');
             return;
@@ -113,12 +114,12 @@ class CheckoutController extends Controller {
             }
         }
 
-        $paymentRef = trim((string)($_POST['payment_reference'] ?? ''));
+        $paymentRef = trim((string)($_POST['payment_reference'] ?? $_POST['upi_utr_number'] ?? ''));
         $initialPaymentStatus = in_array($paymentMethod, ['upi', 'bank_transfer']) ? 'pending' : 'pending';
 
         $orderModel = new Order();
         $orderId = $orderModel->createOrder([
-            'user_id'           => Auth::id(),
+            'user_id'           => (Auth::id() > 0) ? (int)Auth::id() : null,
             'customer_name'     => $customerName,
             'customer_email'    => $customerEmail,
             'customer_phone'    => $customerPhone,

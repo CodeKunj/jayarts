@@ -16,6 +16,22 @@ if (!empty($upi['upi_vpa'])) {
     $tempOrderNumber = 'JA-' . date('ymd') . '-' . strtoupper(substr(bin2hex(random_bytes(2)), 0, 4));
     $upiData = Payment::buildUPIData($upi['upi_vpa'], $upi['upi_merchant_name'] ?? 'JayArt Gallery', $total, $tempOrderNumber);
 }
+
+$oldCheckout = $_SESSION['old_checkout'] ?? [];
+unset($_SESSION['old_checkout']);
+
+$defaultAddress = null;
+if (!empty($savedAddresses) && is_array($savedAddresses)) {
+    foreach ($savedAddresses as $sa) {
+        if (!empty($sa['is_default'])) {
+            $defaultAddress = $sa;
+            break;
+        }
+    }
+    if (!$defaultAddress) {
+        $defaultAddress = $savedAddresses[0] ?? null;
+    }
+}
 ?>
 
 <div class="w-full space-y-6 pb-12 sm:pb-8">
@@ -90,36 +106,36 @@ if (!empty($upi['upi_vpa'])) {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="text-xs font-bold text-stone-700 block mb-1">Full Legal Name *</label>
-                            <input type="text" name="customer_name" required value="<?= htmlspecialchars($currentUser['name'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. Wade Warren">
+                            <input type="text" name="customer_name" required value="<?= htmlspecialchars($oldCheckout['customer_name'] ?? $defaultAddress['recipient_name'] ?? $currentUser['name'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. Wade Warren">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-stone-700 block mb-1">Mobile Phone *</label>
-                            <input type="tel" name="customer_phone" required value="<?= htmlspecialchars($currentUser['phone'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. +91 98765 43210">
+                            <input type="tel" name="customer_phone" required value="<?= htmlspecialchars($oldCheckout['customer_phone'] ?? $defaultAddress['phone'] ?? $currentUser['phone'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. +91 98765 43210">
                         </div>
                     </div>
 
                     <div>
                         <label class="text-xs font-bold text-stone-700 block mb-1">Email Address (For Invoice & Updates) *</label>
-                        <input type="email" name="customer_email" required value="<?= htmlspecialchars($currentUser['email'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. collector@domain.com">
+                        <input type="email" name="customer_email" required value="<?= htmlspecialchars($oldCheckout['customer_email'] ?? $currentUser['email'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. collector@domain.com">
                     </div>
 
                     <div>
                         <label class="text-xs font-bold text-stone-700 block mb-1">Street Address *</label>
-                        <input type="text" name="address_line1" required class="form-input text-xs" placeholder="e.g. 4140 Heritage Boulevard, Arts Enclave">
+                        <input type="text" name="address_line1" required value="<?= htmlspecialchars($oldCheckout['address_line1'] ?? $defaultAddress['address_line1'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. 4140 Heritage Boulevard, Arts Enclave">
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="text-xs font-bold text-stone-700 block mb-1">City *</label>
-                            <input type="text" name="city" required class="form-input text-xs" placeholder="e.g. Mumbai">
+                            <input type="text" name="city" required value="<?= htmlspecialchars($oldCheckout['city'] ?? $defaultAddress['city'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. Mumbai">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-stone-700 block mb-1">State *</label>
-                            <input type="text" name="state" required class="form-input text-xs" placeholder="e.g. Maharashtra">
+                            <input type="text" name="state" required value="<?= htmlspecialchars($oldCheckout['state'] ?? $defaultAddress['state'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. Maharashtra">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-stone-700 block mb-1">Pincode / Postal Code *</label>
-                            <input type="text" name="pincode" required class="form-input text-xs" placeholder="e.g. 400001">
+                            <input type="text" name="postal_code" required value="<?= htmlspecialchars($oldCheckout['postal_code'] ?? $oldCheckout['pincode'] ?? $defaultAddress['postal_code'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. 400001">
                         </div>
                     </div>
                 </div>
