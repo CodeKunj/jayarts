@@ -49,8 +49,10 @@ class Database {
             PDO::ATTR_TIMEOUT            => 5, // 5s timeout for reliable shared hosting
         ];
 
-        if (defined('PDO::MYSQL_ATTR_MULTI_STATEMENTS')) {
-            $options[PDO::MYSQL_ATTR_MULTI_STATEMENTS] = true;
+        if (defined('Pdo\Mysql::ATTR_MULTI_STATEMENTS')) {
+            $options[\Pdo\Mysql::ATTR_MULTI_STATEMENTS] = true;
+        } elseif (defined('PDO::MYSQL_ATTR_MULTI_STATEMENTS')) {
+            $options[@constant('PDO::MYSQL_ATTR_MULTI_STATEMENTS')] = true;
         }
 
         try {

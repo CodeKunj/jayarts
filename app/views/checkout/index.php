@@ -105,37 +105,37 @@ if (!empty($savedAddresses) && is_array($savedAddresses)) {
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="text-xs font-bold text-stone-700 block mb-1">Full Legal Name *</label>
-                            <input type="text" name="customer_name" required value="<?= htmlspecialchars($oldCheckout['customer_name'] ?? $defaultAddress['recipient_name'] ?? $currentUser['name'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. Wade Warren">
+                            <label class="text-xs font-bold text-stone-700 block mb-1">Full Legal Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="checkout_name" name="customer_name" required value="<?= htmlspecialchars(!empty($oldCheckout['customer_name']) ? $oldCheckout['customer_name'] : ($defaultAddress['recipient_name'] ?? $currentUser['name'] ?? '')) ?>" class="form-input text-xs" placeholder="Your Full Name">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-stone-700 block mb-1">Mobile Phone *</label>
-                            <input type="tel" name="customer_phone" required value="<?= htmlspecialchars($oldCheckout['customer_phone'] ?? $defaultAddress['phone'] ?? $currentUser['phone'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. +91 98765 43210">
+                            <label class="text-xs font-bold text-stone-700 block mb-1">Mobile Phone <span class="text-red-500">*</span></label>
+                            <input type="tel" id="checkout_phone" name="customer_phone" required value="<?= htmlspecialchars(!empty($oldCheckout['customer_phone']) ? $oldCheckout['customer_phone'] : ($defaultAddress['phone'] ?? $currentUser['phone'] ?? '')) ?>" class="form-input text-xs" placeholder="10-digit mobile number">
                         </div>
                     </div>
 
                     <div>
-                        <label class="text-xs font-bold text-stone-700 block mb-1">Email Address (For Invoice & Updates) *</label>
-                        <input type="email" name="customer_email" required value="<?= htmlspecialchars($oldCheckout['customer_email'] ?? $currentUser['email'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. collector@domain.com">
+                        <label class="text-xs font-bold text-stone-700 block mb-1">Email Address (For Invoice &amp; Updates) <span class="text-red-500">*</span></label>
+                        <input type="email" id="checkout_email" name="customer_email" required value="<?= htmlspecialchars(!empty($oldCheckout['customer_email']) ? $oldCheckout['customer_email'] : ($currentUser['email'] ?? '')) ?>" class="form-input text-xs" placeholder="name@example.com">
                     </div>
 
                     <div>
-                        <label class="text-xs font-bold text-stone-700 block mb-1">Street Address *</label>
-                        <input type="text" name="address_line1" required value="<?= htmlspecialchars($oldCheckout['address_line1'] ?? $defaultAddress['address_line1'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. 4140 Heritage Boulevard, Arts Enclave">
+                        <label class="text-xs font-bold text-stone-700 block mb-1">Street Address <span class="text-red-500">*</span></label>
+                        <input type="text" id="checkout_address" name="address_line1" required value="<?= htmlspecialchars(!empty($oldCheckout['address_line1']) ? $oldCheckout['address_line1'] : ($defaultAddress['address_line1'] ?? '')) ?>" class="form-input text-xs" placeholder="House/Flat No., Building, Street, Area">
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="text-xs font-bold text-stone-700 block mb-1">City *</label>
-                            <input type="text" name="city" required value="<?= htmlspecialchars($oldCheckout['city'] ?? $defaultAddress['city'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. Mumbai">
+                            <label class="text-xs font-bold text-stone-700 block mb-1">City <span class="text-red-500">*</span></label>
+                            <input type="text" id="checkout_city" name="city" required value="<?= htmlspecialchars(!empty($oldCheckout['city']) ? $oldCheckout['city'] : ($defaultAddress['city'] ?? '')) ?>" class="form-input text-xs" placeholder="City">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-stone-700 block mb-1">State *</label>
-                            <input type="text" name="state" required value="<?= htmlspecialchars($oldCheckout['state'] ?? $defaultAddress['state'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. Maharashtra">
+                            <label class="text-xs font-bold text-stone-700 block mb-1">State <span class="text-red-500">*</span></label>
+                            <input type="text" id="checkout_state" name="state" required value="<?= htmlspecialchars(!empty($oldCheckout['state']) ? $oldCheckout['state'] : ($defaultAddress['state'] ?? '')) ?>" class="form-input text-xs" placeholder="State">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-stone-700 block mb-1">Pincode / Postal Code *</label>
-                            <input type="text" name="postal_code" required value="<?= htmlspecialchars($oldCheckout['postal_code'] ?? $oldCheckout['pincode'] ?? $defaultAddress['postal_code'] ?? '') ?>" class="form-input text-xs" placeholder="e.g. 400001">
+                            <label class="text-xs font-bold text-stone-700 block mb-1">Pincode / Postal Code <span class="text-red-500">*</span></label>
+                            <input type="text" id="checkout_pincode" name="postal_code" required value="<?= htmlspecialchars(!empty($oldCheckout['postal_code']) ? $oldCheckout['postal_code'] : (!empty($oldCheckout['pincode']) ? $oldCheckout['pincode'] : ($defaultAddress['postal_code'] ?? ''))) ?>" class="form-input text-xs" placeholder="6-digit PIN code">
                         </div>
                     </div>
                 </div>
@@ -427,4 +427,47 @@ async function removeCheckoutCoupon() {
     })
     .catch(() => window.location.reload());
 }
+
+// Client-side Checkout Form Validation with smooth scroll to empty fields
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('checkoutForm');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+        const requiredIds = [
+            { id: 'checkout_name', name: 'Full Legal Name' },
+            { id: 'checkout_phone', name: 'Mobile Phone' },
+            { id: 'checkout_email', name: 'Email Address' },
+            { id: 'checkout_address', name: 'Street Address' },
+            { id: 'checkout_city', name: 'City' },
+            { id: 'checkout_pincode', name: 'Pincode / Postal Code' }
+        ];
+
+        let firstMissing = null;
+
+        requiredIds.forEach(item => {
+            const input = document.getElementById(item.id);
+            if (input) {
+                if (!input.value.trim()) {
+                    input.classList.add('border-red-500', 'bg-red-50/50');
+                    if (!firstMissing) firstMissing = input;
+                } else {
+                    input.classList.remove('border-red-500', 'bg-red-50/50');
+                }
+                
+                input.addEventListener('input', function() {
+                    if (this.value.trim()) {
+                        this.classList.remove('border-red-500', 'bg-red-50/50');
+                    }
+                }, { once: true });
+            }
+        });
+
+        if (firstMissing) {
+            e.preventDefault();
+            firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstMissing.focus();
+        }
+    });
+});
 </script>

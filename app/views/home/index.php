@@ -1,1108 +1,598 @@
 <?php
 /**
- * JayArt Modern Home Page View
- * Exact Clean UI Matching Reference (Shopcart E-Commerce Design)
+ * JayArt Pinterest-Inspired Visual Discovery Home View
+ * Fluid Masonry Art Pinboard, Tactile Touch Discovery & Curated Collections
  */
+
+$paintings = !empty($featuredPaintings) ? $featuredPaintings : (!empty($featuredProducts) ? $featuredProducts : []);
+$categoryList = !empty($categories) ? $categories : [];
+$blogs = !empty($latestBlogs) ? $latestBlogs : (!empty($recentBlogs) ? $recentBlogs : []);
 ?>
 
-<!-- 1. Signature Architectural Bento Hero Grid (Matching Reference Image 2 UI) -->
-<section class="w-full pt-1 pb-4 sm:pb-8">
-    <!-- Horizontal Snap Slider on Mobile (< lg), Full 12-Col Bento Grid on Desktop (lg+) -->
-    <div id="mobileBentoSlider" class="flex lg:grid lg:grid-cols-12 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scrollbar-none gap-3.5 sm:gap-5 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 pb-2">
+<!-- ====================================================================
+     1. PINTEREST INSPIRATION HERO & DISCOVERY BAR
+     ==================================================================== -->
+<section class="w-full pt-2 sm:pt-4 pb-6 sm:pb-8">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         
-        <!-- ============================================================== -->
-        <!-- 1. COLUMN 1 / SLIDE 1: Tall Card ("New Deals" / "Master Solo") -->
-        <!-- ============================================================== -->
-        <div class="w-[88vw] max-w-[360px] sm:w-[420px] sm:max-w-none flex-shrink-0 snap-center lg:w-auto lg:flex-shrink lg:col-span-4 bento-stone-1 rounded-[28px] sm:rounded-[34px] p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden min-h-[460px] sm:min-h-[560px] shadow-xs group">
-            
-            <!-- Card Header -->
-            <div class="relative z-10">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-stone-500 block mb-1">Curated Masterworks</span>
-                <h2 class="text-3xl sm:text-4xl font-heading font-semibold text-[#18181B] tracking-tight leading-tight">
-                    New Deals
-                </h2>
-                <p class="text-xs text-stone-600 mt-1">Direct acquisitions from master atelier studios</p>
+        <!-- Editorial Header Pill & Title -->
+        <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-8 pt-2">
+            <div class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-white border border-black/[0.06] shadow-xs mb-3.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-stone-700">Curated Master Atelier • 2026 Collection</span>
             </div>
+            <h1 class="text-2xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-[#18181B] tracking-tight leading-tight">
+                Visual Inspiration &amp; Original Fine Art
+            </h1>
+            <p class="text-xs sm:text-sm text-stone-500 mt-2 max-w-xl mx-auto font-medium leading-relaxed">
+                Explore hand-painted masterworks directly from artist studios. Every original arrives with an archival provenance certificate and museum crating.
+            </p>
+        </div>
 
-            <!-- Center: Floating Glassmorphic Artwork Card (Matching Reference Card) -->
-            <div id="bentoHeroCarousel" class="relative z-10 w-full max-w-[280px] sm:max-w-[290px] mx-auto my-3 sm:my-4">
-                <?php 
-                $carouselArt = !empty($featuredPaintings) ? array_slice($featuredPaintings, 0, 4) : [];
-                if (!empty($carouselArt)):
-                    foreach ($carouselArt as $idx => $art): 
-                ?>
-                <div class="bento-slide <?= $idx === 0 ? '' : 'hidden' ?> bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-4.5 shadow-xl border border-white/80 transition-all duration-300" data-slide-index="<?= $idx ?>">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xl font-bold font-mono text-[#18181B]">
-                            <?= !empty($art['discount_price']) ? Validator::formatPrice($art['discount_price']) : Validator::formatPrice($art['price']) ?>
-                        </span>
-                        <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200/50">
-                            <svg width="12" height="12" style="width: 12px; height: 12px;" class="w-3 h-3 text-amber-500 fill-current inline" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            4.9
-                        </span>
-                    </div>
-                    <p class="text-[11px] text-stone-500 font-medium mb-3 truncate"><?= htmlspecialchars($art['medium'] ?? 'Original Artwork') ?></p>
-                    
-                    <!-- Artwork Image -->
-                    <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-stone-100 mb-3 relative flex items-center justify-center p-2">
-                        <img src="<?= htmlspecialchars(Product::imageUrl($art['primary_image'] ?? '')) ?>" alt="<?= htmlspecialchars($art['title'] ?? 'Art') ?>" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';" class="max-h-full max-w-full object-contain drop-shadow-md rounded-lg">
-                    </div>
-
-                    <div class="flex items-center justify-between pt-1">
-                        <div class="max-w-[65%]">
-                            <h4 class="font-bold text-xs text-[#18181B] line-clamp-1"><?= htmlspecialchars($art['title'] ?? '') ?></h4>
-                            <p class="text-[10px] text-stone-400 truncate"><?= htmlspecialchars($art['artist_name'] ?? 'JayArt Master') ?></p>
-                        </div>
-                        <div class="flex items-center gap-1.5 flex-shrink-0">
-                            <?php $isTopWish = in_array((int)($art['id'] ?? 0), $_SESSION['wishlist'] ?? [], true); ?>
-                            <button type="button" onclick="toggleWishlist(<?= $art['id'] ?? 0 ?>, this)" class="w-8 h-8 rounded-full <?= $isTopWish ? 'bg-red-50 text-red-500' : 'bg-stone-100 text-stone-600' ?> hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors shadow-xs" title="Save to Wishlist">
-                                <svg width="14" height="14" fill="<?= $isTopWish ? 'currentColor' : 'none' ?>" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                            </button>
-                            <button type="button" onclick="quickAddToCart(<?= $art['id'] ?? 0 ?>)" class="w-8 h-8 rounded-full bg-[#18181B] hover:bg-black text-white flex items-center justify-center transition-transform active:scale-90 shadow-xs" title="Add to Bag">
-                                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-                <?php else: ?>
-                <div class="bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/80 text-center flex flex-col items-center justify-center min-h-[260px]">
-                    <div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center mb-3 text-stone-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    </div>
-                    <h4 class="font-bold text-xs text-[#18181B] mb-1">New Collection Unveiling</h4>
-                    <p class="text-[11px] text-stone-500 mb-3">Original atelier pieces are being cataloged by our curatorial team.</p>
-                    <a href="<?= SITE_URL ?>/shop" class="text-[11px] font-bold text-[#18181B] bg-stone-100 hover:bg-stone-200 px-4 py-1.5 rounded-full transition-colors">Explore Gallery</a>
-                </div>
-                <?php endif; ?>
+        <!-- Pinterest-Style Horizontal Explore Topic Pills Bar -->
+        <div class="relative mb-6 sm:mb-8">
+            <div class="pinterest-scroll-row pb-2 -mx-3 px-3 sm:mx-0 sm:px-0">
+                <a href="<?= SITE_URL ?>/shop" class="pinterest-topic-pill active flex items-center gap-1.5">
+                    <span class="text-red-500 text-xs">✦</span>
+                    <span>All Masterworks</span>
+                </a>
+                <a href="<?= SITE_URL ?>/shop?category=oil-paintings" class="pinterest-topic-pill">Oil on Linen</a>
+                <a href="<?= SITE_URL ?>/shop?category=acrylic-art" class="pinterest-topic-pill">Heavy Acrylic</a>
+                <a href="<?= SITE_URL ?>/shop?category=watercolor-paintings" class="pinterest-topic-pill">Watercolors</a>
+                <a href="<?= SITE_URL ?>/shop?category=modern-abstract" class="pinterest-topic-pill">Modern Abstract</a>
+                <a href="<?= SITE_URL ?>/shop?category=traditional-heritage" class="pinterest-topic-pill">Heritage &amp; Spiritual</a>
+                <a href="<?= SITE_URL ?>/shop?filter=gold" class="pinterest-topic-pill flex items-center gap-1">
+                    <span class="text-amber-500 font-bold">★</span>
+                    <span>24K Gold Leaf</span>
+                </a>
+                <a href="<?= SITE_URL ?>/shop?filter=charcoal" class="pinterest-topic-pill">Charcoal Mono</a>
+                <a href="<?= SITE_URL ?>/offers" class="pinterest-topic-pill bg-amber-50 text-amber-900 border-amber-200 hover:bg-[#18181B] hover:text-white font-bold">
+                    Salon Offers 30-50% Off
+                </a>
             </div>
+        </div>
 
-            <!-- Bottom Navigation Bar (Matching Reference Image 2: "← Slide left and right →") -->
-            <div class="relative z-10 flex items-center justify-between pt-3 sm:pt-4 border-t border-black/[0.06] text-xs font-medium text-stone-600">
-                <button type="button" onclick="changeBentoSlide(-1)" class="w-8 sm:w-9 h-8 sm:h-9 rounded-full bg-white hover:bg-[#18181B] text-stone-700 hover:text-white flex items-center justify-center shadow-xs transition-colors" aria-label="Previous Slide">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-                </button>
-                <span class="text-xs text-stone-600 font-medium">Slide left and right</span>
-                <button type="button" onclick="changeBentoSlide(1)" class="w-8 sm:w-9 h-8 sm:h-9 rounded-full bg-[#18181B] hover:bg-black text-white flex items-center justify-center shadow-xs transition-colors" aria-label="Next Slide">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                </button>
+        <!-- Discovery Filter Summary Row -->
+        <div class="flex items-center justify-between pb-4 border-b border-black/[0.05] text-xs text-stone-500 mb-6 sm:mb-8">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-[#18181B]"><?= count($paintings) ?> Original Works</span>
+                <span class="text-stone-300">•</span>
+                <span class="hidden sm:inline">Authenticated Provenance</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="<?= SITE_URL ?>/shop" class="font-bold text-[#18181B] hover:underline flex items-center gap-1">
+                    <span>Explore Full Catalog</span>
+                    <span>&rarr;</span>
+                </a>
             </div>
         </div>
 
         <!-- ============================================================== -->
-        <!-- 2. COLUMN 2 / SLIDE 2: Stacked Bento Cards                      -->
-        <!--    Top: "Great Value Deals" | Bottom: "EXCLUSIVE PureSpace Duo" -->
+        <!-- 2. PINTEREST FLUID MASONRY PINBOARD                            -->
+        <!--    Mobile: 2 Tight Columns | Tablet: 3 | Desktop: 4 | XL: 5    -->
         <!-- ============================================================== -->
-        <div class="w-[88vw] max-w-[360px] sm:w-[420px] sm:max-w-none flex-shrink-0 snap-center lg:w-auto lg:flex-shrink lg:col-span-5 flex flex-col justify-between gap-3 sm:gap-5">
-            
-            <!-- Top Card: Great Value Deals (Matching Big Center Card in Reference) -->
-            <div class="bento-stone-2 rounded-[28px] sm:rounded-[34px] p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden min-h-[270px] sm:min-h-[340px] shadow-xs group flex-1">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-heading font-semibold text-[#18181B] tracking-tight leading-tight">
-                        Great Value Deals
-                    </h2>
-                    <p class="text-xs text-stone-600 mt-1">Acquire curated originals on sale with 30 &ndash; 50% discount</p>
-                </div>
+        <?php if (!empty($paintings)): ?>
+        <div class="pinterest-masonry-grid">
+            <?php foreach ($paintings as $idx => $p): 
+                $rawImg = !empty($p['primary_image']) ? $p['primary_image'] : (!empty($p['image']) ? $p['image'] : (!empty($p['image_path']) ? $p['image_path'] : ''));
+                $imgUrl = Product::imageUrl($rawImg);
+                $isSaved = in_array((int)$p['id'], $_SESSION['wishlist'] ?? [], true);
+                $displayPrice = !empty($p['discount_price']) ? (float)$p['discount_price'] : (float)$p['price'];
+                $hasDiscount = !empty($p['discount_price']) && (float)$p['discount_price'] < (float)$p['price'];
+                $medium = !empty($p['medium']) ? $p['medium'] : (!empty($p['category_name']) ? $p['category_name'] : 'Original Painting');
+                $dimensions = !empty($p['dimensions']) ? $p['dimensions'] : '30 × 40 in';
+                $artistName = !empty($p['artist_name']) ? $p['artist_name'] : 'JayArt Master';
+            ?>
+            <div class="pinterest-pin group" data-pin-id="<?= (int)$p['id'] ?>">
+                
+                <!-- Media Box -->
+                <div class="pinterest-pin-media" onclick="openArtModal(<?= htmlspecialchars(json_encode([
+                    'id'            => (int)$p['id'],
+                    'title'         => $p['title'],
+                    'slug'          => $p['slug'],
+                    'artist'        => $artistName,
+                    'medium'        => $medium,
+                    'dimensions'    => $dimensions,
+                    'price'         => $displayPrice,
+                    'priceFormatted'=> Validator::formatPrice($displayPrice),
+                    'originalPrice' => $hasDiscount ? Validator::formatPrice((float)$p['price']) : null,
+                    'image'         => $imgUrl,
+                    'isSaved'       => $isSaved,
+                    'description'   => !empty($p['description']) ? strip_tags($p['description']) : 'Exquisite authentic atelier original painted with archival museum-grade pigments.'
+                ])) ?>)">
+                    
+                    <img src="<?= htmlspecialchars($imgUrl) ?>" 
+                         alt="<?= htmlspecialchars($p['title']) ?>" 
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';" 
+                         loading="<?= $idx < 6 ? 'eager' : 'lazy' ?>">
 
-                <?php if (!empty($featuredPaintings[1])): 
-                    $dealArt = $featuredPaintings[1];
-                ?>
-                <!-- Center Large Featured Artwork with Soft Drop Shadow -->
-                <div class="my-2 sm:my-3 flex items-center justify-center relative">
-                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($dealArt['slug'] ?? '') ?>" class="block transform group-hover:scale-105 transition-transform duration-300">
-                        <img src="<?= htmlspecialchars(Product::imageUrl($dealArt['primary_image'] ?? '')) ?>" alt="Featured Art Deal" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';" class="max-h-44 sm:max-h-52 w-auto object-contain rounded-2xl drop-shadow-2xl">
-                    </a>
-                </div>
+                    <!-- Pinterest Signature Floating Action Overlay -->
+                    <div class="pinterest-pin-overlay" onclick="event.stopPropagation();">
+                        
+                        <!-- Top Row: Medium Tag + Red Save Button -->
+                        <div class="flex items-center justify-between w-full">
+                            <span class="pinterest-tag-badge line-clamp-1 max-w-[120px] sm:max-w-[150px]">
+                                <?= htmlspecialchars($medium) ?>
+                            </span>
 
-                <!-- Bottom Tag Pill & Action -->
-                <div class="flex items-center justify-between pt-1">
-                    <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-stone-800 bg-white/90 backdrop-blur-xs px-3 sm:px-3.5 py-1.5 rounded-full shadow-xs">
-                        <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 text-amber-500 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <span>4.9 Authenticated Provenance</span>
-                    </span>
-                    <a href="<?= SITE_URL ?>/shop?filter=deals" class="text-xs font-bold text-[#18181B] hover:underline flex items-center gap-1">
-                        Explore Deals &rarr;
-                    </a>
-                </div>
-                <?php else: ?>
-                <div class="my-auto py-8 text-center flex flex-col items-center justify-center">
-                    <div class="w-12 h-12 rounded-full bg-white/60 flex items-center justify-center mb-2 text-stone-500">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V4a2 2 0 10-2 2h2m0 13a2 2 0 100-4 2 2 0 000 4zm0 0a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                            <button type="button" 
+                                    onclick="toggleWishlist(<?= (int)$p['id'] ?>, this)" 
+                                    class="pinterest-save-btn <?= $isSaved ? 'is-saved' : '' ?>"
+                                    title="Save to My Collection">
+                                <svg width="12" height="12" fill="<?= $isSaved ? 'currentColor' : 'none' ?>" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                                <span><?= $isSaved ? 'Saved' : 'Save' ?></span>
+                            </button>
+                        </div>
+
+                        <!-- Bottom Row: Quick Inspect Eye + Quick Buy Button -->
+                        <div class="flex items-center justify-between w-full pt-4">
+                            <button type="button" 
+                                    class="pinterest-inspect-btn" 
+                                    title="Quick Inspect Provenance & Details"
+                                    onclick="this.closest('.pinterest-pin').querySelector('.pinterest-pin-media').click()">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+
+                            <button type="button" 
+                                    onclick="quickAddToCart(<?= (int)$p['id'] ?>)" 
+                                    class="pinterest-quick-buy" 
+                                    title="Add to Collection Bag">
+                                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                <span>Add to Bag</span>
+                            </button>
+                        </div>
+
                     </div>
-                    <p class="text-xs text-stone-600 font-medium">Curated seasonal exhibition deals will appear here</p>
-                </div>
-                <div class="flex items-center justify-between pt-1">
-                    <span class="text-[11px] font-bold text-stone-600 bg-white/70 px-3 py-1 rounded-full">JayArt Atelier Provenance</span>
-                    <a href="<?= SITE_URL ?>/shop" class="text-xs font-bold text-[#18181B] hover:underline">Browse Catalog &rarr;</a>
-                </div>
-                <?php endif; ?>
-            </div>
-
-            <!-- Bottom Split Card: "EXCLUSIVE PureSpace Focus Duo" (Matching Split in Reference) -->
-            <div class="bento-stone-3 rounded-[28px] sm:rounded-[34px] p-4 sm:p-6 flex items-center justify-between gap-3 sm:gap-4 shadow-xs">
-                <?php if (!empty($featuredPaintings[2])): 
-                    $splitArt = $featuredPaintings[2];
-                ?>
-                <div class="max-w-[58%]">
-                    <span class="text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-[#18181B] shadow-xs inline-block mb-1.5">
-                        EXCLUSIVE
-                    </span>
-                    <h3 class="font-heading font-bold text-sm sm:text-lg text-[#18181B] leading-snug">
-                        <?= htmlspecialchars($splitArt['title'] ?? '') ?>
-                    </h3>
-                    <p class="text-[11px] text-stone-500 mt-0.5 sm:mt-1 line-clamp-2">
-                        <?= htmlspecialchars($splitArt['medium'] ?? 'Original Masterpiece') ?>
-                    </p>
                 </div>
 
-                <!-- Right Artwork Thumbnail with Heart & "Open ↗" pill -->
-                <div class="relative flex-shrink-0">
-                    <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-white shadow-md relative group">
-                        <img src="<?= htmlspecialchars(Product::imageUrl($splitArt['primary_image'] ?? '')) ?>" alt="Exclusive" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';" class="w-full h-full object-cover">
-                        <button type="button" onclick="toggleWishlist(<?= $splitArt['id'] ?? 0 ?>, this)" class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-6 h-6 rounded-full bg-white/90 text-red-500 flex items-center justify-center text-xs shadow-xs" title="Wishlist">
-                            <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 text-red-500 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
+                <!-- Pin Card Meta Footer -->
+                <div class="p-3 sm:p-4">
+                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($p['slug']) ?>" class="block group-hover:text-stone-600 transition-colors">
+                        <h3 class="font-heading font-bold text-xs sm:text-sm text-[#18181B] line-clamp-1 leading-snug">
+                            <?= htmlspecialchars($p['title']) ?>
+                        </h3>
+                    </a>
+
+                    <!-- Artist & Provenance Attribution -->
+                    <div class="flex items-center justify-between text-[11px] text-stone-500 mt-1">
+                        <span class="truncate max-w-[70%] font-medium"><?= htmlspecialchars($artistName) ?></span>
+                        <span class="flex items-center gap-0.5 text-amber-600 font-bold flex-shrink-0">
+                            <svg width="11" height="11" class="fill-current text-amber-500" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <span>4.9</span>
+                        </span>
+                    </div>
+
+                    <!-- Price & Mobile Quick Action -->
+                    <div class="flex items-center justify-between mt-2 pt-2 border-t border-black/[0.04]">
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="font-mono font-bold text-xs sm:text-sm text-[#18181B]">
+                                <?= Validator::formatPrice($displayPrice) ?>
+                            </span>
+                            <?php if ($hasDiscount): ?>
+                                <span class="font-mono text-[10px] text-stone-400 line-through">
+                                    <?= Validator::formatPrice((float)$p['price']) ?>
+                                </span>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Mobile direct bag tap (Visible on mobile/tablet) -->
+                        <button type="button" 
+                                onclick="quickBuyNow(<?= (int)$p['id'] ?>)" 
+                                class="lg:hidden text-[11px] font-bold text-stone-800 hover:text-black bg-stone-100 px-2.5 py-1 rounded-full transition-colors" 
+                                title="Instant Acquisition">
+                            Buy Now
                         </button>
                     </div>
-                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($splitArt['slug'] ?? '') ?>" class="absolute -bottom-2 -left-2 bg-[#18181B] hover:bg-black text-white text-[10px] font-bold pl-2.5 sm:pl-3 pr-2 py-0.5 sm:py-1 rounded-full flex items-center gap-1 shadow-md transition-colors">
-                        <span>Open</span>
-                        <span class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-white/20 flex items-center justify-center text-[9px] sm:text-[10px]">↗</span>
-                    </a>
+
                 </div>
-                <?php else: ?>
-                <div class="max-w-[70%]">
-                    <span class="text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-[#18181B] shadow-xs inline-block mb-1.5">
-                        ATELIER
-                    </span>
-                    <h3 class="font-heading font-bold text-sm sm:text-base text-[#18181B] leading-snug">
-                        Museum Grade Fine Art
-                    </h3>
-                    <p class="text-[11px] text-stone-500 mt-0.5 line-clamp-2">
-                        Archival certified originals crafted by studio masters across India.
-                    </p>
-                </div>
-                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/70 border border-stone-200/60 flex items-center justify-center text-stone-400">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                </div>
-                <?php endif; ?>
+
             </div>
-        </div>
-
-        <!-- ============================================================== -->
-        <!-- 3. COLUMN 3 / SLIDE 3: Modular 3-Widget Stack & Revenue Engine -->
-        <!-- ============================================================== -->
-        <div class="w-[88vw] max-w-[360px] sm:w-[420px] sm:max-w-none flex-shrink-0 snap-center lg:w-auto lg:flex-shrink lg:col-span-3 flex flex-col justify-between gap-2.5 sm:gap-4">
-            
-            <!-- Widget 1: OUR TEAM / CURATORS (Matching Reference Widget 1) -->
-            <div class="bg-white rounded-[24px] p-4 sm:p-5 border border-black/[0.05] shadow-xs flex flex-col justify-between h-[135px] sm:h-[165px] hover:shadow-md transition-shadow">
-                <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-stone-400">OUR CURATORS</span>
-                    <a href="<?= SITE_URL ?>/about" class="w-5 h-5 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 hover:text-black transition-colors" title="Learn more">↗</a>
-                </div>
-                <p class="text-xs text-stone-700 font-medium leading-relaxed">
-                    Our panel of master art historians certifies the provenance of every acquisition.
-                </p>
-                <div class="flex items-center justify-between pt-1">
-                    <!-- Curators Avatar Stack -->
-                    <div class="flex -space-x-2">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop" class="w-6 h-6 rounded-full border-2 border-white object-cover" alt="Curator">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop" class="w-6 h-6 rounded-full border-2 border-white object-cover" alt="Curator">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop" class="w-6 h-6 rounded-full border-2 border-white object-cover" alt="Curator">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=60&h=60&fit=crop" class="w-6 h-6 rounded-full border-2 border-white object-cover" alt="Curator">
-                    </div>
-                    <!-- Pagination Indicator Dots from Reference Image 2 -->
-                    <div class="flex items-center gap-1">
-                        <span class="w-3.5 h-1 rounded-full bg-[#18181B]"></span>
-                        <span class="w-1 h-1 rounded-full bg-stone-300"></span>
-                        <span class="w-1 h-1 rounded-full bg-stone-300"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Widget 2: GET A BONUS (VIP Voucher & Coupon Integration) -->
-            <div class="bg-white rounded-[24px] p-4 sm:p-5 border border-black/[0.05] shadow-xs flex flex-col justify-between h-[145px] sm:h-[175px] hover:shadow-md transition-shadow">
-                <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-stone-400">GET A BONUS</span>
-                    <a href="<?= SITE_URL ?>/offers" class="w-5 h-5 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 hover:text-black transition-colors" title="View all offers">↗</a>
-                </div>
-                <p class="text-xs text-stone-700 font-medium">
-                    Discover our salon preview &amp; claim an instant collector acquisition grant.
-                </p>
-                <div class="flex items-center gap-2 pt-1">
-                    <button type="button" onclick="navigator.clipboard.writeText('SPRING50'); showToast('Coupon SPRING50 copied to clipboard!', 'success')" class="flex-1 bg-stone-50 hover:bg-stone-100 border border-stone-200 rounded-full px-3 py-1.5 text-xs font-mono font-bold text-[#18181B] text-center transition-colors flex items-center justify-center gap-1.5" title="Click to Copy">
-                        <span>SPRING50</span>
-                        <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                    </button>
-                    <a href="<?= SITE_URL ?>/offers" class="bg-[#18181B] hover:bg-black text-white text-[11px] font-bold px-3.5 py-1.5 rounded-full transition-colors whitespace-nowrap">
-                        Claim
-                    </a>
-                </div>
-            </div>
-
-            <!-- Widget 3: SPONSORED EXHIBITION / AD MONETIZATION ENGINE (Matches Reference Widget 3) -->
-            <?php 
-            $headerAd = Ad::getSlot('header_billboard');
-            $adTitle = !empty($headerAd['title']) ? htmlspecialchars($headerAd['title']) : 'Spring Art Salon 2026';
-            $adSubtitle = !empty($headerAd['subtitle']) ? htmlspecialchars($headerAd['subtitle']) : 'National Modern Art Exhibition. VIP vernissage now open.';
-            $adUrl = !empty($headerAd['target_url']) ? htmlspecialchars($headerAd['target_url']) : SITE_URL . '/shop?filter=deals';
-            $adThumb = !empty($headerAd['banner_desktop']) ? htmlspecialchars($headerAd['banner_desktop']) : 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=120';
-            ?>
-            <div class="bg-white rounded-[24px] p-4 sm:p-5 border border-black/[0.06] shadow-xs flex flex-col justify-between h-[145px] sm:h-[175px] hover:shadow-md transition-shadow relative overflow-hidden">
-                <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#18181B]"></span>
-                        OFFICIAL PARTNER
-                    </span>
-                    <a href="<?= $adUrl ?>" class="w-5 h-5 rounded-full hover:bg-stone-100 flex items-center justify-center text-stone-400 hover:text-black transition-colors">↗</a>
-                </div>
-                <div>
-                    <h4 class="text-xs font-bold text-[#18181B] leading-snug line-clamp-1"><?= $adTitle ?></h4>
-                    <p class="text-[11px] text-stone-500 mt-0.5 line-clamp-2"><?= $adSubtitle ?></p>
-                </div>
-                <div class="flex items-center justify-between pt-1">
-                    <img src="<?= $adThumb ?>" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=120';" class="w-8 h-8 rounded-lg object-cover border border-black/5" alt="Partner">
-                    <a href="<?= $adUrl ?>" class="bg-[#18181B] hover:bg-black text-white text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-                        <span>Explore Expo</span>
-                        <span>↗</span>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Mobile Slider Pagination Indicator Dots (Visible ONLY on mobile/tablet < lg) -->
-    <div class="flex lg:hidden items-center justify-center gap-1.5 pt-3 pb-1" id="bentoSliderDots">
-        <button type="button" onclick="scrollBentoToSlide(0)" class="bento-dot w-6 h-1.5 rounded-full bg-[#18181B] transition-all cursor-pointer" aria-label="Go to slide 1"></button>
-        <button type="button" onclick="scrollBentoToSlide(1)" class="bento-dot w-2 h-1.5 rounded-full bg-stone-300 transition-all cursor-pointer" aria-label="Go to slide 2"></button>
-        <button type="button" onclick="scrollBentoToSlide(2)" class="bento-dot w-2 h-1.5 rounded-full bg-stone-300 transition-all cursor-pointer" aria-label="Go to slide 3"></button>
-    </div>
-</section>
-
-<script>
-let currentBentoSlide = 0;
-function changeBentoSlide(dir) {
-    const slides = document.querySelectorAll('.bento-slide');
-    if (!slides || slides.length === 0) return;
-    slides[currentBentoSlide].classList.add('hidden');
-    currentBentoSlide = (currentBentoSlide + dir + slides.length) % slides.length;
-    slides[currentBentoSlide].classList.remove('hidden');
-}
-
-function scrollBentoToSlide(index) {
-    const slider = document.getElementById('mobileBentoSlider');
-    if (!slider) return;
-    const slides = slider.children;
-    if (slides[index]) {
-        slides[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const bentoSlider = document.getElementById('mobileBentoSlider');
-    if (bentoSlider) {
-        bentoSlider.addEventListener('scroll', function() {
-            const dots = document.querySelectorAll('#bentoSliderDots .bento-dot');
-            if (!dots.length) return;
-            const scrollLeft = bentoSlider.scrollLeft;
-            const cardWidth = bentoSlider.children[0] ? bentoSlider.children[0].offsetWidth : bentoSlider.offsetWidth * 0.85;
-            const activeIdx = Math.min(dots.length - 1, Math.max(0, Math.round(scrollLeft / cardWidth)));
-            dots.forEach((dot, idx) => {
-                if (idx === activeIdx) {
-                    dot.classList.remove('w-2', 'bg-stone-300');
-                    dot.classList.add('w-6', 'bg-[#18181B]');
-                } else {
-                    dot.classList.remove('w-6', 'bg-[#18181B]');
-                    dot.classList.add('w-2', 'bg-stone-300');
-                }
-            });
-        }, { passive: true });
-    }
-});
-</script>
-
-<!-- 2. Horizontal Filter Pills Bar with In-Place Interactive Dropdowns (Shopcart Style) -->
-<section class="w-full py-2.5 sm:py-3 relative z-30">
-    <!-- Backdrop for mobile popovers -->
-    <div id="filterBackdrop" onclick="closeAllFilterMenus()" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 hidden sm:hidden transition-opacity"></div>
-
-    <div class="flex items-center gap-2 overflow-x-auto scrollbar-none pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-between sm:overflow-visible">
-        
-        <!-- Filter Pills Scroll Row (Single Horizontal Line on Mobile) -->
-        <div class="flex items-center gap-2 flex-nowrap flex-shrink-0 sm:flex-shrink">
-            
-            <!-- 0. All Filters Modal Trigger (Prominent on Mobile & Desktop) -->
-            <button type="button" onclick="openAllFiltersModal()" class="filter-pill font-bold bg-[#18181B] text-white hover:bg-black border-transparent shadow-xs flex-shrink-0" id="btnAllFilters">
-                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                <span>All Filters</span>
-            </button>
-
-            <!-- 1. Sort by Dropdown (Immediately visible as Pill #2) -->
-            <div class="relative filter-dropdown-wrap flex-shrink-0">
-                <button type="button" onclick="toggleFilterMenu('sortDropdown', this)" class="filter-pill bg-white border-stone-200 hover:border-black font-semibold" id="btnFilterSort">
-                    <span class="text-gray-500 font-normal">Sort:</span>
-                    <span class="font-bold sort-label">Popular</span>
-                    <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="sortDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-0 sm:left-0 sm:right-auto sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[210px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[60vh] overflow-y-auto">
-                    <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Sort Artworks</div>
-                    <button type="button" onclick="selectSort('popular', 'Popular')" class="filter-opt-btn active" data-type="sort" data-val="popular">
-                        <span>Popular / Best Sellers</span>
-                    </button>
-                    <button type="button" onclick="selectSort('price_low', 'Low to High')" class="filter-opt-btn" data-type="sort" data-val="price_low">
-                        <span>Price: Low to High</span>
-                    </button>
-                    <button type="button" onclick="selectSort('price_high', 'High to Low')" class="filter-opt-btn" data-type="sort" data-val="price_high">
-                        <span>Price: High to Low</span>
-                    </button>
-                    <button type="button" onclick="selectSort('rating', 'Top Rated')" class="filter-opt-btn" data-type="sort" data-val="rating">
-                        <span>Highest Rated</span>
-                    </button>
-                    <button type="button" onclick="selectSort('name', 'A to Z')" class="filter-opt-btn" data-type="sort" data-val="name">
-                        <span>Alphabetical (A&ndash;Z)</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 1. Medium Type Dropdown -->
-            <div class="relative filter-dropdown-wrap flex-shrink-0">
-                <button type="button" onclick="toggleFilterMenu('mediumDropdown', this)" class="filter-pill" id="btnFilterMedium">
-                    <span class="filter-label">Medium Type</span>
-                    <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="mediumDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[220px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
-                    <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Art Medium</div>
-                    <button type="button" onclick="selectFilter('medium', 'all', 'Medium Type')" class="filter-opt-btn active" data-type="medium" data-val="all">
-                        <span>All Mediums</span>
-                        <span class="text-[10px] text-gray-400">8</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('medium', 'oil', 'Oil on Linen')" class="filter-opt-btn" data-type="medium" data-val="oil">
-                        <span>Oil on Belgian Linen</span>
-                        <span class="text-[10px] text-gray-400">3</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('medium', 'acrylic', 'Acrylic Impasto')" class="filter-opt-btn" data-type="medium" data-val="acrylic">
-                        <span>Heavy Acrylic Impasto</span>
-                        <span class="text-[10px] text-gray-400">2</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('medium', 'watercolor', 'Watercolor')" class="filter-opt-btn" data-type="medium" data-val="watercolor">
-                        <span>Fine Watercolor</span>
-                        <span class="text-[10px] text-gray-400">1</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('medium', 'mixed', 'Mixed Media & Gold')" class="filter-opt-btn" data-type="medium" data-val="mixed">
-                        <span>Mixed Media &amp; 24K Gold</span>
-                        <span class="text-[10px] text-gray-400">1</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('medium', 'traditional', 'Traditional Heritage')" class="filter-opt-btn" data-type="medium" data-val="traditional">
-                        <span>Traditional Mineral Heritage</span>
-                        <span class="text-[10px] text-gray-400">1</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 2. Price Range Dropdown -->
-            <div class="relative filter-dropdown-wrap flex-shrink-0">
-                <button type="button" onclick="toggleFilterMenu('priceDropdown', this)" class="filter-pill" id="btnFilterPrice">
-                    <span class="filter-label">Price</span>
-                    <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="priceDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[210px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
-                    <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Acquisition Price</div>
-                    <button type="button" onclick="selectFilter('price', 'all', 'Price')" class="filter-opt-btn active" data-type="price" data-val="all">
-                        <span>All Prices</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('price', 'under_20000', 'Under ₹20,000')" class="filter-opt-btn" data-type="price" data-val="under_20000">
-                        <span>Under <?= CURRENCY_SYMBOL ?> 20,000</span>
-                        <span class="text-[10px] text-gray-400">2</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('price', '20000_30000', '₹20k - ₹30k')" class="filter-opt-btn" data-type="price" data-val="20000_30000">
-                        <span><?= CURRENCY_SYMBOL ?> 20,000 &ndash; <?= CURRENCY_SYMBOL ?> 30,000</span>
-                        <span class="text-[10px] text-gray-400">3</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('price', '30000_40000', '₹30k - ₹40k')" class="filter-opt-btn" data-type="price" data-val="30000_40000">
-                        <span><?= CURRENCY_SYMBOL ?> 30,000 &ndash; <?= CURRENCY_SYMBOL ?> 40,000</span>
-                        <span class="text-[10px] text-gray-400">2</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('price', 'above_40000', 'Above ₹40,000')" class="filter-opt-btn" data-type="price" data-val="above_40000">
-                        <span>Above <?= CURRENCY_SYMBOL ?> 40,000</span>
-                        <span class="text-[10px] text-gray-400">1</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 3. Review / Rating Dropdown -->
-            <div class="relative filter-dropdown-wrap flex-shrink-0">
-                <button type="button" onclick="toggleFilterMenu('reviewDropdown', this)" class="filter-pill" id="btnFilterReview">
-                    <span class="filter-label">Review</span>
-                    <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="reviewDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[200px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
-                    <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Collector Rating</div>
-                    <button type="button" onclick="selectFilter('review', 'all', 'Review')" class="filter-opt-btn active" data-type="review" data-val="all">
-                        <span>All Ratings</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('review', '5', '5.0 Stars')" class="filter-opt-btn" data-type="review" data-val="5">
-                        <span class="flex items-center gap-1.5"><span class="text-emerald-700 font-bold flex items-center gap-0.5"><svg class="w-3 h-3 text-amber-500 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> 5.0</span> Top Rated Art</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('review', 'top', 'Top Curated')" class="filter-opt-btn" data-type="review" data-val="top">
-                        <span>Most Reviewed Works</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 4. Color Palette Dropdown -->
-            <div class="relative filter-dropdown-wrap flex-shrink-0">
-                <button type="button" onclick="toggleFilterMenu('colorDropdown', this)" class="filter-pill" id="btnFilterColor">
-                    <span class="filter-label">Color</span>
-                    <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="colorDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[220px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
-                    <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Dominant Palette</div>
-                    <button type="button" onclick="selectFilter('color', 'all', 'Color')" class="filter-opt-btn active" data-type="color" data-val="all">
-                        <span>All Palettes</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('color', 'green', 'Emerald & Forest')" class="filter-opt-btn" data-type="color" data-val="green">
-                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-800 border border-gray-200"></span> Emerald &amp; Twilight</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('color', 'gold', 'Ochre & Gold Leaf')" class="filter-opt-btn" data-type="color" data-val="gold">
-                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500 border border-gray-200"></span> Ochre &amp; Gold Leaf</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('color', 'blue', 'Cobalt & Ocean')" class="filter-opt-btn" data-type="color" data-val="blue">
-                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-blue-700 border border-gray-200"></span> Cobalt &amp; Monsoon Blue</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('color', 'earth', 'Desert & Earth')" class="filter-opt-btn" data-type="color" data-val="earth">
-                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-700 border border-gray-200"></span> Desert Earth &amp; Sienna</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('color', 'monochrome', 'Monochrome')" class="filter-opt-btn" data-type="color" data-val="monochrome">
-                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-gray-900 border border-gray-200"></span> Charcoal Monochrome</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 5. Material / Canvas Dropdown -->
-            <div class="relative filter-dropdown-wrap flex-shrink-0">
-                <button type="button" onclick="toggleFilterMenu('materialDropdown', this)" class="filter-pill" id="btnFilterMaterial">
-                    <span class="filter-label">Material</span>
-                    <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="materialDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[230px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
-                    <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Canvas &amp; Substrate</div>
-                    <button type="button" onclick="selectFilter('material', 'all', 'Material')" class="filter-opt-btn active" data-type="material" data-val="all">
-                        <span>All Materials</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('material', 'linen', 'Belgian Linen')" class="filter-opt-btn" data-type="material" data-val="linen">
-                        <span>Belgian Linen Canvas</span>
-                        <span class="text-[10px] text-gray-400">3</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('material', 'cotton', 'Cotton Canvas')" class="filter-opt-btn" data-type="material" data-val="cotton">
-                        <span>Cotton Duck Canvas</span>
-                        <span class="text-[10px] text-gray-400">2</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('material', 'paper', 'Arches Paper')" class="filter-opt-btn" data-type="material" data-val="paper">
-                        <span>French Arches 300gsm Paper</span>
-                        <span class="text-[10px] text-gray-400">1</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('material', 'gold_leaf', '24K Gold Board')" class="filter-opt-btn" data-type="material" data-val="gold_leaf">
-                        <span>24K Genuine Gold Leaf Board</span>
-                        <span class="text-[10px] text-gray-400">1</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 6. Offer Dropdown -->
-            <div class="relative filter-dropdown-wrap flex-shrink-0">
-                <button type="button" onclick="toggleFilterMenu('offerDropdown', this)" class="filter-pill" id="btnFilterOffer">
-                    <span class="filter-label">Offer</span>
-                    <svg class="w-3.5 h-3.5 text-gray-400 filter-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="offerDropdown" class="filter-popover hidden fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-auto left-auto sm:left-0 sm:mt-2 z-50 bg-white rounded-3xl sm:rounded-2xl shadow-2xl sm:shadow-xl border border-stone-200 sm:border-gray-100 p-2 sm:py-2 min-w-[210px] max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[65vh] overflow-y-auto">
-                    <div class="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">Promotions &amp; Deals</div>
-                    <button type="button" onclick="selectFilter('offer', 'all', 'Offer')" class="filter-opt-btn active" data-type="offer" data-val="all">
-                        <span>All Paintings</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('offer', 'special_price', 'Special Price')" class="filter-opt-btn" data-type="offer" data-val="special_price">
-                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Discounted Gallery Deals</span>
-                        <span class="text-[10px] text-gray-400">4</span>
-                    </button>
-                    <button type="button" onclick="selectFilter('offer', 'has_coupon', 'Coupon Eligible')" class="filter-opt-btn" data-type="offer" data-val="has_coupon">
-                        <span>Coupon Voucher Eligible</span>
-                        <span class="text-[10px] text-gray-400">All</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Reset Active Filters Pill (Revealed when any filter is active) -->
-            <button type="button" onclick="resetAllFilters()" id="clearAllFiltersBtn" class="hidden filter-pill border-red-200 text-red-600 bg-red-50 hover:bg-red-100 hover:border-red-300 font-bold transition-colors flex-shrink-0">
-                <span>Reset</span>
-                <span class="text-xs">&times;</span>
-            </button>
-        </div>
-
-    </div>
-</section>
-
-<!-- 3. Section Title with Live Count Feedback -->
-<section class="w-full pt-4 pb-2" id="catalogSection">
-    <div class="flex items-center justify-between">
-        <h2 id="catalogHeading" class="text-2xl sm:text-3xl font-extrabold text-[#111827] tracking-tight">Paintings For You!</h2>
-        <span id="filteredCountBadge" class="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Showing <?= count($featuredProducts ?? []) ?> artworks</span>
-    </div>
-</section>
-
-<!-- 4. Clean Product Grid (4 Columns Desktop, 2 Mobile - Shopcart Style) -->
-<section class="w-full py-4">
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6" id="paintingsGrid">
-        <?php if (!empty($featuredProducts)): ?>
-            <?php foreach ($featuredProducts as $index => $p): 
-                $medLower = strtolower($p['medium'] ?? '');
-                $titleLower = strtolower($p['title'] ?? '');
-
-                $materialType = 'canvas';
-                if (str_contains($medLower, 'linen')) $materialType = 'linen';
-                elseif (str_contains($medLower, 'paper') || str_contains($medLower, 'arches')) $materialType = 'paper';
-                elseif (str_contains($medLower, 'cotton')) $materialType = 'cotton';
-                elseif (str_contains($medLower, 'gold leaf') || str_contains($titleLower, 'gold')) $materialType = 'gold_leaf';
-
-                $colorPalette = 'earth';
-                if (str_contains($titleLower, 'gold') || str_contains($titleLower, 'ochre')) $colorPalette = 'gold';
-                elseif (str_contains($titleLower, 'cobalt') || str_contains($titleLower, 'blue') || str_contains($titleLower, 'monsoon') || str_contains($titleLower, 'vrindavan')) $colorPalette = 'blue';
-                elseif (str_contains($titleLower, 'twilight') || str_contains($titleLower, 'valley') || str_contains($titleLower, 'lotus')) $colorPalette = 'green';
-                elseif (str_contains($titleLower, 'charcoal') || str_contains($medLower, 'charcoal')) $colorPalette = 'monochrome';
-                elseif (str_contains($titleLower, 'thar') || str_contains($titleLower, 'desert') || str_contains($titleLower, 'banaras')) $colorPalette = 'earth';
-
-                $mediumCategory = 'oil';
-                if (str_contains($medLower, 'acrylic')) $mediumCategory = 'acrylic';
-                elseif (str_contains($medLower, 'watercolor')) $mediumCategory = 'watercolor';
-                elseif (str_contains($medLower, 'mixed media')) $mediumCategory = 'mixed';
-                elseif (str_contains($medLower, 'heritage') || str_contains($medLower, 'mineral')) $mediumCategory = 'traditional';
-                elseif (str_contains($medLower, 'oil')) $mediumCategory = 'oil';
-
-                $effectivePrice = (float)($p['discount_price'] ?? $p['price']);
-                $hasOffer = !empty($p['discount_price']) ? '1' : '0';
-                $reviewsCount = 100 + ($p['id'] * 7);
-            ?>
-                
-                <!-- Product Card Grid Item with Rich Filter Data Attributes -->
-                <div class="product-grid-item col-span-1"
-                    data-id="<?= $p['id'] ?>"
-                    data-title="<?= htmlspecialchars($titleLower) ?>"
-                    data-medium="<?= htmlspecialchars($medLower) ?>"
-                    data-medium-cat="<?= $mediumCategory ?>"
-                    data-material="<?= $materialType ?>"
-                    data-color="<?= $colorPalette ?>"
-                    data-price="<?= $effectivePrice ?>"
-                    data-raw-price="<?= (float)$p['price'] ?>"
-                    data-rating="5"
-                    data-reviews="<?= $reviewsCount ?>"
-                    data-has-offer="<?= $hasOffer ?>"
-                    data-original-order="<?= $index ?>">
-
-                    <div class="product-card group h-full">
-                        <!-- Image Container with Heart Button -->
-                        <div class="product-img-wrap">
-                            <!-- Wishlist Heart Button -->
-                            <?php $isWish = in_array((int)$p['id'], $_SESSION['wishlist'] ?? [], true); ?>
-                            <button onclick="toggleWishlist(<?= $p['id'] ?>, this)" class="wishlist-heart-btn <?= $isWish ? 'active text-red-500' : '' ?>" title="Add to Wishlist">
-                                <svg class="w-4 h-4 <?= $isWish ? 'text-red-500' : '' ?>" fill="<?= $isWish ? 'currentColor' : 'none' ?>" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                            </button>
-
-                            <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($p['slug']) ?>" class="w-full h-full flex items-center justify-center">
-                                <img src="<?= htmlspecialchars(Product::imageUrl($p['primary_image'] ?? '')) ?>" alt="<?= htmlspecialchars($p['title']) ?>" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';" class="max-h-full max-w-full object-contain transform group-hover:scale-105 transition-transform duration-300" loading="lazy">
-                            </a>
-                        </div>
-
-                        <!-- Meta Details -->
-                        <div class="pt-3 pb-1 flex-1 flex flex-col justify-between">
-                            <div>
-                                <!-- Row 1: Title (left) & Price (right) -->
-                                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
-                                    <h3 class="font-bold text-xs sm:text-sm text-[#111827] group-hover:text-black transition-colors line-clamp-1 min-w-0 flex-1">
-                                        <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($p['slug']) ?>">
-                                            <?= htmlspecialchars($p['title']) ?>
-                                        </a>
-                                    </h3>
-                                    <div class="sm:text-right flex-shrink-0">
-                                        <span class="font-extrabold text-xs sm:text-sm md:text-base text-[#111827] whitespace-nowrap block">
-                                            <?= Validator::formatPrice($effectivePrice) ?>
-                                        </span>
-                                        <?php if (!empty($p['discount_price'])): ?>
-                                            <span class="text-[10px] text-gray-400 line-through block">
-                                                <?= Validator::formatPrice((float)$p['price']) ?>
-                                            </span>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-
-                                <!-- Row 2: Subtitle Description -->
-                                <p class="text-[11px] sm:text-xs text-gray-500 mt-1 line-clamp-1">
-                                    <?= htmlspecialchars($p['medium']) ?> &bull; <?= htmlspecialchars($p['dimensions']) ?>
-                                </p>
-
-                                <!-- Row 3: Star Rating -->
-                                <div class="mt-2 flex items-center gap-1.5">
-                                    <div class="flex items-center text-amber-500 gap-0.5">
-                                        <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                        <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                        <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                        <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                        <svg width="14" height="14" style="width: 14px; height: 14px;" class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                    </div>
-                                    <span class="text-[11px] sm:text-xs font-bold text-stone-600">(<?= $reviewsCount ?>)</span>
-                                </div>
-                            </div>
-
-                            <!-- Row 4: Clean Pill Buttons (Add to Cart & Buy Now) -->
-                            <div class="mt-3 sm:mt-4 grid grid-cols-2 gap-1.5 sm:gap-2">
-                                <button type="button" onclick="quickAddToCart(<?= $p['id'] ?>)" class="w-full py-1.5 sm:py-2 px-1 sm:px-2 border border-[#18181B] text-[#18181B] hover:bg-stone-100 rounded-full text-[10px] sm:text-xs font-bold transition-all flex items-center justify-center text-center cursor-pointer whitespace-nowrap leading-tight">
-                                    <span class="sm:hidden">+ Cart</span>
-                                    <span class="hidden sm:inline">Add to Cart</span>
-                                </button>
-                                <button type="button" onclick="quickBuyNow(<?= $p['id'] ?>)" class="w-full py-1.5 sm:py-2 px-1 sm:px-2 bg-[#18181B] hover:bg-black text-white rounded-full text-[10px] sm:text-xs font-bold transition-all shadow-xs flex items-center justify-center text-center cursor-pointer whitespace-nowrap leading-tight">
-                                    <span>Buy Now</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- In-Grid Poster Ad Slot (Inserted seamlessly at index 2) -->
-                <?php if ($index === 2): ?>
-                    <div class="col-span-1 in-grid-ad-container" id="inGridAdPoster">
-                        <?= Ad::render('in_grid_poster') ?>
-                    </div>
-                <?php endif; ?>
-
             <?php endforeach; ?>
+        </div>
         <?php else: ?>
-            <div class="col-span-2 md:col-span-3 lg:col-span-4 bg-stone-50 border border-stone-200/80 rounded-3xl p-12 text-center my-6">
-                <div class="w-16 h-16 rounded-2xl bg-white shadow-xs border border-stone-200 text-stone-400 mx-auto flex items-center justify-center mb-4">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                </div>
-                <h3 class="font-heading font-semibold text-stone-900 text-lg mb-2">Art Gallery Collection Being Prepared</h3>
-                <p class="text-xs text-stone-500 mb-6 max-w-md mx-auto">Original masterworks and certified paintings will appear here as soon as they are published from the studio catalogue.</p>
-                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                    <a href="<?= SITE_URL ?>/admin/products/create" class="inline-flex items-center gap-2 px-6 py-3 bg-[#18181B] hover:bg-black text-white text-xs font-bold rounded-full transition-colors shadow-xs">
-                        <span>+ Add First Painting</span>
-                    </a>
-                <?php endif; ?>
+        <div class="bg-white rounded-3xl border border-stone-200/80 p-12 text-center my-6 shadow-xs max-w-lg mx-auto">
+            <div class="w-16 h-16 rounded-full bg-stone-100 flex items-center justify-center mx-auto mb-4 text-stone-400">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
             </div>
+            <h3 class="text-base font-bold text-stone-900">Curating New Masterpieces</h3>
+            <p class="text-xs text-stone-500 mt-1">Our curatorial atelier is cataloging new acquisitions.</p>
+            <a href="<?= SITE_URL ?>/shop" class="inline-block mt-4 px-6 py-2.5 bg-[#18181B] hover:bg-black text-white rounded-full text-xs font-bold shadow-sm transition-colors">
+                Browse Full Catalog
+            </a>
+        </div>
         <?php endif; ?>
 
-        <!-- Zero Results Empty State -->
-        <div id="noPaintingsFound" class="hidden col-span-2 md:col-span-3 lg:col-span-4 bg-gray-50 border border-gray-200 rounded-3xl p-10 text-center my-4">
-            <div class="w-12 h-12 rounded-2xl bg-white border border-gray-200 text-gray-400 mx-auto flex items-center justify-center mb-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-            </div>
-            <h3 class="font-bold text-gray-800 text-base mb-1">No Paintings Match Your Filter</h3>
-            <p class="text-xs text-gray-500 mb-5 max-w-sm mx-auto">Try clearing one or more filters to view our full collection of original canvases.</p>
-            <button type="button" onclick="resetAllFilters()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#18181B] hover:bg-black text-white text-xs font-bold rounded-full transition-colors cursor-pointer shadow-xs">
-                <span>Reset All Filters</span>
-            </button>
+        <!-- Pinterest-Inspired Infinite "Load More In Gallery" Anchor -->
+        <div class="text-center mt-10 sm:mt-14 mb-12 sm:mb-16">
+            <a href="<?= SITE_URL ?>/shop" class="inline-flex items-center gap-2 px-8 py-3.5 bg-[#18181B] hover:bg-black text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-full shadow-md hover:shadow-lg transition-all active:scale-95">
+                <span>Explore All <?= count($paintings) ?>+ Artworks in Salon Catalog</span>
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
         </div>
+
     </div>
 </section>
 
-<!-- Filters modal is loaded globally via footer.php -->
-
-<!-- ======================================================== -->
-<!-- Instant Client-Side Filter Engine Script                 -->
-<!-- ======================================================== -->
-<script>
-const activeFilters = {
-    medium: 'all',
-    price: 'all',
-    review: 'all',
-    color: 'all',
-    material: 'all',
-    offer: 'all',
-    sort: 'popular'
-};
-
-const defaultLabels = {
-    medium: 'Medium Type',
-    price: 'Price',
-    review: 'Review',
-    color: 'Color',
-    material: 'Material',
-    offer: 'Offer',
-    sort: 'Popular'
-};
-
-function toggleFilterMenu(dropdownId, buttonEl) {
-    const targetMenu = document.getElementById(dropdownId);
-    if (!targetMenu) return;
-    const isCurrentlyOpen = !targetMenu.classList.contains('hidden');
-    const backdrop = document.getElementById('filterBackdrop');
-
-    // Close all open popovers first
-    closeAllFilterMenus();
-
-    if (!isCurrentlyOpen) {
-        targetMenu.classList.remove('hidden');
-        buttonEl.classList.add('open');
-        if (backdrop && window.innerWidth < 640) {
-            backdrop.classList.remove('hidden');
-        }
-    }
-}
-
-function closeAllFilterMenus() {
-    document.querySelectorAll('.filter-popover').forEach(menu => {
-        menu.classList.add('hidden');
-    });
-    document.querySelectorAll('.filter-pill').forEach(btn => {
-        btn.classList.remove('open');
-    });
-    const backdrop = document.getElementById('filterBackdrop');
-    if (backdrop) {
-        backdrop.classList.add('hidden');
-    }
-}
-
-// Global click outside to dismiss menus
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.filter-dropdown-wrap') && !e.target.closest('#filterBackdrop')) {
-        closeAllFilterMenus();
-    }
-});
-
-function selectFilter(filterType, filterVal, displayLabel) {
-    activeFilters[filterType] = filterVal;
-
-    // Update active state in that dropdown
-    const dropdown = document.getElementById(filterType + 'Dropdown');
-    if (dropdown) {
-        dropdown.querySelectorAll('.filter-opt-btn').forEach(btn => {
-            if (btn.getAttribute('data-val') === filterVal) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    }
-
-    // Update button text & active border
-    const pillBtn = document.getElementById('btnFilter' + capitalizeFirst(filterType));
-    if (pillBtn) {
-        const labelSpan = pillBtn.querySelector('.filter-label');
-        if (filterVal === 'all') {
-            labelSpan.textContent = defaultLabels[filterType];
-            pillBtn.classList.remove('active');
-        } else {
-            labelSpan.textContent = displayLabel;
-            pillBtn.classList.add('active');
-        }
-    }
-
-    closeAllFilterMenus();
-    applyAllFilters();
-}
-
-function selectSort(sortVal, displayLabel) {
-    activeFilters.sort = sortVal;
-
-    const dropdown = document.getElementById('sortDropdown');
-    if (dropdown) {
-        dropdown.querySelectorAll('.filter-opt-btn').forEach(btn => {
-            if (btn.getAttribute('data-val') === sortVal) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    }
-
-    const sortBtn = document.getElementById('btnFilterSort');
-    if (sortBtn) {
-        const sortLabel = sortBtn.querySelector('.sort-label');
-        if (sortLabel) sortLabel.textContent = displayLabel;
-        if (sortVal !== 'popular') {
-            sortBtn.classList.add('active');
-        } else {
-            sortBtn.classList.remove('active');
-        }
-    }
-
-    closeAllFilterMenus();
-    applyAllFilters();
-}
-
-function applyAllFilters() {
-    const grid = document.getElementById('paintingsGrid');
-    if (!grid) return;
-
-    const items = Array.from(grid.querySelectorAll('.product-grid-item'));
-    let matchCount = 0;
-
-    items.forEach(item => {
-        const medCat = item.getAttribute('data-medium-cat') || '';
-        const price = parseFloat(item.getAttribute('data-price') || '0');
-        const color = item.getAttribute('data-color') || '';
-        const material = item.getAttribute('data-material') || '';
-        const hasOffer = item.getAttribute('data-has-offer') || '0';
-        const reviews = parseInt(item.getAttribute('data-reviews') || '0');
-
-        let matches = true;
-
-        // 1. Medium Match
-        if (activeFilters.medium !== 'all' && medCat !== activeFilters.medium) {
-            matches = false;
-        }
-
-        // 2. Price Match
-        if (matches && activeFilters.price !== 'all') {
-            if (activeFilters.price === 'under_20000' && price >= 20000) matches = false;
-            else if (activeFilters.price === '20000_30000' && (price < 20000 || price > 30000)) matches = false;
-            else if (activeFilters.price === '30000_40000' && (price < 30000 || price > 40000)) matches = false;
-            else if (activeFilters.price === 'above_40000' && price <= 40000) matches = false;
-        }
-
-        // 3. Review Match
-        if (matches && activeFilters.review !== 'all') {
-            if (activeFilters.review === '5' && reviews < 100) matches = false;
-            else if (activeFilters.review === 'top' && reviews < 130) matches = false;
-        }
-
-        // 4. Color Match
-        if (matches && activeFilters.color !== 'all' && color !== activeFilters.color) {
-            matches = false;
-        }
-
-        // 5. Material Match
-        if (matches && activeFilters.material !== 'all' && material !== activeFilters.material) {
-            matches = false;
-        }
-
-        // 6. Offer Match
-        if (matches && activeFilters.offer !== 'all') {
-            if (activeFilters.offer === 'special_price' && hasOffer !== '1') matches = false;
-        }
-
-        if (matches) {
-            item.style.display = '';
-            matchCount++;
-        } else {
-            item.style.display = 'none';
-        }
-    });
-
-    // Handle Sort Order on items
-    if (activeFilters.sort !== 'popular') {
-        items.sort((a, b) => {
-            if (activeFilters.sort === 'price_low') {
-                return parseFloat(a.getAttribute('data-price') || '0') - parseFloat(b.getAttribute('data-price') || '0');
-            } else if (activeFilters.sort === 'price_high') {
-                return parseFloat(b.getAttribute('data-price') || '0') - parseFloat(a.getAttribute('data-price') || '0');
-            } else if (activeFilters.sort === 'rating') {
-                return parseInt(b.getAttribute('data-reviews') || '0') - parseInt(a.getAttribute('data-reviews') || '0');
-            } else if (activeFilters.sort === 'name') {
-                return (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || '');
-            }
-            return 0;
-        });
-    } else {
-        // Return to natural order
-        items.sort((a, b) => {
-            return parseInt(a.getAttribute('data-original-order') || '0') - parseInt(b.getAttribute('data-original-order') || '0');
-        });
-    }
-
-    // Re-append items in DOM before the empty card
-    const emptyCard = document.getElementById('noPaintingsFound');
-    const inGridAd = document.getElementById('inGridAdPoster');
-    items.forEach(el => grid.insertBefore(el, emptyCard));
-
-    // Re-position in-grid ad after the 3rd artwork (slot index 2 or 3) if present
-    if (inGridAd) {
-        if (matchCount >= 3) {
-            inGridAd.style.display = '';
-            const visibleItems = items.filter(el => el.style.display !== 'none');
-            const targetRef = visibleItems[2] ? visibleItems[2].nextSibling : emptyCard;
-            grid.insertBefore(inGridAd, targetRef);
-        } else {
-            inGridAd.style.display = 'none';
-        }
-    }
-
-    // Update Counter Badge
-    const counterBadge = document.getElementById('filteredCountBadge');
-    if (counterBadge) {
-        counterBadge.textContent = matchCount === items.length 
-            ? 'Showing ' + matchCount + ' artworks' 
-            : 'Showing ' + matchCount + ' of ' + items.length + ' matching';
-    }
-
-    // Toggle Empty State Card
-    const emptyState = document.getElementById('noPaintingsFound');
-    if (emptyState) {
-        if (matchCount === 0) {
-            emptyState.classList.remove('hidden');
-        } else {
-            emptyState.classList.add('hidden');
-        }
-    }
-
-    // Toggle Reset Filters button
-    const clearBtn = document.getElementById('clearAllFiltersBtn');
-    const isAnyActive = Object.keys(activeFilters).some(k => k !== 'sort' && activeFilters[k] !== 'all');
-    if (clearBtn) {
-        if (isAnyActive) {
-            clearBtn.classList.remove('hidden');
-        } else {
-            clearBtn.classList.add('hidden');
-        }
-    }
-}
-
-function resetAllFilters() {
-    Object.keys(activeFilters).forEach(k => {
-        if (k !== 'sort') {
-            activeFilters[k] = 'all';
-            const pillBtn = document.getElementById('btnFilter' + capitalizeFirst(k));
-            if (pillBtn) {
-                const labelSpan = pillBtn.querySelector('.filter-label');
-                if (labelSpan) labelSpan.textContent = defaultLabels[k];
-                pillBtn.classList.remove('active');
-            }
-            const dropdown = document.getElementById(k + 'Dropdown');
-            if (dropdown) {
-                dropdown.querySelectorAll('.filter-opt-btn').forEach(btn => {
-                    if (btn.getAttribute('data-val') === 'all') btn.classList.add('active');
-                    else btn.classList.remove('active');
-                });
-            }
-        }
-    });
-
-    closeAllFilterMenus();
-    applyAllFilters();
-}
-
-function capitalizeFirst(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-</script>
-
-<!-- 4b. Active Offers & Collector Vouchers Section -->
-<?php if (!empty($activeCoupons)): ?>
-<section class="w-full py-6" id="collectorOffersSection">
-    <div class="bg-[#18181B] rounded-[28px] sm:rounded-[34px] p-6 sm:p-8 text-white relative overflow-hidden shadow-lg border border-white/10">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+<!-- ====================================================================
+     3. PINTEREST-STYLE CURATED BOARDS / THEMATIC SPACES
+     ==================================================================== -->
+<section class="w-full py-12 bg-stone-100/60 border-t border-b border-black/[0.04]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
             <div>
-                <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-full text-stone-200 text-xs font-bold mb-2 border border-white/15">
-                    <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
-                    <span>Collector Privilege Offers</span>
-                </div>
-                <h2 class="text-xl sm:text-2xl font-bold font-heading text-white">Save Up to 50% With Verified Coupon Codes</h2>
-                <p class="text-xs text-stone-300 mt-1 max-w-xl">Apply promotional vouchers during checkout for instant price reductions on original fine art.</p>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-stone-500 block mb-1">Inspirational Art Spaces</span>
+                <h2 class="text-2xl sm:text-3xl font-heading font-extrabold text-[#18181B] tracking-tight">
+                    Curated Atelier Boards
+                </h2>
             </div>
-            <a href="<?= SITE_URL ?>/offers" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#18181B] hover:bg-stone-100 rounded-full text-xs font-bold transition-all shadow-xs flex-shrink-0 self-start md:self-auto">
-                <span>View All <?= count($activeCoupons) ?> Offers</span>
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            <a href="<?= SITE_URL ?>/shop" class="text-xs font-bold text-stone-700 hover:text-black hover:underline flex items-center gap-1">
+                <span>View all aesthetic boards</span>
+                <span>&rarr;</span>
             </a>
         </div>
 
-        <!-- Horizontal Voucher Cards Preview -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 relative z-10">
-            <?php foreach (array_slice($activeCoupons, 0, 3) as $c): 
-                $discLabel = ($c['discount_type'] === 'percentage') ? ((float)$c['discount_value'] . '% OFF') : ('Flat ' . CURRENCY_SYMBOL . ' ' . number_format((float)$c['discount_value']) . ' OFF');
-            ?>
-                <div class="bg-white/10 backdrop-blur-xs border border-white/10 rounded-2xl p-4 flex items-center justify-between gap-3 hover:bg-white/15 transition-all">
-                    <div class="overflow-hidden">
-                        <span class="text-[11px] font-extrabold text-amber-400 uppercase tracking-wider block"><?= $discLabel ?></span>
-                        <h4 class="text-xs font-bold text-white mt-0.5 truncate"><?= htmlspecialchars($c['title'] ?? $c['code']) ?></h4>
-                        <span class="text-[10px] text-stone-400 block mt-0.5">
-                            <?= ((float)$c['min_order_amount'] > 0) ? ('Min. spend ' . CURRENCY_SYMBOL . ' ' . number_format((float)$c['min_order_amount'])) : 'No minimum spend' ?>
-                        </span>
+        <!-- 3 Pinterest Board Cards (Collage-Style Previews) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Board 1: Heritage & Sacred Waters -->
+            <a href="<?= SITE_URL ?>/shop?category=traditional-heritage" class="bg-white rounded-3xl p-4 sm:p-5 border border-black/[0.05] shadow-xs hover:shadow-md transition-all group block">
+                <div class="grid grid-cols-3 gap-2 h-44 sm:h-52 rounded-2xl overflow-hidden mb-4 bg-stone-100">
+                    <div class="col-span-2 h-full">
+                        <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=600&q=80" alt="Sacred Waters" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
-                    <button type="button" onclick="navigator.clipboard.writeText('<?= htmlspecialchars($c['code']) ?>'); this.innerText = 'Copied!'; setTimeout(() => this.innerText = '<?= htmlspecialchars($c['code']) ?>', 2000);" title="Click to copy code" class="px-3 py-1.5 bg-white text-[#18181B] hover:bg-stone-100 rounded-xl text-xs font-mono font-bold shadow-xs transition-colors flex items-center gap-1 flex-shrink-0 cursor-pointer">
-                        <span><?= htmlspecialchars($c['code']) ?></span>
-                    </button>
+                    <div class="grid grid-rows-2 gap-2 h-full">
+                        <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=300&q=80" alt="Banaras Ghats" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300&q=80" alt="Heritage Flute" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
-<!-- 5. Popular Categories Section -->
-<section class="w-full py-8">
-    <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#111827] tracking-tight">Popular Categories</h2>
-        <a href="<?= SITE_URL ?>/shop" class="text-xs sm:text-sm font-bold text-[#18181B] hover:text-stone-600 hover:underline">See All Categories &rarr;</a>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <?php
-        $categoryThumbnails = [
-            'oil-paintings' => 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=200&q=80',
-            'acrylic-paintings' => 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=200&q=80',
-            'acrylic-art' => 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=200&q=80',
-            'watercolor-paintings' => 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=200&q=80',
-            'modern-abstract' => 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=200&q=80',
-            'landscapes-nature' => 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=200&q=80',
-            'heritage-spiritual' => 'https://images.unsplash.com/photo-1578925518470-4def7a0f08bb?w=200&q=80',
-            'traditional-heritage' => 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=200&q=80',
-            'charcoal-and-ink' => 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&q=80',
-        ];
-        ?>
-        <?php foreach ($categories as $cat): 
-            $pCount = (int)($cat['product_count'] ?? 0);
-            if ($pCount <= 0) continue;
-        ?>
-            <?php 
-                $img = !empty($cat['image_url']) && str_starts_with($cat['image_url'], 'http') 
-                    ? $cat['image_url'] 
-                    : ($categoryThumbnails[$cat['slug']] ?? 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=200&q=80');
-            ?>
-            <a href="<?= SITE_URL ?>/shop?category=<?= htmlspecialchars($cat['slug']) ?>" class="category-box-item group">
-                <div class="w-14 h-14 rounded-xl bg-stone-100 p-1 overflow-hidden shadow-xs flex-shrink-0 flex items-center justify-center">
-                    <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($cat['name']) ?>" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=200&q=80';" class="w-full h-full object-cover rounded-lg group-hover:scale-110 transition-transform duration-300">
-                </div>
-                <div>
-                    <h3 class="font-bold text-sm text-[#111827] group-hover:text-black transition-colors">
-                        <?= htmlspecialchars($cat['name']) ?>
-                    </h3>
-                    <p class="text-xs text-stone-500 font-medium mt-0.5">
-                        <?= $pCount ?> Items Available
-                    </p>
+                <h3 class="font-heading font-bold text-base text-[#18181B] group-hover:text-stone-600 transition-colors">
+                    Sacred Banaras &amp; Spiritual Heritage
+                </h3>
+                <p class="text-xs text-stone-500 mt-1">Oils and temperas celebrating the Ghats and divine mythology</p>
+                <div class="flex items-center justify-between text-xs font-bold text-stone-700 mt-3 pt-3 border-t border-black/[0.04]">
+                    <span>12 Original Works</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </div>
             </a>
-        <?php endforeach; ?>
+
+            <!-- Board 2: Modern Impasto & Bold Geometry -->
+            <a href="<?= SITE_URL ?>/shop?category=modern-abstract" class="bg-white rounded-3xl p-4 sm:p-5 border border-black/[0.05] shadow-xs hover:shadow-md transition-all group block">
+                <div class="grid grid-cols-3 gap-2 h-44 sm:h-52 rounded-2xl overflow-hidden mb-4 bg-stone-100">
+                    <div class="col-span-2 h-full">
+                        <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&q=80" alt="Abstract Impasto" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="grid grid-rows-2 gap-2 h-full">
+                        <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" alt="Modern Brush" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1549887534-1541e9326642?w=300&q=80" alt="Vibrant Palette" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+                <h3 class="font-heading font-bold text-base text-[#18181B] group-hover:text-stone-600 transition-colors">
+                    Textured Impasto &amp; Abstract Vibrations
+                </h3>
+                <p class="text-xs text-stone-500 mt-1">Palette-knife heavy acrylics tailored for contemporary architecture</p>
+                <div class="flex items-center justify-between text-xs font-bold text-stone-700 mt-3 pt-3 border-t border-black/[0.04]">
+                    <span>16 Original Works</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </a>
+
+            <!-- Board 3: Belgian Linen Master Oils -->
+            <a href="<?= SITE_URL ?>/shop?category=oil-paintings" class="bg-white rounded-3xl p-4 sm:p-5 border border-black/[0.05] shadow-xs hover:shadow-md transition-all group block">
+                <div class="grid grid-cols-3 gap-2 h-44 sm:h-52 rounded-2xl overflow-hidden mb-4 bg-stone-100">
+                    <div class="col-span-2 h-full">
+                        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&q=80" alt="Linen Oil" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="grid grid-rows-2 gap-2 h-full">
+                        <img src="https://images.unsplash.com/photo-1549887534-1541e9326642?w=300&q=80" alt="Atelier Master" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" alt="Oil Portrait" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+                <h3 class="font-heading font-bold text-base text-[#18181B] group-hover:text-stone-600 transition-colors">
+                    Belgian Linen &amp; Classical Realism
+                </h3>
+                <p class="text-xs text-stone-500 mt-1">Layered glazing techniques inspired by Dutch and Renaissance masters</p>
+                <div class="flex items-center justify-between text-xs font-bold text-stone-700 mt-3 pt-3 border-t border-black/[0.04]">
+                    <span>14 Original Works</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </a>
+
+        </div>
+
     </div>
 </section>
 
-<!-- 6. Weekly Curated Art Stories -->
-<?php if (!empty($latestBlogs)): ?>
-<section class="w-full py-8 border-t border-black/[0.06]">
-    <div class="flex items-center justify-between mb-6">
-        <div>
-            <h2 class="text-2xl font-extrabold text-[#111827]">Art Stories &amp; Curator Insights</h2>
-            <p class="text-xs text-stone-500 mt-1">Collecting tips, master artist techniques, and salon exhibition reviews</p>
-        </div>
-        <a href="<?= SITE_URL ?>/blog" class="text-xs font-bold text-[#18181B] hover:text-stone-600 hover:underline">Read All &rarr;</a>
-    </div>
+<!-- ====================================================================
+     4. MUSEUM PROVENANCE GUARANTEE STRIP
+     ==================================================================== -->
+<section class="w-full py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
+            
+            <div class="flex flex-col items-center">
+                <div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-[#18181B] mb-3 shadow-xs">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <h4 class="font-bold text-xs sm:text-sm text-[#18181B]">Physical Provenance</h4>
+                <p class="text-[11px] text-stone-500 mt-1">Stamped atelier certificate signed by the artist</p>
+            </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <?php foreach ($latestBlogs as $blog): ?>
-            <a href="<?= SITE_URL ?>/blog/<?= htmlspecialchars($blog['slug']) ?>" class="group bg-white rounded-2xl overflow-hidden border border-black/[0.06] hover:shadow-md transition-all">
-                <div class="aspect-[16/10] bg-[#F5F6F6] overflow-hidden">
-                    <img src="<?= htmlspecialchars($blog['featured_image'] ?? ASSETS_URL . '/images/banner.jpg') ?>" alt="<?= htmlspecialchars($blog['title']) ?>" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=600&q=80';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            <div class="flex flex-col items-center">
+                <div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-[#18181B] mb-3 shadow-xs">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
+                <h4 class="font-bold text-xs sm:text-sm text-[#18181B]">Insured Art Crating</h4>
+                <p class="text-[11px] text-stone-500 mt-1">Multi-layered moisture-proof archival wooden crates</p>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-[#18181B] mb-3 shadow-xs">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                </div>
+                <h4 class="font-bold text-xs sm:text-sm text-[#18181B]">14-Day In-Home Trial</h4>
+                <p class="text-[11px] text-stone-500 mt-1">Full inspection in your living space with guaranteed returns</p>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <div class="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-[#18181B] mb-3 shadow-xs">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                </div>
+                <h4 class="font-bold text-xs sm:text-sm text-[#18181B]">Multi-Currency &amp; EMI</h4>
+                <p class="text-[11px] text-stone-500 mt-1">Seamless global card, UPI, bank wire &amp; zero-interest splits</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ====================================================================
+     5. ARTIST STORIES & JOURNAL (PINTEREST EDITORIAL JOURNAL)
+     ==================================================================== -->
+<?php if (!empty($blogs)): ?>
+<section class="w-full py-12 sm:py-16 bg-[#FBFBFA]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-stone-500 block mb-1">Atelier Chronicles</span>
+                <h2 class="text-2xl sm:text-3xl font-heading font-extrabold text-[#18181B] tracking-tight">
+                    Artist Profiles &amp; Studio Stories
+                </h2>
+            </div>
+            <a href="<?= SITE_URL ?>/blog" class="text-xs font-bold text-stone-700 hover:text-black hover:underline flex items-center gap-1">
+                <span>View all stories</span>
+                <span>&rarr;</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <?php foreach ($blogs as $post): 
+                $blogImg = !empty($post['featured_image']) ? $post['featured_image'] : 'https://images.unsplash.com/photo-1549887534-1541e9326642?w=600&q=80';
+            ?>
+            <a href="<?= SITE_URL ?>/blog/<?= htmlspecialchars($post['slug']) ?>" class="group block bg-white rounded-3xl overflow-hidden border border-black/[0.05] shadow-xs hover:shadow-md transition-all">
+                <div class="aspect-[16/10] overflow-hidden bg-stone-100">
+                    <img src="<?= htmlspecialchars($blogImg) ?>" alt="<?= htmlspecialchars($post['title']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                 </div>
                 <div class="p-5">
-                    <span class="text-[10px] uppercase font-bold text-stone-500 tracking-wider">Fine Art Journal</span>
-                    <h3 class="font-bold text-base text-[#111827] group-hover:text-black transition-colors mt-1 line-clamp-2">
-                        <?= htmlspecialchars($blog['title']) ?>
+                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wider block mb-1">
+                        <?= date('M d, Y', strtotime($post['created_at'] ?? 'now')) ?>
+                    </span>
+                    <h3 class="font-heading font-bold text-sm sm:text-base text-[#18181B] group-hover:text-stone-600 transition-colors leading-snug">
+                        <?= htmlspecialchars($post['title']) ?>
                     </h3>
-                    <p class="text-xs text-stone-500 mt-2 line-clamp-2">
-                        <?= htmlspecialchars($blog['excerpt'] ?? '') ?>
+                    <p class="text-xs text-stone-500 mt-2 line-clamp-2 leading-relaxed">
+                        <?= htmlspecialchars(strip_tags($post['excerpt'] ?? ($post['content'] ?? ''))) ?>
                     </p>
+                    <span class="text-xs font-bold text-stone-800 mt-3 inline-flex items-center gap-1">
+                        Read Story &rarr;
+                    </span>
                 </div>
             </a>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
+
     </div>
 </section>
 <?php endif; ?>
 
-<!-- 7. Footer Billboard Banner Ad Slot -->
-<div class="w-full py-4">
-    <?= Ad::render('footer_banner') ?>
+<!-- ====================================================================
+     6. PINTEREST QUICK INSPECT LIGHTBOX MODAL
+     ==================================================================== -->
+<div id="artInspectModal" onclick="closeArtModal(event)">
+    <div class="art-modal-container" onclick="event.stopPropagation();">
+        <div class="relative p-5 sm:p-8">
+            
+            <!-- Close Button -->
+            <button type="button" 
+                    onclick="closeArtModal()" 
+                    class="absolute top-4 right-4 w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-colors z-20"
+                    aria-label="Close Preview">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+                
+                <!-- Left: High-Res Painting Preview -->
+                <div class="lg:col-span-7 flex items-center justify-center bg-stone-50 rounded-2xl p-4 sm:p-6 border border-black/[0.04]">
+                    <div class="relative max-h-[60vh] flex items-center justify-center">
+                        <img id="inspectModalImg" src="" alt="Painting" class="max-h-[55vh] w-auto object-contain rounded-xl shadow-lg">
+                    </div>
+                </div>
+
+                <!-- Right: Artwork Information & Framing Controls -->
+                <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+                    
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span id="inspectModalMedium" class="text-[11px] font-bold text-stone-700 bg-stone-100 px-3 py-1 rounded-full"></span>
+                            <span class="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                <span>Certified Original</span>
+                            </span>
+                        </div>
+
+                        <h2 id="inspectModalTitle" class="text-xl sm:text-2xl font-heading font-extrabold text-[#18181B] leading-snug"></h2>
+                        <p id="inspectModalArtist" class="text-xs font-medium text-stone-500 mt-1"></p>
+                        
+                        <p id="inspectModalDesc" class="text-xs text-stone-600 mt-3 leading-relaxed line-clamp-3"></p>
+                    </div>
+
+                    <!-- Framing Selector -->
+                    <div class="pt-2 border-t border-black/[0.06]">
+                        <label class="text-xs font-bold text-[#18181B] block mb-2">Museum Framing Options:</label>
+                        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                            <button type="button" onclick="selectModalFrame('Rolled Canvas', 0, this)" class="modal-frame-btn active p-2.5 rounded-xl border border-[#18181B] bg-stone-900 text-white font-bold transition-all">
+                                <span class="block font-bold">Rolled</span>
+                                <span class="text-[10px] text-stone-300">Included</span>
+                            </button>
+                            <button type="button" onclick="selectModalFrame('Stretched Canvas', 1200, this)" class="modal-frame-btn p-2.5 rounded-xl border border-stone-200 bg-white hover:border-black text-stone-800 font-medium transition-all">
+                                <span class="block font-bold">Stretched</span>
+                                <span class="text-[10px] text-stone-500">+₹1,200</span>
+                            </button>
+                            <button type="button" onclick="selectModalFrame('Teak Floating Frame', 2500, this)" class="modal-frame-btn p-2.5 rounded-xl border border-stone-200 bg-white hover:border-black text-stone-800 font-medium transition-all">
+                                <span class="block font-bold">Teak Float</span>
+                                <span class="text-[10px] text-stone-500">+₹2,500</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Price & Actions -->
+                    <div class="pt-3 border-t border-black/[0.06]">
+                        <div class="flex items-baseline justify-between mb-3">
+                            <span class="text-xs text-stone-500 font-semibold">Acquisition Price:</span>
+                            <div class="text-right">
+                                <span id="inspectModalPrice" class="font-mono text-xl sm:text-2xl font-bold text-[#18181B]"></span>
+                                <span id="inspectModalOriginalPrice" class="font-mono text-xs text-stone-400 line-through ml-2 hidden"></span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <button type="button" 
+                                    id="modalAddBagBtn"
+                                    onclick="executeModalAddToCart()" 
+                                    class="w-full py-3 px-4 border border-[#18181B] text-[#18181B] hover:bg-stone-100 rounded-full text-xs font-bold transition-colors">
+                                Add to Bag
+                            </button>
+                            <button type="button" 
+                                    id="modalBuyNowBtn"
+                                    onclick="executeModalBuyNow()" 
+                                    class="w-full py-3 px-4 bg-[#18181B] hover:bg-black text-white rounded-full text-xs font-bold shadow-md transition-all">
+                                Instant Acquire
+                            </button>
+                        </div>
+
+                        <div class="text-center pt-2">
+                            <a id="inspectModalFullLink" href="#" class="text-xs text-stone-500 hover:text-black underline font-semibold">
+                                View Full Artwork Details Page &rarr;
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>
+
+<!-- ====================================================================
+     7. JAVASCRIPT FOR PINTEREST QUICK VIEW MODAL & INTERACTIONS
+     ==================================================================== -->
+<script>
+let currentModalArt = null;
+let currentModalFrame = 'Rolled Canvas';
+let currentModalFrameSurcharge = 0;
+
+function openArtModal(artData) {
+    currentModalArt = artData;
+    currentModalFrame = 'Rolled Canvas';
+    currentModalFrameSurcharge = 0;
+
+    document.getElementById('inspectModalImg').src = artData.image;
+    document.getElementById('inspectModalTitle').textContent = artData.title;
+    document.getElementById('inspectModalArtist').textContent = artData.artist + ' • ' + artData.dimensions;
+    document.getElementById('inspectModalMedium').textContent = artData.medium;
+    document.getElementById('inspectModalDesc').textContent = artData.description;
+    document.getElementById('inspectModalFullLink').href = (window.SITE_URL || '') + '/product/' + encodeURIComponent(artData.slug);
+    
+    updateModalPriceDisplay();
+
+    // Reset frame buttons
+    document.querySelectorAll('.modal-frame-btn').forEach((btn, idx) => {
+        if (idx === 0) {
+            btn.className = 'modal-frame-btn active p-2.5 rounded-xl border border-[#18181B] bg-stone-900 text-white font-bold transition-all';
+        } else {
+            btn.className = 'modal-frame-btn p-2.5 rounded-xl border border-stone-200 bg-white hover:border-black text-stone-800 font-medium transition-all';
+        }
+    });
+
+    const modal = document.getElementById('artInspectModal');
+    modal.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeArtModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.closest('button[aria-label="Close Preview"]')) {
+        return;
+    }
+    const modal = document.getElementById('artInspectModal');
+    modal.classList.remove('modal-open');
+    document.body.style.overflow = '';
+}
+
+function selectModalFrame(frameName, surcharge, btn) {
+    currentModalFrame = frameName;
+    currentModalFrameSurcharge = surcharge;
+
+    document.querySelectorAll('.modal-frame-btn').forEach(b => {
+        b.className = 'modal-frame-btn p-2.5 rounded-xl border border-stone-200 bg-white hover:border-black text-stone-800 font-medium transition-all';
+    });
+    btn.className = 'modal-frame-btn active p-2.5 rounded-xl border border-[#18181B] bg-stone-900 text-white font-bold transition-all';
+
+    updateModalPriceDisplay();
+}
+
+function updateModalPriceDisplay() {
+    if (!currentModalArt) return;
+    const base = parseFloat(currentModalArt.price) || 0;
+    const total = base + currentModalFrameSurcharge;
+    
+    // Approximate currency formatting for modal display
+    const priceEl = document.getElementById('inspectModalPrice');
+    if (typeof window.CURRENCY_SYMBOL !== 'undefined') {
+        priceEl.textContent = window.CURRENCY_SYMBOL + ' ' + total.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+    } else {
+        priceEl.textContent = '₹ ' + total.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+    }
+}
+
+async function executeModalAddToCart() {
+    if (!currentModalArt) return;
+    const btn = document.getElementById('modalAddBagBtn');
+    if (btn) btn.disabled = true;
+    try {
+        await quickAddToCart(currentModalArt.id, 1, currentModalFrame);
+        closeArtModal();
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+async function executeModalBuyNow() {
+    if (!currentModalArt) return;
+    const btn = document.getElementById('modalBuyNowBtn');
+    if (btn) btn.disabled = true;
+    try {
+        await quickBuyNow(currentModalArt.id, 1, currentModalFrame);
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeArtModal();
+});
+</script>

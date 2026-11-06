@@ -22,7 +22,7 @@ class ShopController extends Controller {
             'sort'        => $_GET['sort'] ?? null,
         ];
 
-        $results = $productModel->filter($filters, $page, 12);
+        $results = $productModel->filter($filters, $page, 24);
         $categories = $categoryModel->getActiveWithCounts();
 
         // If AJAX request, return partial JSON for instant client-side update

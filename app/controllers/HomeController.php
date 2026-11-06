@@ -11,7 +11,7 @@ class HomeController extends Controller {
         $categoryModel = new Category();
         $blogModel = new Blog();
 
-        $featuredPaintings = $productModel->getFeatured(8);
+        $featuredPaintings = $productModel->getFeatured(24);
         $categories = $categoryModel->getActiveWithCounts();
 
         $homepageTtl = (int)Cache::getConfig()['homepage_ttl'];
