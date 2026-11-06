@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="660" height="240" viewBox="305 395 660 240" xml:space="preserve">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="344 400 563 451" xml:space="preserve">
 <desc>Created with Fabric.js 5.3.0</desc>
 <defs>
 </defs>
-<g transform="matrix(1 0 0 1 640 512)" id="background-logo"  >
-<rect style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-opacity: 0; fill-rule: nonzero; opacity: 1;"  paint-order="stroke"  x="-640" y="-512" rx="0" ry="0" width="660" height="240" />
-</g>
 <g transform="matrix(2.409419245182297 0 0 2.409419245182297 654.4063981772324 519.7786235852869)" id="shape-cf7b8c7b-d2de-42d7-9193-7f449d51cb19"  >
 <g style=""  paint-order="stroke"   >
 		<g transform="matrix(1 0 0 1 -95.09084605589939 -22.984219633669426)" id="path-02"  >

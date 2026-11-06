@@ -326,15 +326,15 @@ $navCategories = $categoryModel->getActiveWithCounts();
             <!-- 1. Top Modular Capsule Navigation Bar -->
             <div class="flex items-center justify-between gap-2.5 sm:gap-4 flex-wrap lg:flex-nowrap">
                 
-                <!-- Left: Brand Capsule + Collection Capsule -->
-                <div class="flex items-center gap-2 sm:gap-2.5">
-                    <!-- Brand Capsule -->
-                    <a href="<?= SITE_URL ?>" class="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-white hover:bg-stone-50 border border-black/[0.06] rounded-full shadow-xs transition-transform active:scale-95 group" title="JayArt Fine Art Atelier">
-                        <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-6 sm:h-7 w-auto object-contain">
+                <!-- Left: Brand Logo + Atelier Salon Tag -->
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <a href="<?= SITE_URL ?>" class="inline-flex items-center focus:outline-none transition-transform hover:opacity-90 active:scale-95 py-0.5" title="JayArt Fine Art Atelier">
+                        <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-9 sm:h-11 w-auto object-contain">
                     </a>
 
                     <!-- Collection / Breadcrumb Capsule -->
-                    <div class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-black/[0.06] rounded-full shadow-xs text-xs font-semibold text-stone-700">
+                    <div class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black/[0.06] rounded-full shadow-2xs text-[11px] font-semibold text-stone-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                         <span>Salon 2026</span>
                         <span class="text-stone-300">/</span>
                         <a href="<?= SITE_URL ?>/shop" class="text-stone-500 hover:text-black">Paintings</a>
@@ -449,6 +449,11 @@ $navCategories = $categoryModel->getActiveWithCounts();
             }
             ?>
 
+            <?php 
+            $requestPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+            $isHome = ($requestPath === '' || $requestPath === 'index.php');
+            ?>
+            <?php if (!$isHome): ?>
             <!-- 2. Sub-Nav Category Capsule Bar (Scrollbar-Free, Native Swipe & Desktop Drag) -->
             <div id="categoryCapsuleBar" class="mt-3 sm:mt-3.5 flex items-center gap-2 overflow-x-auto scrollbar-none pb-1.5 -mx-1 px-1 select-none cursor-grab active:cursor-grabbing" style="scrollbar-width: none; -ms-overflow-style: none;">
                 <!-- Filter Toggle Pill Button -->
@@ -467,6 +472,7 @@ $navCategories = $categoryModel->getActiveWithCounts();
                 <a href="<?= SITE_URL ?>/shop?filter=charcoal" onclick="return handleCategoryPillClick(event, this, 'charcoal', '<?= SITE_URL ?>/shop?filter=charcoal')" class="category-capsule-pill <?= ($activeKey === 'charcoal') ? 'active' : '' ?>" data-cat="charcoal">Charcoal Mono</a>
                 <a href="<?= SITE_URL ?>/offers" onclick="return handleCategoryPillClick(event, this, 'offers', '<?= SITE_URL ?>/offers')" class="category-capsule-pill bg-stone-100 hover:bg-stone-200 text-[#18181B] font-bold border-black/[0.08] <?= ($activeKey === 'offers') ? 'active' : '' ?>" data-cat="offers">Salon Offers</a>
             </div>
+            <?php endif; ?>
         </div>
     </header>
 
