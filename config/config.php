@@ -46,6 +46,16 @@ if ($appDebug) {
 
 // Detect Site Base URL (Supports .env APP_URL override, localhost, subfolders, and cPanel domains)
 $envAppUrl = env('APP_URL');
+$currentHost = $_SERVER['HTTP_HOST'] ?? '';
+
+// If accessed via a real domain/host (not localhost), ignore localhost APP_URL from dev .env
+if (!empty($envAppUrl) && !empty($currentHost)) {
+    $parsedHost = parse_url((string)$envAppUrl, PHP_URL_HOST);
+    if ($parsedHost && $parsedHost !== $currentHost && !in_array($currentHost, ['localhost', '127.0.0.1'], true)) {
+        $envAppUrl = null;
+    }
+}
+
 if (!empty($envAppUrl)) {
     define('SITE_URL', rtrim((string)$envAppUrl, '/'));
 } else {
