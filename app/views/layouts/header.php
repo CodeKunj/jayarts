@@ -40,6 +40,117 @@ $navCategories = $categoryModel->getActiveWithCounts();
 </head>
 <body class="bg-[#FBFBFA] text-[#18181B] min-h-screen flex flex-col font-sans antialiased overflow-x-clip selection:bg-[#18181B] selection:text-white">
 
+    <!-- Classical Sculpture Atelier Preloader -->
+    <div id="jayartPreloader" class="jayart-preloader" aria-hidden="true">
+        <div class="sculpture-loader-content">
+            <div class="sculpture-wrapper">
+                <div class="sculpture-ambient-glow"></div>
+                <!-- Inline Classical Sculpture SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none" class="sculpture-svg">
+                    <defs>
+                        <linearGradient id="sculptureGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#C59A58" />
+                            <stop offset="50%" stop-color="#E5C388" />
+                            <stop offset="100%" stop-color="#9A7432" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Ambient Golden Aura Ring -->
+                    <circle cx="100" cy="105" r="70" stroke="url(#sculptureGoldGrad)" stroke-width="1" stroke-dasharray="4 6" opacity="0.4" class="sculpture-halo" />
+
+                    <!-- Pedestal / Socle Base -->
+                    <path d="M65 224 H135 V228 C135 230 133 232 131 232 H69 C67 232 65 230 65 228 V224 Z" fill="#18181B" />
+                    <path d="M72 216 H128 L131 224 H69 L72 216 Z" fill="#27272A" stroke="#C59A58" stroke-width="1" />
+                    <path d="M80 200 H120 V216 H80 V200 Z" fill="#18181B" />
+                    <path d="M76 196 H124 L122 200 H78 L76 196 Z" fill="#C59A58" />
+
+                    <!-- Draped Classical Torso & Chest -->
+                    <path d="M42 188 C50 170 70 162 86 160 C90 174 110 174 114 160 C130 162 150 170 158 188 C144 198 126 202 100 202 C74 202 56 198 42 188 Z" fill="#27272A" stroke="#18181B" stroke-width="1.5" />
+                    
+                    <!-- Toga Folds / Chiseled Drapery Lines -->
+                    <path d="M54 184 C68 174 84 172 100 174" stroke="#C59A58" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.8" />
+                    <path d="M62 192 C78 182 96 182 110 186" stroke="#3F3F46" stroke-width="1.2" stroke-linecap="round" fill="none" />
+                    <path d="M146 184 C132 174 116 172 100 174" stroke="#C59A58" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.6" />
+                    <path d="M100 174 V198" stroke="#3F3F46" stroke-width="1" stroke-linecap="round" />
+
+                    <!-- Neck & Musculature -->
+                    <path d="M86 134 C86 148 84 160 84 162 C94 166 106 166 116 162 C116 160 114 148 114 134 Z" fill="#3F3F46" stroke="#18181B" stroke-width="1" />
+                    <path d="M96 140 C95 148 94 156 90 162" stroke="#52525B" stroke-width="1.2" stroke-linecap="round" fill="none" />
+                    <path d="M104 140 C105 148 106 156 110 162" stroke="#52525B" stroke-width="1.2" stroke-linecap="round" fill="none" />
+
+                    <!-- Head Contour & Jawline (Classical Greco-Roman Portrait) -->
+                    <path d="M72 90 C70 108 72 122 82 134 C90 144 100 146 104 146 C112 144 122 136 128 124 C132 112 132 96 130 90 Z" fill="#27272A" stroke="#18181B" stroke-width="1.5" />
+
+                    <!-- Facial Planes & Features -->
+                    <path d="M75 96 L86 112 L84 130 L78 124 Z" fill="#18181B" opacity="0.4" />
+                    <path d="M98 76 L96 110 L102 112 L103 108 L100 76 Z" fill="#D4D4D8" />
+                    <path d="M96 110 L92 112 L96 114 L102 112 Z" fill="#A1A1AA" />
+
+                    <!-- Brows & Eyes -->
+                    <path d="M82 82 C86 80 92 80 96 82" stroke="#18181B" stroke-width="2" stroke-linecap="round" fill="none" />
+                    <path d="M104 82 C108 80 114 80 118 82" stroke="#18181B" stroke-width="2" stroke-linecap="round" fill="none" />
+                    <path d="M84 87 C87 85 91 85 94 88 C91 90 87 90 84 87 Z" fill="#18181B" />
+                    <path d="M106 88 C109 85 113 85 116 87 C113 90 109 90 106 88 Z" fill="#18181B" />
+
+                    <!-- Sculpted Lips & Chin -->
+                    <path d="M93 124 C97 122 103 122 107 124 C103 127 97 127 93 124 Z" fill="#18181B" />
+                    <path d="M95 128 C98 130 102 130 105 128" stroke="#18181B" stroke-width="1.2" stroke-linecap="round" fill="none" />
+                    <path d="M98 138 C99 140 101 140 102 138" stroke="#52525B" stroke-width="1.5" stroke-linecap="round" fill="none" />
+
+                    <!-- Classical Renaissance Sculpted Hair Locks -->
+                    <path d="M70 82 C66 74 68 64 74 58 C80 52 86 54 88 50 C92 44 100 42 106 46 C112 42 122 44 126 52 C132 54 136 62 134 70 C138 76 136 86 130 92 C126 84 124 76 118 74 C112 72 108 76 102 72 C96 68 90 70 86 76 C82 74 76 76 72 82 Z" fill="#18181B" stroke="#C59A58" stroke-width="1.2" />
+                    <path d="M76 60 C82 64 80 72 74 74" stroke="#C59A58" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <path d="M88 54 C94 58 92 68 86 70" stroke="#C59A58" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <path d="M104 48 C110 52 108 62 102 64" stroke="#C59A58" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <path d="M118 54 C124 58 122 68 116 70" stroke="#C59A58" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <path d="M128 66 C134 72 130 80 124 82" stroke="#C59A58" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <path d="M68 76 C64 82 66 90 70 94 C68 98 70 104 74 106" stroke="#C59A58" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <path d="M132 78 C136 84 134 92 130 96 C132 100 130 106 126 108" stroke="#C59A58" stroke-width="1.5" stroke-linecap="round" fill="none" />
+
+                    <!-- Gold Atelier Chisel Contour Line -->
+                    <path d="M42 188 C50 170 70 162 86 160 C90 174 110 174 114 160 C130 162 150 170 158 188" stroke="url(#sculptureGoldGrad)" stroke-width="2" stroke-linecap="round" fill="none" class="sculpture-chisel-line" />
+                </svg>
+                <div class="sculpture-base-line"></div>
+            </div>
+
+            <div class="sculpture-brand">
+                <span class="sculpture-brand-title">JayArt</span>
+                <span class="sculpture-brand-sub">Fine Art Atelier • 2026</span>
+            </div>
+
+            <div class="sculpture-progress-track">
+                <div class="sculpture-progress-bar"></div>
+            </div>
+            <span class="sculpture-status-text">Curating Gallery Masterworks...</span>
+        </div>
+    </div>
+    <noscript>
+        <style>#jayartPreloader { display: none !important; }</style>
+    </noscript>
+    <script>
+        // Inline early dismissal fail-safe
+        (function() {
+            var startTime = Date.now();
+            function closeEarly() {
+                var p = document.getElementById('jayartPreloader');
+                if (p && !p.classList.contains('preloader-hidden')) {
+                    var diff = Date.now() - startTime;
+                    var delay = Math.max(0, 320 - diff);
+                    setTimeout(function() {
+                        p.classList.add('preloader-hidden');
+                        setTimeout(function() { if (p && p.parentNode) p.parentNode.removeChild(p); }, 500);
+                    }, delay);
+                }
+            }
+            if (document.readyState === 'complete') {
+                closeEarly();
+            } else {
+                window.addEventListener('load', closeEarly);
+                setTimeout(closeEarly, 2000);
+            }
+        })();
+    </script>
+
     <!-- Sticky Full-Width Header -->
     <header id="siteMasterHeader" class="site-sticky-header w-full bg-[#FBFBFA]/95 backdrop-blur-md sticky top-0 z-50 border-b border-black/[0.06] shadow-xs transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">

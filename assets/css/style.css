@@ -411,3 +411,172 @@ header.site-sticky-header,
   background-color: #ECEAE6;
 }
 
+/* ====================================================================
+   JayArt Classical Sculpture Preloader (Nordic Atelier Luxury)
+   ==================================================================== */
+.jayart-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: #FBFBFA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: all;
+  user-select: none;
+}
+
+.jayart-preloader.preloader-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.sculpture-loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  animation: sculptureFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.sculpture-wrapper {
+  position: relative;
+  width: 96px;
+  height: 115px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sculpture-ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(197, 154, 88, 0.22) 0%, rgba(197, 154, 88, 0.05) 50%, transparent 70%);
+  border-radius: 9999px;
+  filter: blur(8px);
+  animation: sculpturePulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.sculpture-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 14px rgba(24, 24, 27, 0.08));
+  animation: sculptureFloat 3s ease-in-out infinite;
+}
+
+.sculpture-halo {
+  animation: sculptureSpin 16s linear infinite;
+  transform-origin: 100px 105px;
+}
+
+.sculpture-chisel-line {
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: sculptureDraw 2.4s ease-in-out infinite alternate;
+}
+
+.sculpture-base-line {
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #C59A58, transparent);
+  margin-top: 4px;
+}
+
+.sculpture-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.sculpture-brand-title {
+  font-family: 'Outfit', -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 1.125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #18181B;
+}
+
+.sculpture-brand-sub {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #71717A;
+  font-weight: 600;
+}
+
+.sculpture-progress-track {
+  width: 130px;
+  height: 2px;
+  background: rgba(24, 24, 27, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.sculpture-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, #C59A58, #E5C388, #C59A58);
+  border-radius: 9999px;
+  animation: sculptureTrack 1.6s ease-in-out infinite;
+}
+
+.sculpture-status-text {
+  font-size: 0.65rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #A1A1AA;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@keyframes sculptureFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes sculpturePulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+}
+
+@keyframes sculptureDraw {
+  0% { stroke-dashoffset: 120; opacity: 0.3; }
+  50% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: -120; opacity: 0.3; }
+}
+
+@keyframes sculptureSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes sculptureTrack {
+  0% { left: -40%; width: 30%; }
+  50% { left: 35%; width: 50%; }
+  100% { left: 100%; width: 30%; }
+}
+
+@keyframes sculptureFadeUp {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+

@@ -4,9 +4,37 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    initSculpturePreloader();
     initMobileDrawer();
     initWishlistToggles();
 });
+
+/**
+ * Classical Sculpture Preloader Controller
+ */
+function initSculpturePreloader() {
+    const preloader = document.getElementById('jayartPreloader');
+    if (!preloader) return;
+
+    let dismissed = false;
+    const hide = () => {
+        if (dismissed) return;
+        dismissed = true;
+        preloader.classList.add('preloader-hidden');
+        setTimeout(() => {
+            if (preloader.parentNode) {
+                preloader.remove();
+            }
+        }, 550);
+    };
+
+    if (document.readyState === 'complete') {
+        setTimeout(hide, 320);
+    } else {
+        window.addEventListener('load', () => setTimeout(hide, 320));
+        setTimeout(hide, 2000);
+    }
+}
 
 /**
  * Mobile Drawer Open/Close Handler
