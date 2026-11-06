@@ -37,6 +37,14 @@ class Wishlist extends Model {
         }
     }
 
+    public function remove(int $userId, int $productId): bool {
+        $this->query(
+            "DELETE FROM `wishlists` WHERE `user_id` = :uid AND `product_id` = :pid",
+            ['uid' => $userId, 'pid' => $productId]
+        );
+        return true;
+    }
+
     public function isWishlisted(int $userId, int $productId): bool {
         $row = $this->fetch(
             "SELECT id FROM `wishlists` WHERE `user_id` = :uid AND `product_id` = :pid LIMIT 1",

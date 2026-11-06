@@ -110,6 +110,7 @@ class ProfileController extends Controller {
 
         if ($userId > 0) {
             $artworks = $wishlistModel->getUserWishlist($userId);
+            $_SESSION['wishlist'] = array_map('intval', array_column($artworks, 'id'));
         } else {
             // Guest session wishlist
             $wishlistIds = $_SESSION['wishlist'] ?? [];
@@ -135,18 +136,57 @@ class ProfileController extends Controller {
 
     public function toggleWishlist(): void {
         $productId = (int)($_POST['product_id'] ?? 0);
+        $action = trim((string)($_POST['action'] ?? 'toggle')); // 'toggle', 'remove', 'add'
         if ($productId <= 0) {
             $this->json(['success' => false, 'message' => 'Invalid artwork.'], 400);
             return;
         }
 
         $userId = (int)Auth::id();
+        if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
+            $_SESSION['wishlist'] = [];
+        }
+
+        // Idempotent Explicit Remove
+        if ($action === 'remove') {
+            if ($userId > 0) {
+                $wishlistModel = new Wishlist();
+                $wishlistModel->remove($userId, $productId);
+            }
+            $_SESSION['wishlist'] = array_values(array_diff($_SESSION['wishlist'], [$productId]));
+            $this->json([
+                'success'        => true,
+                'saved'          => false,
+                'wishlist_count' => count($_SESSION['wishlist']),
+                'message'        => 'Artwork removed from your wishlist.'
+            ]);
+            return;
+        }
+
+        // Idempotent Explicit Add
+        if ($action === 'add') {
+            if ($userId > 0) {
+                $wishlistModel = new Wishlist();
+                if (!$wishlistModel->isWishlisted($userId, $productId)) {
+                    $wishlistModel->toggle($userId, $productId);
+                }
+            }
+            if (!in_array($productId, $_SESSION['wishlist'], true)) {
+                $_SESSION['wishlist'][] = $productId;
+            }
+            $this->json([
+                'success'        => true,
+                'saved'          => true,
+                'wishlist_count' => count($_SESSION['wishlist']),
+                'message'        => 'Artwork saved to your wishlist!'
+            ]);
+            return;
+        }
+
+        // Action === 'toggle'
         if ($userId > 0) {
             $wishlistModel = new Wishlist();
             $res = $wishlistModel->toggle($userId, $productId);
-            if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
-                $_SESSION['wishlist'] = [];
-            }
             if (!empty($res['saved'])) {
                 if (!in_array($productId, $_SESSION['wishlist'], true)) {
                     $_SESSION['wishlist'][] = $productId;
@@ -160,11 +200,7 @@ class ProfileController extends Controller {
             return;
         }
 
-        // Guest Session Wishlist (Instant & Seamless)
-        if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
-            $_SESSION['wishlist'] = [];
-        }
-
+        // Guest Session Wishlist Toggle
         if (in_array($productId, $_SESSION['wishlist'], true)) {
             $_SESSION['wishlist'] = array_values(array_diff($_SESSION['wishlist'], [$productId]));
             $this->json([

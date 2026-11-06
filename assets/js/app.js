@@ -68,11 +68,20 @@ function initMobileDrawer() {
     });
 }
 
+const wishlistInFlight = new Set();
+
 /**
  * Global Wishlist Toggle Function (Triggered by onclick="toggleWishlist(id, this)" or click events)
  */
-async function toggleWishlist(productId, btnElement = null) {
+async function toggleWishlist(productId, btnElement = null, explicitAction = 'toggle') {
     if (!productId) return;
+    productId = parseInt(productId, 10);
+    if (!productId || isNaN(productId)) return;
+
+    if (wishlistInFlight.has(productId)) {
+        return;
+    }
+    wishlistInFlight.add(productId);
 
     if (btnElement) {
         btnElement.classList.add('scale-125');
@@ -88,6 +97,7 @@ async function toggleWishlist(productId, btnElement = null) {
 
         const formData = new FormData();
         formData.append('product_id', productId);
+        formData.append('action', explicitAction);
 
         const response = await fetch(endpoint, {
             method: 'POST',
@@ -105,7 +115,7 @@ async function toggleWishlist(productId, btnElement = null) {
 
         // Update Heart Icon styling on all buttons for this product
         const isSaved = !!data.saved;
-        const targetBtns = document.querySelectorAll(`[onclick*="toggleWishlist(${productId}"], .wishlist-btn-${productId}, .btn-wishlist[data-product-id="${productId}"]`);
+        const targetBtns = document.querySelectorAll(`[onclick*="toggleWishlist(${productId}"], [onclick*="removeFromWishlist(${productId}"], .wishlist-btn-${productId}, .btn-wishlist[data-product-id="${productId}"]`);
         targetBtns.forEach(btn => {
             const svg = btn.querySelector('svg');
             if (isSaved) {
@@ -127,7 +137,7 @@ async function toggleWishlist(productId, btnElement = null) {
         if (!isSaved) {
             const wishCard = document.getElementById(`wishlist-item-${productId}`);
             if (wishCard) {
-                wishCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                wishCard.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
                 wishCard.style.opacity = '0';
                 wishCard.style.transform = 'scale(0.95)';
                 setTimeout(() => {
@@ -136,7 +146,7 @@ async function toggleWishlist(productId, btnElement = null) {
                     if (remaining.length === 0) {
                         location.reload();
                     }
-                }, 300);
+                }, 260);
             }
         }
 
@@ -155,15 +165,25 @@ async function toggleWishlist(productId, btnElement = null) {
     } catch (err) {
         console.error('Wishlist toggle error:', err);
         showToast('Unable to update wishlist. Please try again.', 'error');
+    } finally {
+        wishlistInFlight.delete(productId);
     }
 }
 window.toggleWishlist = toggleWishlist;
 
 /**
+ * Explicit Wishlist Item Remover (Used on My Saved Artworks page)
+ */
+async function removeFromWishlist(productId, btnElement = null) {
+    return toggleWishlist(productId, btnElement, 'remove');
+}
+window.removeFromWishlist = removeFromWishlist;
+
+/**
  * Wishlist Heart Button Initializer for data-attribute elements
  */
 function initWishlistToggles() {
-    document.querySelectorAll('.btn-wishlist').forEach(btn => {
+    document.querySelectorAll('.btn-wishlist:not([onclick])').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
