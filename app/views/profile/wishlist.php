@@ -26,16 +26,16 @@
     <?php else: ?>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             <?php foreach ($artworks as $paint): 
-                $img = !empty($paint['primary_image']) ? SITE_URL . '/' . $paint['primary_image'] : SITE_URL . '/uploads/products/echoes-twilight.jpg';
+                $img = Product::imageUrl($paint['primary_image'] ?? null);
                 $price = !empty($paint['discount_price']) ? $paint['discount_price'] : $paint['price'];
             ?>
-                <div class="painting-card group">
+                <div class="painting-card group" id="wishlist-item-<?= (int)$paint['id'] ?>">
                     <div class="painting-image-box">
                         <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($paint['slug']) ?>">
-                            <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($paint['title']) ?>">
+                            <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($paint['title']) ?>" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';">
                         </a>
                         <!-- Remove button -->
-                        <button type="button" class="btn-wishlist active" data-product-id="<?= (int)$paint['id'] ?>" aria-label="Remove from wishlist">
+                        <button type="button" class="btn-wishlist active text-red-600" data-product-id="<?= (int)$paint['id'] ?>" onclick="toggleWishlist(<?= (int)$paint['id'] ?>, this)" aria-label="Remove from wishlist">
                             <svg class="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                         </button>
                     </div>

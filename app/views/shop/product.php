@@ -34,8 +34,9 @@ $primaryImg = Product::imageUrl($product['primary_image'] ?? null);
         <div class="lg:col-span-6 space-y-4">
             <!-- Main Crisp Image Container -->
             <div class="bg-stone-100 rounded-3xl p-6 sm:p-10 aspect-square flex items-center justify-center relative overflow-hidden border border-stone-200/80">
-                <button onclick="toggleWishlist(<?= $product['id'] ?>, this)" class="wishlist-heart-btn top-4 right-4" title="Add to Wishlist">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                <?php $isWish = in_array((int)$product['id'], $_SESSION['wishlist'] ?? [], true); ?>
+                <button onclick="toggleWishlist(<?= $product['id'] ?>, this)" class="wishlist-heart-btn top-4 right-4 <?= $isWish ? 'active text-red-500' : '' ?>" title="Add to Wishlist">
+                    <svg class="w-5 h-5 <?= $isWish ? 'text-red-500' : '' ?>" fill="<?= $isWish ? 'currentColor' : 'none' ?>" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                 </button>
 
                 <img id="mainProductImage" src="<?= htmlspecialchars($primaryImg) ?>" alt="<?= htmlspecialchars($product['title']) ?>" class="max-h-full max-w-full object-contain transition-transform duration-300 hover:scale-105">

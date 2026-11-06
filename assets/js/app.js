@@ -41,7 +41,98 @@ function initMobileDrawer() {
 }
 
 /**
- * Wishlist Heart Button Toggler (AJAX)
+ * Global Wishlist Toggle Function (Triggered by onclick="toggleWishlist(id, this)" or click events)
+ */
+async function toggleWishlist(productId, btnElement = null) {
+    if (!productId) return;
+
+    if (btnElement) {
+        btnElement.classList.add('scale-125');
+        setTimeout(() => btnElement.classList.remove('scale-125'), 200);
+    }
+
+    try {
+        let base = (typeof window.SITE_URL !== 'undefined' && window.SITE_URL) ? window.SITE_URL.replace(/\/$/, '') : '';
+        if (window.location.protocol === 'https:' && base.startsWith('http:')) {
+            base = base.replace(/^http:/, 'https:');
+        }
+        const endpoint = base ? `${base}/profile/wishlist/toggle` : '/profile/wishlist/toggle';
+
+        const formData = new FormData();
+        formData.append('product_id', productId);
+
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        if (!response.ok) {
+            console.error('Wishlist toggle HTTP error:', response.status);
+            showToast('Unable to update wishlist (' + response.status + ').', 'error');
+            return;
+        }
+
+        const data = await response.json();
+
+        // Update Heart Icon styling on all buttons for this product
+        const isSaved = !!data.saved;
+        const targetBtns = document.querySelectorAll(`[onclick*="toggleWishlist(${productId}"], .wishlist-btn-${productId}, .btn-wishlist[data-product-id="${productId}"]`);
+        targetBtns.forEach(btn => {
+            const svg = btn.querySelector('svg');
+            if (isSaved) {
+                btn.classList.add('active', 'text-red-500');
+                if (svg) {
+                    svg.setAttribute('fill', 'currentColor');
+                    svg.classList.add('text-red-500');
+                }
+            } else {
+                btn.classList.remove('active', 'text-red-500');
+                if (svg) {
+                    svg.setAttribute('fill', 'none');
+                    svg.classList.remove('text-red-500');
+                }
+            }
+        });
+
+        // If on wishlist page and removed, gracefully fade out the card
+        if (!isSaved) {
+            const wishCard = document.getElementById(`wishlist-item-${productId}`);
+            if (wishCard) {
+                wishCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                wishCard.style.opacity = '0';
+                wishCard.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    wishCard.remove();
+                    const remaining = document.querySelectorAll('[id^="wishlist-item-"]');
+                    if (remaining.length === 0) {
+                        location.reload();
+                    }
+                }, 300);
+            }
+        }
+
+        // Update header wishlist badge if present
+        const badge = document.getElementById('wishlistCountBadge');
+        if (badge && typeof data.wishlist_count !== 'undefined') {
+            badge.textContent = data.wishlist_count;
+            if (data.wishlist_count > 0) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        showToast(data.message || (isSaved ? 'Artwork added to wishlist!' : 'Artwork removed from wishlist.'), isSaved ? 'success' : 'info');
+    } catch (err) {
+        console.error('Wishlist toggle error:', err);
+        showToast('Unable to update wishlist. Please try again.', 'error');
+    }
+}
+window.toggleWishlist = toggleWishlist;
+
+/**
+ * Wishlist Heart Button Initializer for data-attribute elements
  */
 function initWishlistToggles() {
     document.querySelectorAll('.btn-wishlist').forEach(btn => {
@@ -52,35 +143,7 @@ function initWishlistToggles() {
             const productId = btn.getAttribute('data-product-id');
             if (!productId) return;
 
-            try {
-                const formData = new FormData();
-                formData.append('product_id', productId);
-
-                const response = await fetch(`${SITE_URL}/profile/wishlist/toggle`, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                });
-
-                const data = await response.json();
-                if (data.redirect) {
-                    window.location.href = data.redirect;
-                    return;
-                }
-
-                if (data.saved) {
-                    btn.classList.add('active');
-                    btn.querySelector('svg').setAttribute('fill', 'currentColor');
-                    showToast(data.message || 'Artwork saved to your wishlist!', 'success');
-                } else {
-                    btn.classList.remove('active');
-                    btn.querySelector('svg').setAttribute('fill', 'none');
-                    showToast(data.message || 'Artwork removed from your wishlist.', 'info');
-                }
-            } catch (err) {
-                // If not logged in, prompt sign in
-                showToast('Please sign in to save artworks to your personal wishlist.', 'error');
-            }
+            await toggleWishlist(productId, btn);
         });
     });
 }

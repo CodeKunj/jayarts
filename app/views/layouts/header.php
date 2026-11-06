@@ -108,8 +108,15 @@ $navCategories = $categoryModel->getActiveWithCounts();
                     </a>
 
                     <!-- Wishlist Pill -->
-                    <a href="<?= SITE_URL ?>/profile/wishlist" class="w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-white hover:bg-stone-50 border border-black/[0.06] flex items-center justify-center shadow-xs text-red-500 hover:text-red-600 transition-colors" title="Wishlist">
+                    <?php 
+                    $sessionWishlist = $_SESSION['wishlist'] ?? [];
+                    $headerWishCount = is_array($sessionWishlist) ? count($sessionWishlist) : 0;
+                    ?>
+                    <a href="<?= SITE_URL ?>/profile/wishlist" class="relative w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-white hover:bg-stone-50 border border-black/[0.06] flex items-center justify-center shadow-xs text-red-500 hover:text-red-600 transition-colors" title="Wishlist">
                         <svg width="16" height="16" style="width: 16px; height: 16px;" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span id="wishlistCountBadge" class="<?= $headerWishCount > 0 ? '' : 'hidden' ?> absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center font-mono">
+                            <?= $headerWishCount ?>
+                        </span>
                     </a>
 
                     <!-- Shopping Bag Pill -->

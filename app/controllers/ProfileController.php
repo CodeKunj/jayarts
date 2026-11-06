@@ -7,6 +7,12 @@ declare(strict_types=1);
 
 class ProfileController extends Controller {
     public function __construct() {
+        $uri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+        // Allow wishlist viewing and toggling for guests without forced login
+        if ($uri === '/profile/wishlist/toggle' || $uri === '/profile/wishlist' || str_contains((string)$uri, '/wishlist')) {
+            return;
+        }
+
         if (!Auth::check()) {
             if ($this->isAjax()) {
                 $this->json(['redirect' => SITE_URL . '/login']);
@@ -100,7 +106,26 @@ class ProfileController extends Controller {
 
     public function wishlist(): void {
         $wishlistModel = new Wishlist();
-        $artworks = $wishlistModel->getUserWishlist((int)Auth::id());
+        $userId = (int)Auth::id();
+
+        if ($userId > 0) {
+            $artworks = $wishlistModel->getUserWishlist($userId);
+        } else {
+            // Guest session wishlist
+            $wishlistIds = $_SESSION['wishlist'] ?? [];
+            $artworks = [];
+            if (!empty($wishlistIds)) {
+                $productModel = new Product();
+                foreach ($wishlistIds as $pid) {
+                    $item = $productModel->find((int)$pid);
+                    if ($item && ($item['status'] ?? 'active') === 'active') {
+                        $images = $productModel->getImages((int)$pid);
+                        $item['primary_image'] = !empty($images[0]['image_path']) ? $images[0]['image_path'] : ($item['primary_image'] ?? null);
+                        $artworks[] = $item;
+                    }
+                }
+            }
+        }
 
         $this->render('profile/wishlist', [
             'artworks' => $artworks,
@@ -110,9 +135,53 @@ class ProfileController extends Controller {
 
     public function toggleWishlist(): void {
         $productId = (int)($_POST['product_id'] ?? 0);
-        $wishlistModel = new Wishlist();
-        $res = $wishlistModel->toggle((int)Auth::id(), $productId);
-        $this->json($res);
+        if ($productId <= 0) {
+            $this->json(['success' => false, 'message' => 'Invalid artwork.'], 400);
+            return;
+        }
+
+        $userId = (int)Auth::id();
+        if ($userId > 0) {
+            $wishlistModel = new Wishlist();
+            $res = $wishlistModel->toggle($userId, $productId);
+            if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
+                $_SESSION['wishlist'] = [];
+            }
+            if (!empty($res['saved'])) {
+                if (!in_array($productId, $_SESSION['wishlist'], true)) {
+                    $_SESSION['wishlist'][] = $productId;
+                }
+            } else {
+                $_SESSION['wishlist'] = array_values(array_diff($_SESSION['wishlist'], [$productId]));
+            }
+            $res['wishlist_count'] = count($_SESSION['wishlist']);
+            $res['success'] = true;
+            $this->json($res);
+            return;
+        }
+
+        // Guest Session Wishlist (Instant & Seamless)
+        if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
+            $_SESSION['wishlist'] = [];
+        }
+
+        if (in_array($productId, $_SESSION['wishlist'], true)) {
+            $_SESSION['wishlist'] = array_values(array_diff($_SESSION['wishlist'], [$productId]));
+            $this->json([
+                'success'        => true,
+                'saved'          => false,
+                'wishlist_count' => count($_SESSION['wishlist']),
+                'message'        => 'Artwork removed from your wishlist.'
+            ]);
+        } else {
+            $_SESSION['wishlist'][] = $productId;
+            $this->json([
+                'success'        => true,
+                'saved'          => true,
+                'wishlist_count' => count($_SESSION['wishlist']),
+                'message'        => 'Artwork saved to your wishlist!'
+            ]);
+        }
     }
 
     public function tickets(): void {

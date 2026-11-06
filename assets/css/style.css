@@ -237,6 +237,11 @@ svg:not([width]):not([height]) {
   transform: scale(1.1);
 }
 
+.wishlist-heart-btn.active svg,
+.btn-wishlist.active svg {
+  fill: currentColor;
+}
+
 /* Star Rating */
 .star-rating-green {
   color: var(--color-accent-green);
