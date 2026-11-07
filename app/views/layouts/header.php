@@ -37,6 +37,26 @@ $navCategories = $categoryModel->getActiveWithCounts();
     ?>
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/style.css?v=<?= $styleVer ?>">
 
+    <!-- Dynamic Artistic Wallpaper Variable (BG.jpeg & canvas-weave.svg with filemtime cache-busting) -->
+    <?php 
+    $bgVer = '1';
+    $bgPath = ROOT_PATH . '/assets/images/BG.jpeg';
+    if (file_exists($bgPath)) {
+        $bgVer = filemtime($bgPath);
+    }
+    $canvasVer = '1';
+    $canvasPath = ROOT_PATH . '/assets/images/canvas-weave.svg';
+    if (file_exists($canvasPath)) {
+        $canvasVer = filemtime($canvasPath);
+    }
+    ?>
+    <style>
+        :root {
+            --site-bg-image: url('<?= ASSETS_URL ?>/images/BG.jpeg?v=<?= $bgVer ?>');
+            --site-canvas-weave: url('<?= ASSETS_URL ?>/images/canvas-weave.svg?v=<?= $canvasVer ?>');
+        }
+    </style>
+
     <!-- Dynamic Site Global Configuration -->
     <script>
         window.SITE_URL = '<?= SITE_URL ?>';
@@ -56,7 +76,7 @@ $navCategories = $categoryModel->getActiveWithCounts();
             width: 100vw !important;
             height: 100vh !important;
             z-index: 99999999 !important;
-            background: #FBFBFA !important;
+            background: #FAF6F0 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -205,10 +225,10 @@ $navCategories = $categoryModel->getActiveWithCounts();
         }
     </style>
 </head>
-<body class="bg-[#FBFBFA] text-[#18181B] min-h-screen flex flex-col font-sans antialiased overflow-x-clip selection:bg-[#18181B] selection:text-white">
+<body class="site-body-bg text-[#18181B] min-h-screen flex flex-col font-sans antialiased overflow-x-clip selection:bg-[#18181B] selection:text-white">
 
     <!-- Classical Sculpture Atelier Preloader -->
-    <div id="jayartPreloader" class="jayart-preloader" aria-hidden="true" style="position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;background:#FBFBFA;z-index:99999999;display:flex;align-items:center;justify-content:center;margin:0;padding:0;">
+    <div id="jayartPreloader" class="jayart-preloader" aria-hidden="true" style="position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;background:#FAF6F0;z-index:99999999;display:flex;align-items:center;justify-content:center;margin:0;padding:0;">
         <div class="sculpture-loader-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
             <div class="sculpture-wrapper" style="position:relative;width:100px;height:120px;margin:0 auto 16px auto;">
                 <div class="sculpture-ambient-glow"></div>
@@ -320,7 +340,7 @@ $navCategories = $categoryModel->getActiveWithCounts();
     </script>
 
     <!-- Sticky Full-Width Header -->
-    <header id="siteMasterHeader" class="site-sticky-header w-full bg-[#FBFBFA]/95 backdrop-blur-md sticky top-0 z-50 border-b border-black/[0.06] shadow-xs transition-all">
+    <header id="siteMasterHeader" class="site-sticky-header w-full bg-[#FAF6F0]/90 backdrop-blur-md sticky top-0 z-50 border-b border-[#B67A31]/15 shadow-xs transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
             
             <!-- 1. Top Modular Capsule Navigation Bar -->

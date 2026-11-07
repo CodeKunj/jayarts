@@ -208,6 +208,21 @@ class Product extends Model {
         ];
     }
 
+    public function find(int|string $id): ?array {
+        if ($this->db !== null) {
+            try {
+                $item = parent::find($id);
+                if ($item) return $item;
+            } catch (\Throwable $e) {}
+        }
+        foreach (self::getDummyProducts() as $dummy) {
+            if ((int)($dummy['id'] ?? 0) === (int)$id) {
+                return $dummy;
+            }
+        }
+        return null;
+    }
+
     public function findBySlug(string $slug): ?array {
         $ttl = (int)Cache::getConfig()['product_ttl'];
         $cacheKey = 'products:detail:slug:' . $slug;

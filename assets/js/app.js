@@ -115,17 +115,20 @@ async function toggleWishlist(productId, btnElement = null, explicitAction = 'to
 
         // Update Heart Icon styling on all buttons for this product
         const isSaved = !!data.saved;
-        const targetBtns = document.querySelectorAll(`[onclick*="toggleWishlist(${productId}"], [onclick*="removeFromWishlist(${productId}"], .wishlist-btn-${productId}, .btn-wishlist[data-product-id="${productId}"]`);
+        const targetBtns = document.querySelectorAll(`[onclick*="toggleWishlist(${productId}"], [onclick*="removeFromWishlist(${productId}"], [onclick*="togglePinSave(${productId}"], .wishlist-btn-${productId}, .btn-wishlist[data-product-id="${productId}"]`);
         targetBtns.forEach(btn => {
             const svg = btn.querySelector('svg');
+            const label = btn.querySelector('.save-label');
             if (isSaved) {
-                btn.classList.add('active', 'text-red-500');
+                btn.classList.add('active', 'is-saved', 'text-red-500');
+                if (label) label.textContent = 'Saved';
                 if (svg) {
                     svg.setAttribute('fill', 'currentColor');
                     svg.classList.add('text-red-500');
                 }
             } else {
-                btn.classList.remove('active', 'text-red-500');
+                btn.classList.remove('active', 'is-saved', 'text-red-500');
+                if (label) label.textContent = 'Save';
                 if (svg) {
                     svg.setAttribute('fill', 'none');
                     svg.classList.remove('text-red-500');
@@ -142,6 +145,10 @@ async function toggleWishlist(productId, btnElement = null, explicitAction = 'to
                 wishCard.style.transform = 'scale(0.95)';
                 setTimeout(() => {
                     wishCard.remove();
+                    const grid = document.getElementById('wishlist-grid');
+                    if (grid && grid._originalPins) {
+                        grid._originalPins = grid._originalPins.filter(p => p.id !== `wishlist-item-${productId}`);
+                    }
                     const remaining = document.querySelectorAll('[id^="wishlist-item-"]');
                     if (remaining.length === 0) {
                         location.reload();
@@ -244,4 +251,95 @@ document.addEventListener('click', (e) => {
         menu.classList.add('hidden');
     }
 });
+
+/**
+ * Pinterest True Waterfall Masonry Layout Engine
+ * Dynamically balances pins into responsive columns with natural variable heights and left-to-right row flow.
+ */
+function initPinterestWaterfall() {
+    const grids = document.querySelectorAll('.pinterest-masonry-grid');
+    if (!grids.length) return;
+
+    grids.forEach(grid => {
+        // Collect and cache original pins once in DOM order
+        if (!grid._originalPins || !grid._originalPins.length) {
+            const rawPins = Array.from(grid.querySelectorAll('.pinterest-pin'));
+            if (!rawPins.length) return;
+            grid._originalPins = rawPins;
+        }
+
+        const pins = grid._originalPins;
+        if (!pins.length) return;
+
+        const width = grid.getBoundingClientRect().width || window.innerWidth;
+
+        // Determine column count:
+        // Mobile (< 640px): 2 columns
+        // Tablet (640px - 1023px): 3 columns
+        // Desktop (>= 1024px): 4 columns (or 3 columns if inside shop page sidebar layout)
+        let colCount = 2;
+        if (width >= 1080) {
+            colCount = 4;
+        } else if (width >= 640) {
+            colCount = 3;
+        }
+
+        if (grid.closest('main') && width < 1200 && width >= 720) {
+            colCount = 3;
+        }
+
+        // Avoid rebuilding if already configured for this column count
+        const existingColumns = grid.querySelectorAll(':scope > .pinterest-column');
+        if (grid._currentCols === colCount && existingColumns.length === colCount) {
+            return;
+        }
+        grid._currentCols = colCount;
+
+        const gap = width < 640 ? '12px' : '16px';
+
+        // Prepare flex container
+        grid.innerHTML = '';
+        grid.style.display = 'flex';
+        grid.style.flexDirection = 'row';
+        grid.style.alignItems = 'flex-start';
+        grid.style.gap = gap;
+        grid.style.width = '100%';
+        grid.classList.add('is-waterfall-ready');
+
+        // Create column containers
+        const columns = [];
+        for (let i = 0; i < colCount; i++) {
+            const col = document.createElement('div');
+            col.className = 'pinterest-column';
+            col.style.cssText = `flex: 1 1 0%; min-width: 0; display: flex; flex-direction: column; gap: ${gap};`;
+            grid.appendChild(col);
+            columns.push(col);
+        }
+
+        // Distribute pins across columns in row-wise order:
+        // Col 0: Pin 0, Pin 4, Pin 8...
+        // Col 1: Pin 1, Pin 5, Pin 9...
+        // Col 2: Pin 2, Pin 6, Pin 10...
+        // Col 3: Pin 3, Pin 7, Pin 11...
+        // Looking horizontally: Row 1 is [0, 1, 2, 3], Row 2 is [4, 5, 6, 7]!
+        pins.forEach((pin, index) => {
+            columns[index % colCount].appendChild(pin);
+        });
+    });
+}
+window.initPinterestWaterfall = initPinterestWaterfall;
+
+// Initialize on DOM load and setup debounced resize listener
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPinterestWaterfall);
+} else {
+    initPinterestWaterfall();
+}
+
+let pinterestResizeTimer = null;
+window.addEventListener('resize', () => {
+    clearTimeout(pinterestResizeTimer);
+    pinterestResizeTimer = setTimeout(initPinterestWaterfall, 80);
+});
+
 

@@ -331,12 +331,57 @@ svg:not([width]):not([height]) {
 
 /* ====================================================================
    Modern Full-Screen Architectural Atelier Theme
+   Authentic Stretched Linen Canvas Background
+   Layer 1: Base Warm Primed Linen (#FAF6F0)
+   Layer 2: Woven Canvas Warp & Weft Thread Fabric (canvas-weave.svg)
+   Layer 3: Artistic Impasto Studio Texture (BG.jpeg)
+   Layer 4: Soft Radial Gallery Studio Spotlight
    ==================================================================== */
 html, body {
   min-height: 100vh;
-  background-color: #FBFBFA;
   color: #18181B;
   overflow-x: clip !important;
+}
+
+body {
+  position: relative;
+  background-color: #FAF6F0;
+}
+
+/* Layer 1 & 2: Authentic Tactile Canvas Fabric Weave + Studio Spotlight */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: 
+    radial-gradient(ellipse at 50% 20%, rgba(255, 255, 255, 0.45) 0%, rgba(245, 239, 227, 0.2) 70%, rgba(226, 214, 194, 0.35) 100%),
+    var(--site-canvas-weave, url('../images/canvas-weave.svg'));
+  background-size: 
+    100% 100%,
+    24px 24px; /* Crisp repeating warp & weft cloth weave */
+  background-repeat: 
+    no-repeat,
+    repeat;
+  background-position: 
+    center center,
+    0 0;
+  pointer-events: none;
+}
+
+/* Layer 3: Artistic Impasto Paint Texture from BG.jpeg embedded into canvas weave */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--site-bg-image, url('../images/BG.jpeg'));
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 0.14; /* Subtle painterly strokes on top of the woven canvas */
+  mix-blend-mode: multiply;
+  pointer-events: none;
 }
 
 /* Persistent Sticky Capsule Navigation Header */
@@ -581,65 +626,84 @@ header.site-sticky-header,
 }
 
 /* ====================================================================
-   Pinterest-Inspired Masonry Art Wall & Pin Cards
-   Tactile Visual Discovery Feed (Fluid Multi-Column Layout)
+   Pinterest-Inspired Waterfall Masonry & Pin Cards
+   Tactile Discovery Feed (Natural Image Proportions & True Waterfall)
    ==================================================================== */
 .pinterest-masonry-grid {
-  column-count: 2;
-  column-gap: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
   width: 100%;
 }
 
 @media (min-width: 640px) {
   .pinterest-masonry-grid {
-    column-count: 3;
-    column-gap: 16px;
+    gap: 16px;
+  }
+}
+
+/* Individual Responsive Waterfall Columns */
+.pinterest-column {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .pinterest-column {
+    gap: 16px;
+  }
+}
+
+/* CSS Fallback before JavaScript waterfall initializes */
+.pinterest-masonry-grid:not(.is-waterfall-ready) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .pinterest-masonry-grid:not(.is-waterfall-ready) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
   }
 }
 
 @media (min-width: 1024px) {
-  .pinterest-masonry-grid {
-    column-count: 4;
-    column-gap: 20px;
-  }
-}
-
-@media (min-width: 1440px) {
-  .pinterest-masonry-grid {
-    column-count: 5;
-    column-gap: 24px;
+  .pinterest-masonry-grid:not(.is-waterfall-ready) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
   }
 }
 
 .pinterest-pin {
-  break-inside: avoid-column;
-  page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  margin-bottom: 14px;
   position: relative;
-  border-radius: 20px;
+  border-radius: 18px;
   background-color: #FFFFFF;
-  border: 1px solid rgba(24, 24, 27, 0.05);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(182, 122, 49, 0.14);
+  box-shadow: 0 2px 8px rgba(182, 122, 49, 0.05);
   overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (min-width: 640px) {
   .pinterest-pin {
-    margin-bottom: 20px;
-    border-radius: 24px;
+    border-radius: 20px;
   }
 }
 
 .pinterest-pin:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(182, 122, 49, 0.12);
 }
 
-/* Pin Image Box */
+/* Pin Image Box (Preserves natural painting proportions like Pinterest) */
 .pinterest-pin-media {
   position: relative;
   width: 100%;
@@ -648,16 +712,21 @@ header.site-sticky-header,
   cursor: pointer;
 }
 
+.pinterest-pin-media a {
+  display: block;
+  width: 100%;
+}
+
 .pinterest-pin-media img {
   width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pinterest-pin:hover .pinterest-pin-media img {
-  transform: scale(1.035);
+  transform: scale(1.025);
 }
 
 /* Floating Overlay Action Pills (Pinterest Style) */
@@ -797,10 +866,10 @@ header.site-sticky-header,
   border-radius: 9999px;
   font-size: 12px;
   font-weight: 700;
-  background-color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.9);
   color: #27272A;
-  border: 1px solid rgba(24, 24, 27, 0.08);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  border: 1px solid rgba(182, 122, 49, 0.18);
+  box-shadow: 0 1px 4px rgba(182, 122, 49, 0.06);
   transition: all 0.2s ease;
   cursor: pointer;
   text-decoration: none;
@@ -812,7 +881,7 @@ header.site-sticky-header,
   background-color: #18181B;
   color: #FFFFFF;
   border-color: #18181B;
-  box-shadow: 0 3px 8px rgba(24, 24, 27, 0.15);
+  box-shadow: 0 4px 12px rgba(24, 24, 27, 0.18);
 }
 
 /* Quick Art Inspection Lightbox Modal */

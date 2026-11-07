@@ -168,8 +168,15 @@
     <!-- Global Custom Confirmation & Alert Modal -->
     <?php require_once __DIR__ . '/confirm_modal.php'; ?>
 
-    <!-- Scripts -->
-    <script src="<?= ASSETS_URL ?>/js/app.js?v=<?= APP_VERSION ?>"></script>
+    <!-- Scripts (With filemtime cache-busting) -->
+    <?php 
+    $appJsVer = APP_VERSION;
+    $appJsFile = ROOT_PATH . '/assets/js/app.js';
+    if (file_exists($appJsFile)) {
+        $appJsVer .= '.' . filemtime($appJsFile);
+    }
+    ?>
+    <script src="<?= ASSETS_URL ?>/js/app.js?v=<?= $appJsVer ?>"></script>
     <script src="<?= ASSETS_URL ?>/js/cart.js?v=<?= APP_VERSION ?>"></script>
     <script src="<?= ASSETS_URL ?>/js/chatbox.js?v=<?= APP_VERSION ?>"></script>
 </body>

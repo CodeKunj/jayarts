@@ -19,7 +19,7 @@ $hasActiveFilters = !empty($selectedCat) || !empty($selectedMedium) || !empty($s
 <!-- ====================================================================
      1. PINTEREST CATALOG HEADER & TOPIC DISCOVERY BAR
      ==================================================================== -->
-<div class="bg-white border-b border-stone-200/60 sticky top-0 sm:top-0 z-30 backdrop-blur-md bg-white/95">
+<div class="bg-[#FAF6F0]/90 border-b border-[#B67A31]/15 sticky top-0 sm:top-0 z-30 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
         
         <!-- Breadcrumbs & Quick Stats -->
@@ -128,7 +128,7 @@ $hasActiveFilters = !empty($selectedCat) || !empty($selectedMedium) || !empty($s
         
         <!-- Desktop Sticky Left Filter Sidebar -->
         <aside class="hidden lg:block w-64 flex-shrink-0">
-            <div class="sticky top-28 bg-white border border-stone-200/80 rounded-3xl p-5 shadow-xs space-y-6">
+            <div class="sticky top-28 bg-white/95 backdrop-blur-md border border-[#B67A31]/15 rounded-3xl p-5 shadow-xs space-y-6">
                 
                 <div class="flex items-center justify-between pb-3 border-b border-stone-100">
                     <h2 class="text-sm font-extrabold text-[#18181B] tracking-tight">Curate Feed</h2>
@@ -298,22 +298,24 @@ $hasActiveFilters = !empty($selectedCat) || !empty($selectedMedium) || !empty($s
                             </div>
 
                             <!-- Pin Metadata Information Under Image -->
-                            <div class="p-3 sm:p-3.5">
-                                <div class="flex items-center justify-between text-[11px] text-stone-500 mb-1">
-                                    <span class="truncate max-w-[130px] font-semibold text-stone-600 flex items-center gap-1">
-                                        <?= htmlspecialchars($artistName) ?>
-                                        <svg class="w-3 h-3 text-emerald-600 inline flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    </span>
-                                    <span class="text-[10px] text-stone-400 font-mono"><?= htmlspecialchars($dimensions) ?></span>
+                            <div class="p-3 sm:p-3.5 flex flex-col justify-between flex-1">
+                                <div>
+                                    <div class="flex items-center justify-between text-[11px] text-stone-500 mb-1">
+                                        <span class="truncate max-w-[130px] font-semibold text-stone-600 flex items-center gap-1">
+                                            <?= htmlspecialchars($artistName) ?>
+                                            <svg class="w-3 h-3 text-emerald-600 inline flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                        </span>
+                                        <span class="text-[10px] text-stone-400 font-mono"><?= htmlspecialchars($dimensions) ?></span>
+                                    </div>
+
+                                    <h3 class="font-bold text-xs sm:text-sm text-[#18181B] leading-snug line-clamp-1 group-hover:text-black transition-colors">
+                                        <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($slug) ?>">
+                                            <?= htmlspecialchars($p['title']) ?>
+                                        </a>
+                                    </h3>
                                 </div>
 
-                                <h3 class="font-bold text-xs sm:text-sm text-[#18181B] leading-snug line-clamp-1 group-hover:text-black transition-colors">
-                                    <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($slug) ?>">
-                                        <?= htmlspecialchars($p['title']) ?>
-                                    </a>
-                                </h3>
-
-                                <div class="mt-2 flex items-center justify-between gap-1">
+                                <div class="mt-2.5 flex items-center justify-between gap-1">
                                     <div>
                                         <span class="font-extrabold text-xs sm:text-sm text-[#18181B]">
                                             <?= Validator::formatPrice($price) ?>
@@ -334,22 +336,6 @@ $hasActiveFilters = !empty($selectedCat) || !empty($selectedMedium) || !empty($s
                             </div>
 
                         </div>
-
-                        <!-- Interleaved Atelier Inspiration Quote Pin (Slot 5) -->
-                        <?php if ($index === 4): ?>
-                            <div class="pinterest-pin p-5 sm:p-6 bg-[#18181B] text-white flex flex-col justify-between rounded-3xl shadow-sm">
-                                <div>
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-2">Curator Note</span>
-                                    <p class="font-serif italic text-sm sm:text-base leading-relaxed text-stone-200">
-                                        &ldquo;Art enables us to find ourselves and lose ourselves at the same time.&rdquo;
-                                    </p>
-                                </div>
-                                <div class="mt-6 pt-4 border-t border-stone-800 flex items-center justify-between">
-                                    <span class="text-[11px] text-stone-400 font-medium">Thomas Merton</span>
-                                    <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full text-stone-300">JayArt Collection</span>
-                                </div>
-                            </div>
-                        <?php endif; ?>
 
                     <?php endforeach; ?>
                 </div>
@@ -680,5 +666,10 @@ if (inspectModal) {
     inspectModal.addEventListener('click', function(e) {
         if (e.target === this) closeArtInspectModal();
     });
+}
+
+// Trigger Pinterest Waterfall layout
+if (typeof initPinterestWaterfall === 'function') {
+    initPinterestWaterfall();
 }
 </script>

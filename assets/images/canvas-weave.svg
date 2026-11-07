@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <!-- Warp vertical thread shading -->
+    <linearGradient id="warpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#DDD1BD" stop-opacity="0.75" />
+      <stop offset="50%" stop-color="#FCF9F2" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#D5C7B0" stop-opacity="0.8" />
+    </linearGradient>
+    <!-- Weft horizontal thread shading -->
+    <linearGradient id="weftGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#DDD1BD" stop-opacity="0.75" />
+      <stop offset="50%" stop-color="#FCF9F2" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#D5C7B0" stop-opacity="0.8" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Base primed canvas linen substrate -->
+  <rect width="32" height="32" fill="#F7F2E8" />
+  
+  <!-- Interlaced canvas weave grid (4x4 threads per 32px block) -->
+  <!-- Row 1: Weft, Warp, Weft, Warp -->
+  <rect x="0.5" y="0.5" width="7" height="7" rx="1.5" fill="url(#weftGrad)" />
+  <rect x="8.5" y="0.5" width="7" height="7" rx="1.5" fill="url(#warpGrad)" />
+  <rect x="16.5" y="0.5" width="7" height="7" rx="1.5" fill="url(#weftGrad)" />
+  <rect x="24.5" y="0.5" width="7" height="7" rx="1.5" fill="url(#warpGrad)" />
+  
+  <!-- Row 2: Warp, Weft, Warp, Weft -->
+  <rect x="0.5" y="8.5" width="7" height="7" rx="1.5" fill="url(#warpGrad)" />
+  <rect x="8.5" y="8.5" width="7" height="7" rx="1.5" fill="url(#weftGrad)" />
+  <rect x="16.5" y="8.5" width="7" height="7" rx="1.5" fill="url(#warpGrad)" />
+  <rect x="24.5" y="8.5" width="7" height="7" rx="1.5" fill="url(#weftGrad)" />
+  
+  <!-- Row 3: Weft, Warp, Weft, Warp -->
+  <rect x="0.5" y="16.5" width="7" height="7" rx="1.5" fill="url(#weftGrad)" />
+  <rect x="8.5" y="16.5" width="7" height="7" rx="1.5" fill="url(#warpGrad)" />
+  <rect x="16.5" y="16.5" width="7" height="7" rx="1.5" fill="url(#weftGrad)" />
+  <rect x="24.5" y="16.5" width="7" height="7" rx="1.5" fill="url(#warpGrad)" />
+  
+  <!-- Row 4: Warp, Weft, Warp, Weft -->
+  <rect x="0.5" y="24.5" width="7" height="7" rx="1.5" fill="url(#warpGrad)" />
+  <rect x="8.5" y="24.5" width="7" height="7" rx="1.5" fill="url(#weftGrad)" />
+  <rect x="16.5" y="24.5" width="7" height="7" rx="1.5" fill="url(#warpGrad)" />
+  <rect x="24.5" y="24.5" width="7" height="7" rx="1.5" fill="url(#weftGrad)" />
+  
+  <!-- Microscopic crevice shadows between threads -->
+  <path d="M0 8h32M0 16h32M0 24h32M8 0v32M16 0v32M24 0v32" stroke="#CEC0A8" stroke-width="0.8" opacity="0.6" />
+</svg>
+

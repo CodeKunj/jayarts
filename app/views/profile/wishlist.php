@@ -29,7 +29,7 @@ $artworks = is_array($artworks ?? null) ? $artworks : [];
 
     <?php if (empty($artworks)): ?>
         <!-- Clean Empty State -->
-        <div class="bg-white border border-stone-200/80 rounded-3xl p-10 sm:p-16 text-center my-8 max-w-md mx-auto shadow-xs">
+        <div class="bg-white/95 backdrop-blur-md border border-[#B67A31]/20 rounded-3xl p-10 sm:p-16 text-center my-8 max-w-md mx-auto shadow-xs">
             <div class="w-16 h-16 rounded-full bg-red-50 text-[#E60023] flex items-center justify-center mx-auto mb-4">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
             </div>
@@ -90,40 +90,44 @@ $artworks = is_array($artworks ?? null) ? $artworks : [];
                     </div>
 
                     <!-- Meta details -->
-                    <div class="p-3 sm:p-3.5">
-                        <div class="text-[11px] font-semibold text-stone-500 mb-0.5 truncate">
-                            <?= htmlspecialchars($artistName) ?>
-                        </div>
-                        <h4 class="font-bold text-xs sm:text-sm text-[#18181B] truncate mb-1.5">
-                            <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($slug) ?>" class="hover:text-black">
-                                <?= htmlspecialchars($paint['title']) ?>
-                            </a>
-                        </h4>
-                        
-                        <div class="flex items-center justify-between gap-1 mb-2.5">
-                            <div>
-                                <span class="font-extrabold text-xs sm:text-sm text-[#18181B]">
-                                    <?= Validator::formatPrice($price) ?>
-                                </span>
-                                <?php if ($hasDiscount): ?>
-                                    <span class="text-[10px] text-stone-400 line-through ml-1">
-                                        <?= Validator::formatPrice($origPrice) ?>
-                                    </span>
-                                <?php endif; ?>
+                    <div class="p-3 sm:p-3.5 flex flex-col justify-between flex-1">
+                        <div>
+                            <div class="text-[11px] font-semibold text-stone-500 mb-0.5 truncate">
+                                <?= htmlspecialchars($artistName) ?>
                             </div>
+                            <h4 class="font-bold text-xs sm:text-sm text-[#18181B] truncate mb-1.5">
+                                <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($slug) ?>" class="hover:text-black">
+                                    <?= htmlspecialchars($paint['title']) ?>
+                                </a>
+                            </h4>
                         </div>
+                        
+                        <div>
+                            <div class="flex items-center justify-between gap-1 mb-2.5">
+                                <div>
+                                    <span class="font-extrabold text-xs sm:text-sm text-[#18181B]">
+                                        <?= Validator::formatPrice($price) ?>
+                                    </span>
+                                    <?php if ($hasDiscount): ?>
+                                        <span class="text-[10px] text-stone-400 line-through ml-1">
+                                            <?= Validator::formatPrice($origPrice) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
 
-                        <div class="grid grid-cols-2 gap-1.5">
-                            <button type="button" 
-                                    onclick="quickAddToCart(<?= $pid ?>)" 
-                                    class="w-full py-2 bg-stone-100 hover:bg-stone-200 text-[#18181B] rounded-full text-[10px] sm:text-xs font-bold transition-colors">
-                                Add to Bag
-                            </button>
-                            <button type="button" 
-                                    onclick="quickBuyNow(<?= $pid ?>)" 
-                                    class="w-full py-2 bg-[#18181B] hover:bg-black text-white rounded-full text-[10px] sm:text-xs font-bold transition-colors shadow-2xs">
-                                Buy Now
-                            </button>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button type="button" 
+                                        onclick="quickAddToCart(<?= $pid ?>)" 
+                                        class="w-full py-2 bg-stone-100 hover:bg-stone-200 text-[#18181B] rounded-full text-[10px] sm:text-xs font-bold transition-colors">
+                                    Add to Bag
+                                </button>
+                                <button type="button" 
+                                        onclick="quickBuyNow(<?= $pid ?>)" 
+                                        class="w-full py-2 bg-[#18181B] hover:bg-black text-white rounded-full text-[10px] sm:text-xs font-bold transition-colors shadow-2xs">
+                                    Buy Now
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -133,3 +137,9 @@ $artworks = is_array($artworks ?? null) ? $artworks : [];
     <?php endif; ?>
 
 </div>
+
+<script>
+if (typeof initPinterestWaterfall === 'function') {
+    initPinterestWaterfall();
+}
+</script>
