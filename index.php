@@ -102,6 +102,19 @@ Router::post('/profile/ticket/{id}/reply', [ProfileController::class, 'replyTick
 // Dynamic XML Sitemap for Google & Bing
 Router::get('/sitemap.xml', [SitemapController::class, 'index']);
 
+// Direct Favicon Endpoint (Ensures /favicon.ico works across Apache, Nginx, and PHP built-in server)
+Router::get('/favicon.ico', function() {
+    $ico = ROOT_PATH . '/favicon.ico';
+    if (file_exists($ico)) {
+        header('Content-Type: image/x-icon');
+        header('Cache-Control: public, max-age=604800');
+        readfile($ico);
+        exit;
+    }
+    http_response_code(404);
+    exit;
+});
+
 // Dynamic Robots.txt with Sitemap link
 Router::get('/robots.txt', [SitemapController::class, 'robots']);
 

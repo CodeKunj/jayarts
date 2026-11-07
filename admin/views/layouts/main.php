@@ -16,6 +16,12 @@
     <!-- Chart.js for Admin Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- Favicon & Web App Icons -->
+    <link rel="icon" type="image/svg+xml" href="<?= ASSETS_URL ?>/images/favicon.svg?v=<?= APP_VERSION ?>">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="<?= ASSETS_URL ?>/images/favicon-32x32.png?v=<?= APP_VERSION ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= ASSETS_URL ?>/images/apple-touch-icon.png?v=<?= APP_VERSION ?>">
+    <link rel="shortcut icon" href="<?= SITE_URL ?>/favicon.ico">
+
     <!-- Admin Master Stylesheet -->
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/admin.css?v=<?= APP_VERSION ?>">
 </head>

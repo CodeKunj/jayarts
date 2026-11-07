@@ -39,6 +39,7 @@ class ProductController extends Controller {
         // Per-Product Custom SEO overrides
         $metaTitle = !empty($product['meta_title']) ? $product['meta_title'] : $product['title'] . ' by ' . $product['artist_name'] . ' | JayArt Gallery';
         $metaDesc = !empty($product['meta_description']) ? $product['meta_description'] : substr(strip_tags((string)$product['description']), 0, 155);
+        $ogImage = !empty($product['og_image']) ? Product::imageUrl($product['og_image']) : $primaryImg;
 
         $this->render('shop/product', [
             'product'       => $product,
@@ -50,7 +51,7 @@ class ProductController extends Controller {
                 'title'       => $metaTitle,
                 'description' => $metaDesc,
                 'keywords'    => $product['keywords'] ?? '',
-                'og_image'    => $primaryImg,
+                'og_image'    => $ogImage,
                 'og_type'     => 'product',
                 'canonical'   => SITE_URL . '/product/' . $product['slug'],
                 'schema'      => $productSchema,

@@ -38,6 +38,8 @@ class BlogController extends Controller {
         $metaTitle = !empty($post['meta_title']) ? $post['meta_title'] : $post['title'] . ' | JayArt Magazine';
         $metaDesc  = !empty($post['meta_description']) ? $post['meta_description'] : substr(strip_tags((string)$post['content']), 0, 155);
 
+        $ogImage = !empty($post['og_image']) ? SITE_URL . '/' . ltrim($post['og_image'], '/') : $featuredImg;
+
         $this->render('blog/post', [
             'post'        => $post,
             'featuredImg' => $featuredImg,
@@ -45,7 +47,7 @@ class BlogController extends Controller {
                 'title'       => $metaTitle,
                 'description' => $metaDesc,
                 'keywords'    => $post['keywords'] ?? '',
-                'og_image'    => $featuredImg,
+                'og_image'    => $ogImage,
                 'og_type'     => 'article',
                 'canonical'   => SITE_URL . '/blog/' . $post['slug'],
                 'schema'      => $articleSchema,

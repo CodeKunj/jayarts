@@ -74,6 +74,12 @@ class SEO {
         $desc = !empty($customSeo['description']) ? $customSeo['description'] : $global['default_meta_desc'];
         $keywords = !empty($customSeo['keywords']) ? $customSeo['keywords'] : $global['default_keywords'];
         $ogImage = !empty($customSeo['og_image']) ? $customSeo['og_image'] : $global['default_og_image'];
+        if (!empty($ogImage) && !str_starts_with($ogImage, 'http://') && !str_starts_with($ogImage, 'https://')) {
+            $ogImage = SITE_URL . '/' . ltrim($ogImage, '/');
+        }
+        if (empty($ogImage)) {
+            $ogImage = ASSETS_URL . '/images/og-default.jpg';
+        }
         $canonical = !empty($customSeo['canonical']) ? $customSeo['canonical'] : (SITE_URL . ($_SERVER['REQUEST_URI'] ?? ''));
         $ogType = $customSeo['og_type'] ?? 'website';
 
@@ -85,12 +91,24 @@ class SEO {
         }
         $html .= '<link rel="canonical" href="' . htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') . "\">\n";
 
+        // Favicon & Web App Touch Icons
+        $appVer = defined('APP_VERSION') ? APP_VERSION : '1.0.4';
+        $html .= "\n<!-- Favicon & Web App Icons -->\n";
+        $html .= '<link rel="icon" type="image/svg+xml" href="' . ASSETS_URL . '/images/favicon.svg?v=' . $appVer . "\">\n";
+        $html .= '<link rel="alternate icon" type="image/png" sizes="32x32" href="' . ASSETS_URL . '/images/favicon-32x32.png?v=' . $appVer . "\">\n";
+        $html .= '<link rel="alternate icon" type="image/png" sizes="16x16" href="' . ASSETS_URL . '/images/favicon-16x16.png?v=' . $appVer . "\">\n";
+        $html .= '<link rel="apple-touch-icon" sizes="180x180" href="' . ASSETS_URL . '/images/apple-touch-icon.png?v=' . $appVer . "\">\n";
+        $html .= '<link rel="shortcut icon" href="' . SITE_URL . "/favicon.ico\">\n";
+
         // OpenGraph / Facebook
         $html .= "\n<!-- OpenGraph / Facebook -->\n";
         $html .= '<meta property="og:type" content="' . htmlspecialchars($ogType, ENT_QUOTES, 'UTF-8') . "\">\n";
         $html .= '<meta property="og:title" content="' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "\">\n";
         $html .= '<meta property="og:description" content="' . htmlspecialchars($desc, ENT_QUOTES, 'UTF-8') . "\">\n";
         $html .= '<meta property="og:image" content="' . htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') . "\">\n";
+        $html .= '<meta property="og:image:secure_url" content="' . htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') . "\">\n";
+        $html .= "<meta property=\"og:image:width\" content=\"1200\">\n";
+        $html .= "<meta property=\"og:image:height\" content=\"630\">\n";
         $html .= '<meta property="og:url" content="' . htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') . "\">\n";
         $html .= '<meta property="og:site_name" content="' . htmlspecialchars(APP_NAME, ENT_QUOTES, 'UTF-8') . "\">\n";
 

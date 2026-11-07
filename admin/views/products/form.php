@@ -186,6 +186,60 @@ $actionUrl = $isEdit ? ADMIN_URL . '/products/update/' . $product['id'] : ADMIN_
                     <label class="text-xs font-bold text-slate-700 block mb-1">Canonical URL (Leave blank to use default)</label>
                     <input type="text" name="canonical_url" value="<?= htmlspecialchars($seo['canonical_url'] ?? '') ?>" placeholder="<?= SITE_URL ?>/product/<?= htmlspecialchars($product['slug'] ?? 'artwork-slug') ?>" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:bg-white font-mono">
                 </div>
+
+                <!-- Custom OG Social Share Image -->
+                <?php
+                $initialProductOg = !empty($seo['og_image']) 
+                    ? Product::imageUrl($seo['og_image']) 
+                    : (!empty($product['primary_image']) ? Product::imageUrl($product['primary_image']) : ASSETS_URL . '/images/og-default.jpg');
+                ?>
+                <div class="pt-4 border-t border-slate-100 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-xs font-bold text-slate-800 block mb-0.5">
+                                OpenGraph Social Share Image (WhatsApp / Facebook Preview)
+                            </label>
+                            <span class="text-[10px] text-slate-400 block">
+                                Custom 1200 &times; 630 px promotional banner when this artwork is shared on social media. (Leave blank to use the painting's primary photo automatically).
+                            </span>
+                        </div>
+                        <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold uppercase">
+                            OG Ready
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-start bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <!-- Preview Thumbnail -->
+                        <div class="sm:col-span-4 relative group overflow-hidden rounded-xl border border-slate-300 bg-slate-900 aspect-video shadow-2xs">
+                            <img id="productOgPreviewImg" src="<?= htmlspecialchars($initialProductOg) ?>" alt="OG Preview" class="w-full h-full object-cover">
+                            <div class="absolute bottom-1 left-1 bg-black/75 backdrop-blur-xs px-1.5 py-0.5 rounded text-[8px] font-mono font-bold text-white">
+                                1200 &times; 630 OG
+                            </div>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="sm:col-span-8 space-y-2.5">
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-700 block mb-1">Upload Custom OG Image File</label>
+                                <input type="file" name="product_og_image_file" id="productOgFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-white file:border file:border-slate-300 file:text-slate-700 hover:file:bg-slate-100 cursor-pointer">
+                            </div>
+
+                            <div>
+                                <label class="text-[11px] font-semibold text-slate-700 block mb-1">Or Enter Custom Image URL / Server Path</label>
+                                <input type="text" name="og_image" id="productOgImageInput" value="<?= htmlspecialchars($seo['og_image'] ?? '') ?>" placeholder="e.g. uploads/products/og/custom.jpg or https://..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-mono focus:bg-white">
+                            </div>
+
+                            <?php if (!empty($seo['og_image'])): ?>
+                                <div class="flex items-center gap-2 pt-1 text-[11px]">
+                                    <span class="text-slate-400">Current file:</span>
+                                    <a href="<?= htmlspecialchars(Product::imageUrl($seo['og_image'])) ?>" target="_blank" class="text-blue-600 hover:underline font-mono truncate max-w-xs font-medium">
+                                        <?= htmlspecialchars($seo['og_image']) ?>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -231,6 +285,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updatePreview();
+
+    // OG Image Live Preview Sync
+    const ogFileInput = document.getElementById('productOgFileInput');
+    const ogImageInput = document.getElementById('productOgImageInput');
+    const ogPreviewImg = document.getElementById('productOgPreviewImg');
+
+    if (ogFileInput && ogPreviewImg) {
+        ogFileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    ogPreviewImg.src = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+
+    if (ogImageInput && ogPreviewImg) {
+        ogImageInput.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                const val = this.value.trim();
+                ogPreviewImg.src = (val.startsWith('http://') || val.startsWith('https://'))
+                    ? val
+                    : '<?= SITE_URL ?>/' + val.replace(/^\/+/, '');
+            }
+        });
+    }
 });
 </script>
 

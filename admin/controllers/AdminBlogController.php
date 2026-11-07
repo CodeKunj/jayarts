@@ -65,15 +65,30 @@ class AdminBlogController extends Controller {
         $metaTitle = trim((string)($_POST['meta_title'] ?? ''));
         $metaDesc  = trim((string)($_POST['meta_description'] ?? ''));
         $keywords  = trim((string)($_POST['keywords'] ?? ''));
+        $ogImage   = trim((string)($_POST['og_image'] ?? ''));
+
+        if (!empty($_FILES['blog_og_image_file']['tmp_name']) && is_uploaded_file($_FILES['blog_og_image_file']['tmp_name'])) {
+            $file = $_FILES['blog_og_image_file'];
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'svg'], true)) {
+                $ogDir = ROOT_PATH . '/uploads/blogs/og';
+                if (!is_dir($ogDir)) @mkdir($ogDir, 0755, true);
+                $ogFilename = 'og-blog-' . time() . '-' . uniqid() . '.' . $ext;
+                if (move_uploaded_file($file['tmp_name'], $ogDir . '/' . $ogFilename)) {
+                    $ogImage = 'uploads/blogs/og/' . $ogFilename;
+                }
+            }
+        }
 
         $db = Database::connect();
-        $db->prepare("INSERT INTO `blog_seo` (`blog_id`, `meta_title`, `meta_description`, `keywords`, `canonical_url`) VALUES (:bid, :title, :desc, :kw, :canon)")
+        $db->prepare("INSERT INTO `blog_seo` (`blog_id`, `meta_title`, `meta_description`, `keywords`, `canonical_url`, `og_image`) VALUES (:bid, :title, :desc, :kw, :canon, :og)")
            ->execute([
                'bid'   => $blogId,
                'title' => $metaTitle ?: ($title . ' | JayArt Magazine'),
                'desc'  => $metaDesc ?: substr(strip_tags((string)$_POST['content']), 0, 155),
                'kw'    => $keywords,
-               'canon' => SITE_URL . '/blog/' . $slug
+               'canon' => SITE_URL . '/blog/' . $slug,
+               'og'    => $ogImage !== '' ? $ogImage : null
            ]);
 
         Cache::deletePattern('home:*');
@@ -139,20 +154,36 @@ class AdminBlogController extends Controller {
         $metaTitle = trim((string)($_POST['meta_title'] ?? ''));
         $metaDesc  = trim((string)($_POST['meta_description'] ?? ''));
         $keywords  = trim((string)($_POST['keywords'] ?? ''));
+        $ogImage   = trim((string)($_POST['og_image'] ?? ''));
+
+        if (!empty($_FILES['blog_og_image_file']['tmp_name']) && is_uploaded_file($_FILES['blog_og_image_file']['tmp_name'])) {
+            $file = $_FILES['blog_og_image_file'];
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'svg'], true)) {
+                $ogDir = ROOT_PATH . '/uploads/blogs/og';
+                if (!is_dir($ogDir)) @mkdir($ogDir, 0755, true);
+                $ogFilename = 'og-blog-' . time() . '-' . uniqid() . '.' . $ext;
+                if (move_uploaded_file($file['tmp_name'], $ogDir . '/' . $ogFilename)) {
+                    $ogImage = 'uploads/blogs/og/' . $ogFilename;
+                }
+            }
+        }
 
         $db = Database::connect();
-        $db->prepare("INSERT INTO `blog_seo` (`blog_id`, `meta_title`, `meta_description`, `keywords`, `canonical_url`) 
-                      VALUES (:bid, :title, :desc, :kw, :canon) 
-                      ON DUPLICATE KEY UPDATE `meta_title` = :t2, `meta_description` = :d2, `keywords` = :k2")
+        $db->prepare("INSERT INTO `blog_seo` (`blog_id`, `meta_title`, `meta_description`, `keywords`, `canonical_url`, `og_image`) 
+                      VALUES (:bid, :title, :desc, :kw, :canon, :og) 
+                      ON DUPLICATE KEY UPDATE `meta_title` = :t2, `meta_description` = :d2, `keywords` = :k2, `og_image` = :og2")
            ->execute([
                'bid'   => $id,
                'title' => $metaTitle,
                'desc'  => $metaDesc,
                'kw'    => $keywords,
                'canon' => SITE_URL . '/blog/' . $blog['slug'],
+               'og'    => $ogImage !== '' ? $ogImage : null,
                't2'    => $metaTitle,
                'd2'    => $metaDesc,
                'k2'    => $keywords,
+               'og2'   => $ogImage !== '' ? $ogImage : null,
            ]);
 
         Cache::deletePattern('home:*');

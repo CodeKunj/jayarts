@@ -183,6 +183,28 @@
             </div>
         </div>
 
+        <!-- 6. SEO & OpenGraph Social Sharing Direct Access -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0" style="width: 36px; height: 36px; min-width: 36px;">
+                        <svg width="18" height="18" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-heading font-bold text-slate-900">SEO &amp; OpenGraph (OG) Social Previews</h2>
+                        <p class="text-xs text-slate-400">Manage global meta tags, upload 1200 &times; 630 px WhatsApp / Facebook OG images, and webmaster tags</p>
+                    </div>
+                </div>
+                <a href="<?= ADMIN_URL ?>/seo" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#0F172A] hover:bg-black text-white text-xs font-bold rounded-xl transition-all shadow-xs flex-shrink-0">
+                    <span>Manage OG Image &amp; SEO</span> &rarr;
+                </a>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+                <span>Configure custom social share banners, preview live WhatsApp share cards, and update Google Analytics / Search Console.</span>
+                <span class="text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase font-mono">OG Active</span>
+            </div>
+        </div>
+
         <!-- Submit Button -->
         <div class="flex justify-end pt-2">
             <button type="submit" class="px-6 py-3 bg-[#0F172A] hover:bg-[#020617] text-white text-xs font-bold rounded-xl transition-all shadow-xs flex items-center gap-2">

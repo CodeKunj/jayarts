@@ -91,15 +91,31 @@ class AdminProductController extends Controller {
         $metaDesc  = trim((string)($_POST['meta_description'] ?? ''));
         $keywords  = trim((string)($_POST['keywords'] ?? ''));
         $canonical = trim((string)($_POST['canonical_url'] ?? SITE_URL . '/product/' . $slug));
+        $ogImage   = trim((string)($_POST['og_image'] ?? ''));
+
+        // Handle Custom OG Image File Upload
+        if (!empty($_FILES['product_og_image_file']['tmp_name']) && is_uploaded_file($_FILES['product_og_image_file']['tmp_name'])) {
+            $file = $_FILES['product_og_image_file'];
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'svg'], true)) {
+                $ogDir = ROOT_PATH . '/uploads/products/og';
+                if (!is_dir($ogDir)) @mkdir($ogDir, 0755, true);
+                $ogFilename = 'og-product-' . time() . '-' . uniqid() . '.' . $ext;
+                if (move_uploaded_file($file['tmp_name'], $ogDir . '/' . $ogFilename)) {
+                    $ogImage = 'uploads/products/og/' . $ogFilename;
+                }
+            }
+        }
 
         $db = Database::connect();
-        $db->prepare("INSERT INTO `product_seo` (`product_id`, `meta_title`, `meta_description`, `keywords`, `canonical_url`) VALUES (:pid, :title, :desc, :kw, :canon)")
+        $db->prepare("INSERT INTO `product_seo` (`product_id`, `meta_title`, `meta_description`, `keywords`, `canonical_url`, `og_image`) VALUES (:pid, :title, :desc, :kw, :canon, :og)")
            ->execute([
                'pid'   => $productId,
                'title' => $metaTitle ?: ($title . ' | JayArt Gallery'),
                'desc'  => $metaDesc ?: substr(strip_tags((string)$_POST['description']), 0, 155),
                'kw'    => $keywords,
-               'canon' => $canonical
+               'canon' => $canonical,
+               'og'    => $ogImage !== '' ? $ogImage : null
            ]);
 
         // Automatic Redis-like Cache Invalidation
@@ -193,21 +209,38 @@ class AdminProductController extends Controller {
         $metaDesc  = trim((string)($_POST['meta_description'] ?? ''));
         $keywords  = trim((string)($_POST['keywords'] ?? ''));
         $canonical = trim((string)($_POST['canonical_url'] ?? SITE_URL . '/product/' . $product['slug']));
+        $ogImage   = trim((string)($_POST['og_image'] ?? ''));
+
+        // Handle Custom OG Image File Upload
+        if (!empty($_FILES['product_og_image_file']['tmp_name']) && is_uploaded_file($_FILES['product_og_image_file']['tmp_name'])) {
+            $file = $_FILES['product_og_image_file'];
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'svg'], true)) {
+                $ogDir = ROOT_PATH . '/uploads/products/og';
+                if (!is_dir($ogDir)) @mkdir($ogDir, 0755, true);
+                $ogFilename = 'og-product-' . time() . '-' . uniqid() . '.' . $ext;
+                if (move_uploaded_file($file['tmp_name'], $ogDir . '/' . $ogFilename)) {
+                    $ogImage = 'uploads/products/og/' . $ogFilename;
+                }
+            }
+        }
 
         $db = Database::connect();
-        $db->prepare("INSERT INTO `product_seo` (`product_id`, `meta_title`, `meta_description`, `keywords`, `canonical_url`) 
-                      VALUES (:pid, :title, :desc, :kw, :canon) 
-                      ON DUPLICATE KEY UPDATE `meta_title` = :title2, `meta_description` = :desc2, `keywords` = :kw2, `canonical_url` = :canon2")
+        $db->prepare("INSERT INTO `product_seo` (`product_id`, `meta_title`, `meta_description`, `keywords`, `canonical_url`, `og_image`) 
+                      VALUES (:pid, :title, :desc, :kw, :canon, :og) 
+                      ON DUPLICATE KEY UPDATE `meta_title` = :title2, `meta_description` = :desc2, `keywords` = :kw2, `canonical_url` = :canon2, `og_image` = :og2")
            ->execute([
                'pid'    => $id,
                'title'  => $metaTitle,
                'desc'   => $metaDesc,
                'kw'     => $keywords,
                'canon'  => $canonical,
+               'og'     => $ogImage !== '' ? $ogImage : null,
                'title2' => $metaTitle,
                'desc2'  => $metaDesc,
                'kw2'    => $keywords,
                'canon2' => $canonical,
+               'og2'    => $ogImage !== '' ? $ogImage : null,
            ]);
 
         // Automatic Redis-like Cache Invalidation

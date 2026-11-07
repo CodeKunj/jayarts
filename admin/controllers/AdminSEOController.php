@@ -27,15 +27,39 @@ class AdminSEOController extends Controller {
         $siteTitle = trim((string)($_POST['site_title'] ?? ''));
         $metaDesc  = trim((string)($_POST['default_meta_desc'] ?? ''));
         $keywords  = trim((string)($_POST['default_keywords'] ?? ''));
+        $ogImage   = trim((string)($_POST['default_og_image'] ?? ''));
         $robots    = trim((string)($_POST['robots_txt'] ?? "User-agent: *\nAllow: /"));
+
+        // Handle OG Image File Upload
+        if (!empty($_FILES['og_image_file']['tmp_name']) && is_uploaded_file($_FILES['og_image_file']['tmp_name'])) {
+            $file = $_FILES['og_image_file'];
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            $allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'svg'];
+            if (in_array($ext, $allowedExts, true)) {
+                $targetDir = ROOT_PATH . '/uploads/seo';
+                if (!is_dir($targetDir)) {
+                    @mkdir($targetDir, 0755, true);
+                }
+                $filename = 'og-share-' . time() . '.' . $ext;
+                $targetPath = $targetDir . '/' . $filename;
+                if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                    $ogImage = 'uploads/seo/' . $filename;
+                }
+            } else {
+                Auth::setFlash('error', 'Invalid image format. Allowed formats: JPG, PNG, WEBP, SVG.');
+            }
+        }
 
         $db = Database::connect();
         if ($db) {
-            $stmt = $db->prepare("UPDATE `seo_settings` SET `site_title` = :t, `default_meta_desc` = :d, `default_keywords` = :k, `robots_txt` = :r WHERE `id` = 1");
-            $stmt->execute(['t' => $siteTitle, 'd' => $metaDesc, 'k' => $keywords, 'r' => $robots]);
+            $stmt = $db->prepare("UPDATE `seo_settings` SET `site_title` = :t, `default_meta_desc` = :d, `default_keywords` = :k, `default_og_image` = :og, `robots_txt` = :r WHERE `id` = 1");
+            $stmt->execute(['t' => $siteTitle, 'd' => $metaDesc, 'k' => $keywords, 'og' => ($ogImage !== '' ? $ogImage : null), 'r' => $robots]);
         }
 
-        Auth::setFlash('success', 'Global SEO parameters and robots.txt saved.');
+        Cache::deletePattern('home:*');
+        Cache::clear();
+
+        Auth::setFlash('success', 'Global SEO parameters and OpenGraph social share image saved.');
         header('Location: ' . ADMIN_URL . '/seo');
         exit;
     }
