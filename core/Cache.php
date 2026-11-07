@@ -121,7 +121,8 @@ class Cache {
         
         $prefix = explode(':', $sanitizedKey)[0] ?? 'general';
         $safePrefix = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $prefix) ?: 'general';
-        $hash = hash('sha256', $sanitizedKey);
+        $version = defined('APP_VERSION') ? (string)APP_VERSION : '1.0';
+        $hash = hash('sha256', 'v' . $version . ':' . $sanitizedKey);
 
         return self::getStoragePath() . DIRECTORY_SEPARATOR . $safePrefix . '__' . $hash . '.cache';
     }

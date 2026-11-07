@@ -92,7 +92,7 @@ if (!defined('UPLOADS_URL')) define('UPLOADS_URL', SITE_URL . '/uploads');
 // Store Branding & General Defaults
 if (!defined('APP_NAME')) define('APP_NAME', 'JayArt');
 if (!defined('APP_TAGLINE')) define('APP_TAGLINE', 'Original Paintings & Fine Art Gallery');
-if (!defined('APP_VERSION')) define('APP_VERSION', '1.0.3');
+if (!defined('APP_VERSION')) define('APP_VERSION', '1.0.4');
 
 // Currency Defaults
 if (!defined('CURRENCY_SYMBOL')) define('CURRENCY_SYMBOL', '₹');

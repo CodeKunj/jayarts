@@ -27,6 +27,16 @@ if (!defined('ROOT_PATH')) {
 require_once __DIR__ . '/core/App.php';
 App::bootstrap();
 
+// Instant Cache Flush Query Trigger (Supports ?flush=1 anywhere from browser)
+if (isset($_GET['flush']) && $_GET['flush'] === '1') {
+    if (class_exists('Cache')) {
+        Cache::clear();
+    }
+    $cleanUri = strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
+    header('Location: ' . ($cleanUri ?: '/'));
+    exit;
+}
+
 // Forward /admin routes
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
 if ($requestPath === '/admin' || str_starts_with((string)$requestPath, '/admin/')) {
@@ -111,9 +121,28 @@ Router::get('/db-setup', function() {
         if (file_exists($cleanFile)) {
             Database::executeSqlFile($db, $cleanFile);
         }
+
+        // Direct table wipe fallback ensuring 100% cleanup across any cPanel database privilege level
+        $tablesToClean = [
+            'product_images', 'product_seo', 'products',
+            'blog_seo', 'blogs', 'order_items', 'orders',
+            'delivery_milestones', 'delivery_tracking', 'reviews',
+            'wishlists', 'inventory_logs', 'ticket_messages', 'support_tickets', 'addresses'
+        ];
+        $db->exec("SET FOREIGN_KEY_CHECKS = 0;");
+        foreach ($tablesToClean as $tbl) {
+            try {
+                $db->exec("DELETE FROM `{$tbl}`");
+                $db->exec("ALTER TABLE `{$tbl}` AUTO_INCREMENT = 1");
+            } catch (Throwable $e) {}
+        }
+        try {
+            $db->exec("DELETE FROM `users` WHERE `role` != 'admin'");
+        } catch (Throwable $e) {}
+        $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
     }
 
-    Database::autoMigrateIfEmpty($db, true);
+    Database::autoMigrateIfEmpty($db, false);
     Cache::clear();
 
     $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
