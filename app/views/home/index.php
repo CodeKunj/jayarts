@@ -5,9 +5,6 @@
  */
 
 $paintings = !empty($featuredPaintings) ? $featuredPaintings : (!empty($featuredProducts) ? $featuredProducts : []);
-if (empty($paintings)) {
-    $paintings = Product::getDummyProducts();
-}
 $categoryList = !empty($categories) ? $categories : [];
 $blogs = !empty($latestBlogs) ? $latestBlogs : (!empty($recentBlogs) ? $recentBlogs : []);
 ?>
@@ -79,147 +76,170 @@ $blogs = !empty($latestBlogs) ? $latestBlogs : (!empty($recentBlogs) ? $recentBl
      ==================================================================== -->
 <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
     
-    <!-- Feed Status Bar -->
-    <div class="flex items-center justify-between pb-4 border-b border-black/[0.06] text-xs text-stone-500 mb-6 sm:mb-8">
-        <div class="flex items-center gap-2">
-            <span class="font-extrabold text-[#18181B] text-xs sm:text-sm"><?= count($paintings) ?> Original Paintings</span>
-            <span class="text-stone-300">•</span>
-            <span class="hidden sm:inline font-medium">Museum Provenance Included</span>
-        </div>
-        
-        <div class="flex items-center gap-3">
-            <a href="<?= SITE_URL ?>/shop" class="text-xs font-bold text-[#18181B] hover:text-stone-600 flex items-center gap-1 transition-colors">
-                <span>View All In Catalog</span>
-                <span class="text-sm">&rarr;</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- PINTEREST MULTI-COLUMN MASONRY WALL (2 Cols on Mobile, 3-5 on Larger Screens) -->
-    <div class="pinterest-masonry-grid" id="homeMasonryWall">
-        <?php 
-        $wishlistIds = $_SESSION['wishlist'] ?? [];
-        foreach ($paintings as $index => $p): 
-            $rawImg = !empty($p['primary_image']) ? $p['primary_image'] : (!empty($p['image']) ? $p['image'] : (!empty($p['image_path']) ? $p['image_path'] : ''));
-            $cardImg = Product::imageUrl($rawImg);
-            $pid = (int)($p['id'] ?? ($index + 1));
-            $isWish = in_array($pid, $wishlistIds, true);
-            $price = (float)(!empty($p['discount_price']) ? $p['discount_price'] : ($p['price'] ?? 0));
-            $origPrice = (float)($p['price'] ?? 0);
-            $hasDiscount = !empty($p['discount_price']) && ($p['discount_price'] < $origPrice);
-            $artistName = !empty($p['artist_name']) ? $p['artist_name'] : 'Atelier Master Artist';
-            $dimensions = !empty($p['dimensions']) ? $p['dimensions'] : 'Original Size';
-            $medium = !empty($p['medium']) ? $p['medium'] : 'Original Pigments on Linen';
-            $slug = !empty($p['slug']) ? $p['slug'] : ('art-' . $pid);
-            $desc = !empty($p['description']) ? strip_tags($p['description']) : 'Authentic handmade atelier masterpiece painted with lightfast archival pigments.';
-        ?>
-
-            <!-- Individual Pinterest Pin -->
-            <div class="pinterest-pin group" data-pin-id="<?= $pid ?>">
-                
-                <!-- Media Box with Natural Aspect Ratio & Pinterest Floating Controls -->
-                <div class="pinterest-pin-media" onclick='openArtInspectModal(<?= json_encode([
-                    'id' => $pid,
-                    'title' => $p['title'],
-                    'slug' => $slug,
-                    'image' => $cardImg,
-                    'artist' => $artistName,
-                    'medium' => $medium,
-                    'dimensions' => $dimensions,
-                    'price' => $price,
-                    'formatted_price' => Validator::formatPrice($price),
-                    'is_wish' => $isWish,
-                    'description' => $desc
-                ]) ?>)'>
-                    
-                    <img src="<?= htmlspecialchars($cardImg) ?>" 
-                         alt="<?= htmlspecialchars($p['title']) ?>" 
-                         loading="<?= $index < 4 ? 'eager' : 'lazy' ?>"
-                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';">
-
-                    <!-- Floating Hover / Mobile Overlay Actions -->
-                    <div class="pinterest-pin-overlay" onclick="event.stopPropagation();">
-                        
-                        <!-- Top Row: Medium Pill & Red Save Pin Button -->
-                        <div class="flex items-center justify-between w-full">
-                            <span class="pinterest-tag-badge line-clamp-1 max-w-[130px] sm:max-w-[160px]">
-                                <?= htmlspecialchars($medium) ?>
-                            </span>
-
-                            <button type="button" 
-                                    onclick="togglePinSave(<?= $pid ?>, this)" 
-                                    class="pinterest-save-btn <?= $isWish ? 'is-saved' : '' ?>"
-                                    title="<?= $isWish ? 'Saved to Wishlist' : 'Save to Wishlist' ?>">
-                                <svg class="w-3.5 h-3.5" fill="<?= $isWish ? 'currentColor' : 'none' ?>" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                <span class="save-label"><?= $isWish ? 'Saved' : 'Save' ?></span>
-                            </button>
-                        </div>
-
-                        <!-- Bottom Row: Quick Inspect Eye & Quick Bag Addition -->
-                        <div class="flex items-center justify-between w-full gap-1.5 pt-4">
-                            <button type="button" 
-                                    onclick='this.closest(".pinterest-pin").querySelector(".pinterest-pin-media").click()'
-                                    class="pinterest-inspect-btn"
-                                    title="Quick Inspect Provenance & Framing">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </button>
-
-                            <button type="button" 
-                                    onclick="quickAddToCart(<?= $pid ?>)" 
-                                    class="pinterest-quick-buy">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                <span>+ Bag</span>
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Pin Caption Section Below Artwork -->
-                <div class="p-3 sm:p-4 flex flex-col justify-between flex-1">
-                    <div>
-                        <div class="flex items-center justify-between text-[11px] text-stone-500 mb-1">
-                            <span class="truncate max-w-[130px] sm:max-w-[170px] font-semibold text-stone-700 flex items-center gap-1">
-                                <?= htmlspecialchars($artistName) ?>
-                                <svg class="w-3 h-3 text-amber-500 inline flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            </span>
-                            <span class="text-[10px] text-stone-400 font-mono"><?= htmlspecialchars($dimensions) ?></span>
-                        </div>
-
-                        <h3 class="font-bold text-xs sm:text-sm text-[#18181B] leading-snug line-clamp-1 group-hover:text-black transition-colors">
-                            <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($slug) ?>">
-                                <?= htmlspecialchars($p['title']) ?>
-                            </a>
-                        </h3>
-                    </div>
-
-                    <div class="mt-2.5 flex items-center justify-between gap-1">
-                        <div>
-                            <span class="font-extrabold text-xs sm:text-sm text-[#18181B]">
-                                <?= Validator::formatPrice($price) ?>
-                            </span>
-                            <?php if ($hasDiscount): ?>
-                                <span class="text-[10px] text-stone-400 line-through ml-1">
-                                    <?= Validator::formatPrice($origPrice) ?>
-                                </span>
-                            <?php endif; ?>
-                        </div>
-
-                        <button type="button" 
-                                onclick="quickBuyNow(<?= $pid ?>)" 
-                                class="px-3 py-1 bg-stone-100 hover:bg-[#18181B] hover:text-white rounded-full text-[10px] sm:text-xs font-bold text-stone-800 transition-colors cursor-pointer">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
+    <?php if (empty($paintings)): ?>
+        <!-- Clean Atelier Curating State When Catalog Has No Artworks Yet -->
+        <div class="py-16 px-4 text-center max-w-xl mx-auto bg-white/80 backdrop-blur-xs rounded-3xl border border-[#B67A31]/20 shadow-xs my-6">
+            <div class="w-16 h-16 rounded-full bg-amber-50 text-amber-800 flex items-center justify-center mx-auto mb-4 border border-[#B67A31]/20">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
             </div>
+            <h3 class="font-serif font-black text-xl text-[#18181B] mb-2">Curating New Masterworks</h3>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6 font-medium">
+                Our atelier artists are currently preparing new original paintings in oil on linen, heavy acrylic, and pure watercolor. Check back shortly or commission a bespoke masterpiece.
+            </p>
+            <div class="flex items-center justify-center gap-3 flex-wrap">
+                <a href="<?= SITE_URL ?>/contact" class="px-5 py-2.5 bg-[#18181B] hover:bg-black text-white rounded-full text-xs font-bold transition-all shadow-xs">
+                    Commission Custom Painting
+                </a>
+                <a href="<?= SITE_URL ?>/shop" class="px-5 py-2.5 bg-white hover:bg-stone-100 text-stone-800 border border-stone-300 rounded-full text-xs font-bold transition-all">
+                    Explore Gallery Archive
+                </a>
+            </div>
+        </div>
+    <?php else: ?>
 
-        <?php endforeach; ?>
-    </div>
+        <!-- Feed Status Bar -->
+        <div class="flex items-center justify-between pb-4 border-b border-black/[0.06] text-xs text-stone-500 mb-6 sm:mb-8">
+            <div class="flex items-center gap-2">
+                <span class="font-extrabold text-[#18181B] text-xs sm:text-sm"><?= count($paintings) ?> Original Paintings</span>
+                <span class="text-stone-300">•</span>
+                <span class="hidden sm:inline font-medium">Museum Provenance Included</span>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <a href="<?= SITE_URL ?>/shop" class="text-xs font-bold text-[#18181B] hover:text-stone-600 flex items-center gap-1 transition-colors">
+                    <span>View All In Catalog</span>
+                    <span class="text-sm">&rarr;</span>
+                </a>
+            </div>
+        </div>
 
+        <!-- PINTEREST MULTI-COLUMN MASONRY WALL (2 Cols on Mobile, 3-5 on Larger Screens) -->
+        <div class="pinterest-masonry-grid" id="homeMasonryWall">
+            <?php 
+            $wishlistIds = $_SESSION['wishlist'] ?? [];
+            foreach ($paintings as $index => $p): 
+                $rawImg = !empty($p['primary_image']) ? $p['primary_image'] : (!empty($p['image']) ? $p['image'] : (!empty($p['image_path']) ? $p['image_path'] : ''));
+                $cardImg = Product::imageUrl($rawImg);
+                $pid = (int)($p['id'] ?? ($index + 1));
+                $isWish = in_array($pid, $wishlistIds, true);
+                $price = (float)(!empty($p['discount_price']) ? $p['discount_price'] : ($p['price'] ?? 0));
+                $origPrice = (float)($p['price'] ?? 0);
+                $hasDiscount = !empty($p['discount_price']) && ($p['discount_price'] < $origPrice);
+                $artistName = !empty($p['artist_name']) ? $p['artist_name'] : 'Atelier Master Artist';
+                $dimensions = !empty($p['dimensions']) ? $p['dimensions'] : 'Original Size';
+                $medium = !empty($p['medium']) ? $p['medium'] : 'Original Pigments on Linen';
+                $slug = !empty($p['slug']) ? $p['slug'] : ('art-' . $pid);
+                $desc = !empty($p['description']) ? strip_tags($p['description']) : 'Authentic handmade atelier masterpiece painted with lightfast archival pigments.';
+            ?>
+
+                <!-- Individual Pinterest Pin -->
+                <div class="pinterest-pin group" data-pin-id="<?= $pid ?>">
+                    
+                    <!-- Media Box with Natural Aspect Ratio & Pinterest Floating Controls -->
+                    <div class="pinterest-pin-media" onclick='openArtInspectModal(<?= json_encode([
+                        'id' => $pid,
+                        'title' => $p['title'],
+                        'slug' => $slug,
+                        'image' => $cardImg,
+                        'artist' => $artistName,
+                        'medium' => $medium,
+                        'dimensions' => $dimensions,
+                        'price' => $price,
+                        'formatted_price' => Validator::formatPrice($price),
+                        'is_wish' => $isWish,
+                        'description' => $desc
+                    ]) ?>)'>
+                        
+                        <img src="<?= htmlspecialchars($cardImg) ?>" 
+                             alt="<?= htmlspecialchars($p['title']) ?>" 
+                             loading="<?= $index < 4 ? 'eager' : 'lazy' ?>"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&q=80';">
+
+                        <!-- Floating Hover / Mobile Overlay Actions -->
+                        <div class="pinterest-pin-overlay" onclick="event.stopPropagation();">
+                            
+                            <!-- Top Row: Medium Pill & Red Save Pin Button -->
+                            <div class="flex items-center justify-between w-full">
+                                <span class="pinterest-tag-badge line-clamp-1 max-w-[130px] sm:max-w-[160px]">
+                                    <?= htmlspecialchars($medium) ?>
+                                </span>
+
+                                <button type="button" 
+                                        onclick="togglePinSave(<?= $pid ?>, this)" 
+                                        class="pinterest-save-btn <?= $isWish ? 'is-saved' : '' ?>"
+                                        title="<?= $isWish ? 'Saved to Wishlist' : 'Save to Wishlist' ?>">
+                                    <svg class="w-3.5 h-3.5" fill="<?= $isWish ? 'currentColor' : 'none' ?>" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                    <span class="save-label"><?= $isWish ? 'Saved' : 'Save' ?></span>
+                                </button>
+                            </div>
+
+                            <!-- Bottom Row: Quick Inspect Eye & Quick Bag Addition -->
+                            <div class="flex items-center justify-between w-full gap-1.5 pt-4">
+                                <button type="button" 
+                                        onclick='this.closest(".pinterest-pin").querySelector(".pinterest-pin-media").click()'
+                                        class="pinterest-inspect-btn"
+                                        title="Quick Inspect Provenance & Framing">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                </button>
+
+                                <button type="button" 
+                                        onclick="quickAddToCart(<?= $pid ?>)" 
+                                        class="pinterest-quick-buy">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    <span>+ Bag</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Pin Caption Section Below Artwork -->
+                    <div class="p-3 sm:p-4 flex flex-col justify-between flex-1">
+                        <div>
+                            <div class="flex items-center justify-between text-[11px] text-stone-500 mb-1">
+                                <span class="truncate max-w-[130px] sm:max-w-[170px] font-semibold text-stone-700 flex items-center gap-1">
+                                    <?= htmlspecialchars($artistName) ?>
+                                    <svg class="w-3 h-3 text-amber-500 inline flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                </span>
+                                <span class="text-[10px] text-stone-400 font-mono"><?= htmlspecialchars($dimensions) ?></span>
+                            </div>
+
+                            <h3 class="font-bold text-xs sm:text-sm text-[#18181B] leading-snug line-clamp-1 group-hover:text-black transition-colors">
+                                <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($slug) ?>">
+                                    <?= htmlspecialchars($p['title']) ?>
+                                </a>
+                            </h3>
+                        </div>
+
+                        <div class="mt-2.5 flex items-center justify-between gap-1">
+                            <div>
+                                <span class="font-extrabold text-xs sm:text-sm text-[#18181B]">
+                                    <?= Validator::formatPrice($price) ?>
+                                </span>
+                                <?php if ($hasDiscount): ?>
+                                    <span class="text-[10px] text-stone-400 line-through ml-1">
+                                        <?= Validator::formatPrice($origPrice) ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+
+                            <button type="button" 
+                                    onclick="quickBuyNow(<?= $pid ?>)" 
+                                    class="px-3 py-1 bg-stone-100 hover:bg-[#18181B] hover:text-white rounded-full text-[10px] sm:text-xs font-bold text-stone-800 transition-colors cursor-pointer">
+                                Acquire
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            <?php endforeach; ?>
+        </div>
+
+    <?php endif; ?>
 </section>
 
+<?php if (!empty($paintings)): ?>
 <!-- Curated Atelier Spotlight: Sacred Kashi & Ghats Anthology -->
 <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mb-4">
     <div class="p-6 sm:p-8 bg-gradient-to-r from-[#2D2A26] to-[#18181B] text-white rounded-3xl shadow-sm border border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -243,6 +263,7 @@ $blogs = !empty($latestBlogs) ? $latestBlogs : (!empty($recentBlogs) ? $recentBl
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- ====================================================================
      3. MUSEUM PROVENANCE & ARCHIVAL CRATING STRIP

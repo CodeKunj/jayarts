@@ -440,8 +440,10 @@ header.site-sticky-header,
 
 @media (max-width: 640px) {
   .category-capsule-pill {
-    padding: 6px 13px;
-    font-size: 12px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    gap: 4px;
   }
 }
 
@@ -750,12 +752,13 @@ header.site-sticky-header,
   }
 }
 
-/* On mobile, overlay actions are subtly visible or accessible via footer bar */
+/* On touch & mobile devices, refine overlays for pristine artwork visibility */
 @media (max-width: 1023px) {
   .pinterest-pin-overlay {
     opacity: 1;
-    background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 100%);
+    background: transparent;
     pointer-events: none;
+    padding: 8px;
   }
   .pinterest-pin-overlay > * {
     pointer-events: auto;
@@ -845,6 +848,63 @@ header.site-sticky-header,
 .pinterest-inspect-btn:hover {
   background: #FFFFFF;
   transform: scale(1.08);
+}
+
+/* Specific mobile adaptations (< 640px) to keep 95% of artwork canvas completely clear */
+@media (max-width: 640px) {
+  /* Hide the large multi-line medium bubble over the painting; medium is already in the card caption */
+  .pinterest-tag-badge {
+    display: none !important;
+  }
+
+  /* Compact 32px circular red heart save button */
+  .pinterest-save-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 9999px;
+    margin-left: auto;
+    box-shadow: 0 2px 8px rgba(230, 0, 35, 0.4);
+  }
+  .pinterest-save-btn .save-label {
+    display: none !important;
+  }
+  .pinterest-save-btn svg {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+  }
+
+  /* Compact 32px circular dark glassmorphic quick buy button */
+  .pinterest-quick-buy {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 9999px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+  .pinterest-quick-buy span {
+    display: none !important;
+  }
+  .pinterest-quick-buy svg {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+  }
+
+  /* Compact 32px circular inspect eye button */
+  .pinterest-inspect-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  }
+  .pinterest-inspect-btn svg {
+    width: 15px;
+    height: 15px;
+  }
 }
 
 /* Horizontal Exploration Pills Scrollbar Hidden */

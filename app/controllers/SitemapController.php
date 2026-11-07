@@ -53,7 +53,7 @@ class SitemapController extends Controller {
         $productModel = new Product();
         $products = $productModel->all("id DESC");
         if (empty($products)) {
-            $products = Product::getDummyProducts();
+            $products = [];
         }
 
         // Fetch categories

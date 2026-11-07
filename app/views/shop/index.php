@@ -17,13 +17,13 @@ $hasActiveFilters = !empty($selectedCat) || !empty($selectedMedium) || !empty($s
 ?>
 
 <!-- ====================================================================
-     1. PINTEREST CATALOG HEADER & TOPIC DISCOVERY BAR
+     1. PINTEREST CATALOG HEADER & CURATION TOOLBAR
      ==================================================================== -->
-<div class="bg-[#FAF6F0]/90 border-b border-[#B67A31]/15 sticky top-0 sm:top-0 z-30 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
+<div class="bg-transparent border-b border-[#B67A31]/10">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-4">
         
-        <!-- Breadcrumbs & Quick Stats -->
-        <div class="flex items-center justify-between text-xs text-stone-400 mb-2">
+        <!-- Breadcrumbs & Quick Stats (Hidden on Small Mobile for Maximum Artwork Focus) -->
+        <div class="hidden sm:flex items-center justify-between text-xs text-stone-400 mb-2">
             <nav class="flex items-center gap-1.5 font-medium" aria-label="Breadcrumb">
                 <a href="<?= SITE_URL ?>" class="hover:text-black transition-colors">Home</a>
                 <span>/</span>
@@ -34,21 +34,21 @@ $hasActiveFilters = !empty($selectedCat) || !empty($selectedMedium) || !empty($s
             </span>
         </div>
 
-        <!-- Title Row + Filter & Sort Controls -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div>
-                <h1 class="text-xl sm:text-2xl lg:text-3xl font-heading font-extrabold text-[#18181B] tracking-tight">
+        <!-- Title Row + Filter & Sort Controls (Single Sleek Bar on Mobile) -->
+        <div class="flex items-center justify-between gap-2.5 flex-wrap">
+            <div class="flex items-center gap-2">
+                <h1 class="text-base sm:text-2xl lg:text-3xl font-heading font-extrabold text-[#18181B] tracking-tight">
                     <?= !empty($searchQuery) ? 'Results for "' . htmlspecialchars($searchQuery) . '"' : (!empty($selectedCat) ? htmlspecialchars(ucwords(str_replace('-', ' ', $selectedCat))) : 'Visual Art Gallery') ?>
                 </h1>
-                <p class="text-xs text-stone-500 mt-0.5 hidden sm:block">
-                    Discover original handmade art with certified museum provenance and natural aspect framing.
-                </p>
+                <span class="text-[10px] sm:text-xs font-bold text-stone-600 bg-white/90 border border-black/[0.08] px-2 py-0.5 rounded-full shadow-2xs">
+                    <?= (int)$total ?> Works
+                </span>
             </div>
 
-            <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <!-- Mobile Filter Drawer Trigger -->
-                <button type="button" id="openMobileFilters" class="lg:hidden inline-flex items-center gap-1.5 px-3.5 py-2 bg-stone-100 hover:bg-stone-200 rounded-full text-xs font-bold text-stone-800 transition-colors cursor-pointer">
-                    <svg class="w-4 h-4 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                <!-- Mobile Filter Trigger (Opens Comprehensive Drawer/Modal) -->
+                <button type="button" onclick="openAllFiltersModal()" class="lg:hidden inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-white hover:bg-stone-50 border border-black/[0.08] rounded-full text-xs font-bold text-stone-800 transition-colors shadow-2xs cursor-pointer">
+                    <svg class="w-3.5 h-3.5 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                     <span>Filters <?= $hasActiveFilters ? '• Active' : '' ?></span>
                 </button>
 
@@ -60,7 +60,7 @@ $hasActiveFilters = !empty($selectedCat) || !empty($selectedMedium) || !empty($s
                     <?php if (!empty($selectedMaxPrice)): ?><input type="hidden" name="max_price" value="<?= htmlspecialchars((string)$selectedMaxPrice) ?>"><?php endif; ?>
                     <?php if (!empty($searchQuery)): ?><input type="hidden" name="search" value="<?= htmlspecialchars($searchQuery) ?>"><?php endif; ?>
                     
-                    <select id="sortSelect" name="sort" onchange="this.form.submit()" class="px-3 sm:px-4 py-2 bg-stone-100 rounded-full text-xs font-bold text-stone-800 border-none focus:outline-none focus:ring-2 focus:ring-black/10 cursor-pointer shadow-xs">
+                    <select id="sortSelect" name="sort" onchange="this.form.submit()" class="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-white border border-black/[0.08] rounded-full text-xs font-bold text-stone-800 focus:outline-none focus:ring-2 focus:ring-black/10 cursor-pointer shadow-2xs">
                         <option value="" <?= ($selectedSort === '') ? 'selected' : '' ?>>Sort: Curated Feed</option>
                         <option value="newest" <?= ($selectedSort === 'newest') ? 'selected' : '' ?>>Sort: Latest Additions</option>
                         <option value="popular" <?= ($selectedSort === 'popular') ? 'selected' : '' ?>>Sort: Most Loved</option>
@@ -70,50 +70,10 @@ $hasActiveFilters = !empty($selectedCat) || !empty($selectedMedium) || !empty($s
                 </form>
 
                 <?php if ($hasActiveFilters): ?>
-                    <a href="<?= SITE_URL ?>/shop" class="text-xs font-bold text-red-600 hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-full transition-colors">
-                        Reset All ✕
+                    <a href="<?= SITE_URL ?>/shop" class="text-xs font-bold text-red-600 hover:text-red-700 bg-red-50 border border-red-200 px-2.5 py-1.5 rounded-full transition-colors shadow-2xs">
+                        Reset ✕
                     </a>
                 <?php endif; ?>
-            </div>
-        </div>
-
-        <!-- Horizontal Scrollable Pinterest Topic Pills (Tactile 1-Thumb Filter on Mobile) -->
-        <div class="mt-3 pt-2.5 border-t border-stone-100">
-            <div class="pinterest-scroll-row">
-                <a href="<?= SITE_URL ?>/shop" class="pinterest-topic-pill <?= empty($selectedCat) && empty($selectedMedium) && $selectedMinPrice === '' ? 'active' : '' ?>">
-                    All Inspirations
-                </a>
-                
-                <!-- Category Pills -->
-                <?php foreach ($categories as $cat): 
-                    $count = (int)($cat['product_count'] ?? 0);
-                    if ($count <= 0 && $selectedCat !== $cat['slug']) continue;
-                ?>
-                    <a href="<?= SITE_URL ?>/shop?category=<?= htmlspecialchars($cat['slug']) ?><?= !empty($selectedMedium) ? '&medium=' . urlencode($selectedMedium) : '' ?>" class="pinterest-topic-pill <?= ($selectedCat === $cat['slug']) ? 'active' : '' ?>">
-                        <?= htmlspecialchars($cat['name']) ?>
-                    </a>
-                <?php endforeach; ?>
-
-                <!-- Medium Pills -->
-                <?php 
-                $quickMediums = ['Oil', 'Acrylic', 'Watercolor', 'Mixed Media', 'Charcoal & Ink'];
-                foreach ($quickMediums as $qm):
-                ?>
-                    <a href="<?= SITE_URL ?>/shop?medium=<?= urlencode($qm) ?><?= !empty($selectedCat) ? '&category=' . urlencode($selectedCat) : '' ?>" class="pinterest-topic-pill <?= ($selectedMedium === $qm) ? 'active' : '' ?>">
-                        #<?= htmlspecialchars($qm) ?>
-                    </a>
-                <?php endforeach; ?>
-
-                <!-- Quick Price Filter Pills -->
-                <a href="<?= SITE_URL ?>/shop?min_price=0&max_price=10000" class="pinterest-topic-pill <?= ($selectedMinPrice === '0' && $selectedMaxPrice === '10000') ? 'active' : '' ?>">
-                    Under ₹10k
-                </a>
-                <a href="<?= SITE_URL ?>/shop?min_price=10000&max_price=25000" class="pinterest-topic-pill <?= ($selectedMinPrice === '10000' && $selectedMaxPrice === '25000') ? 'active' : '' ?>">
-                    ₹10k &ndash; ₹25k
-                </a>
-                <a href="<?= SITE_URL ?>/shop?min_price=25000" class="pinterest-topic-pill <?= ($selectedMinPrice === '25000' && empty($selectedMaxPrice)) ? 'active' : '' ?>">
-                    ₹25k+ Masterworks
-                </a>
             </div>
         </div>
 
