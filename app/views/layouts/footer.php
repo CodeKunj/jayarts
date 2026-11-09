@@ -38,15 +38,16 @@
                     </ul>
                 </div>
 
-                <!-- Col 3: Customer Care -->
+                <!-- Col 3: Customer Care & Legal -->
                 <div>
-                    <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Customer Care</h5>
+                    <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Customer Care &amp; Legal</h5>
                     <ul class="space-y-2.5 text-xs text-gray-400 font-medium">
                         <li><a href="<?= SITE_URL ?>/track" class="hover:text-white transition-colors">Track Order Delivery</a></li>
-                        <li><a href="<?= SITE_URL ?>/profile/tickets" class="hover:text-white transition-colors">Support Tickets</a></li>
-                        <li><a href="<?= SITE_URL ?>/contact" class="hover:text-white transition-colors">Help & FAQ</a></li>
-                        <li><a href="<?= SITE_URL ?>/blog" class="hover:text-white transition-colors">Art Journal & Stories</a></li>
-                        <li><a href="<?= SITE_URL ?>/profile" class="hover:text-white transition-colors">Account & Orders</a></li>
+                        <li><a href="<?= SITE_URL ?>/profile/tickets" class="hover:text-white transition-colors">Support &amp; Grievance Desk</a></li>
+                        <li><a href="<?= SITE_URL ?>/privacy" class="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Privacy Policy (DPDP Act)</span></a></li>
+                        <li><a href="<?= SITE_URL ?>/terms" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="javascript:void(0)" onclick="openDPDPConsentBanner()" class="hover:text-white transition-colors">Manage Cookie &amp; DPDP Consent</a></li>
+                        <li><a href="<?= SITE_URL ?>/profile/privacy" class="hover:text-white transition-colors">Data Principal Rights Portal</a></li>
                     </ul>
                 </div>
 
@@ -66,15 +67,23 @@
 
             </div>
 
-            <!-- Bottom Line: Copyright & Payment Badges -->
-            <div class="pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-                <p>&copy; <?= date('Y') ?> JayArt Gallery. All rights reserved. Handcrafted Original Paintings.</p>
-                <div class="flex items-center gap-4 text-gray-400 font-semibold text-[11px]">
+            <!-- Bottom Line: Copyright, DPDP Statutory & Payment Badges -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+                <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1 text-center md:text-left">
+                    <p>&copy; <?= date('Y') ?> JayArt Fine Art Gallery (RiTiVerse). All rights reserved.</p>
+                    <span class="hidden md:inline">&bull;</span>
+                    <a href="<?= SITE_URL ?>/privacy" class="hover:text-gray-300 underline font-semibold">DPDP Act, 2023 Compliant</a>
+                    <span>&bull;</span>
+                    <a href="<?= SITE_URL ?>/terms" class="hover:text-gray-300 underline">Terms</a>
+                    <span>&bull;</span>
+                    <a href="mailto:privacy@ritiverse.in" class="hover:text-emerald-400">Grievance: privacy@ritiverse.in</a>
+                </div>
+                <div class="flex items-center gap-4 text-gray-400 font-semibold text-[11px] flex-shrink-0">
                     <span>Razorpay Secure</span>
                     <span>&bull;</span>
                     <span>Direct UPI</span>
                     <span>&bull;</span>
-                    <span>COD Available</span>
+                    <span>100% Insured Delivery</span>
                 </div>
             </div>
         </div>
@@ -82,6 +91,9 @@
 
     <!-- Sticky Mobile Bottom Navigation Bar -->
     <?php require_once APP_PATH . '/views/layouts/bottom_nav.php'; ?>
+
+    <!-- DPDP Act, 2023 Statutory Consent & Cookie Banner -->
+    <?php require_once __DIR__ . '/dpdp_banner.php'; ?>
 
     <!-- Customer Care Floating Chatbox Widget -->
     <div id="curatorChatWidget" class="fixed bottom-[74px] sm:bottom-8 right-3.5 sm:right-6 z-40">

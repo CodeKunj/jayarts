@@ -81,6 +81,11 @@ Router::get('/contact', [SupportController::class, 'contact']);
 Router::post('/contact/submit', [SupportController::class, 'submitContact']);
 Router::post('/chat/send', [SupportController::class, 'chatMessage']);
 
+// DPDP Act, 2023 Statutory Privacy Notice & Terms of Service
+Router::get('/privacy', [LegalController::class, 'privacy']);
+Router::get('/dpdp', [LegalController::class, 'privacy']);
+Router::get('/terms', [LegalController::class, 'terms']);
+
 // Customer Authentication
 Router::any('/login', [AuthController::class, 'login']);
 Router::any('/register', [AuthController::class, 'register']);
@@ -98,6 +103,12 @@ Router::get('/profile/tickets', [ProfileController::class, 'tickets']);
 Router::post('/profile/tickets/create', [ProfileController::class, 'createTicket']);
 Router::get('/profile/ticket/{id}', [ProfileController::class, 'viewTicket']);
 Router::post('/profile/ticket/{id}/reply', [ProfileController::class, 'replyTicket']);
+
+// Profile DPDP Act 2023 Data Principal Rights Portal
+Router::get('/profile/privacy', [ProfileController::class, 'privacy']);
+Router::get('/profile/privacy/export', [ProfileController::class, 'exportData']);
+Router::post('/profile/privacy/nominee', [ProfileController::class, 'updateNominee']);
+Router::post('/profile/privacy/erasure-request', [ProfileController::class, 'requestErasure']);
 
 // Dynamic XML Sitemap for Google & Bing
 Router::get('/sitemap.xml', [SitemapController::class, 'index']);

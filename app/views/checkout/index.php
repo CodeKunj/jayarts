@@ -371,6 +371,16 @@ if (!empty($savedAddresses) && is_array($savedAddresses)) {
                         <?php endif; ?>
                     </div>
 
+                    <!-- DPDP Act, 2023 Statutory Consent & Terms Notice -->
+                    <div class="pt-2">
+                        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-stone-50 border border-stone-200 text-xs text-stone-700 cursor-pointer select-none">
+                            <input type="checkbox" name="dpdp_consent" value="1" required checked class="mt-0.5 rounded border-stone-300 text-[#18181B] focus:ring-[#18181B]">
+                            <span class="leading-relaxed text-[11px] text-stone-600">
+                                I consent to JayArt collecting and processing my digital personal data (name, contact, and shipping address) strictly for order fulfillment, delivery transit via logistics partners, and GST tax invoicing under the <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong>. Read our <a href="<?= SITE_URL ?>/privacy" target="_blank" class="font-bold text-[#18181B] underline hover:text-black">DPDP Privacy Policy</a> and <a href="<?= SITE_URL ?>/terms" target="_blank" class="font-bold text-[#18181B] underline hover:text-black">Terms of Service</a>.
+                            </span>
+                        </label>
+                    </div>
+
                     <!-- Final Submission Button -->
                     <div class="pt-4">
                         <button type="submit" class="w-full py-3.5 sm:py-4 px-4 sm:px-8 bg-[#18181B] hover:bg-black text-white rounded-full font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2">

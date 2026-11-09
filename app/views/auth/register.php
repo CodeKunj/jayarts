@@ -46,6 +46,15 @@
                 <input type="password" name="password" required placeholder="••••••••" class="form-input text-xs">
             </div>
 
+            <div class="pt-1">
+                <label class="flex items-start gap-2 text-[11px] text-stone-600 cursor-pointer select-none">
+                    <input type="checkbox" name="dpdp_consent" value="1" required checked class="mt-0.5 rounded border-stone-300 text-ink focus:ring-ink">
+                    <span>
+                        I consent to JayArt processing my personal data in accordance with the <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong> and agree to the <a href="<?= SITE_URL ?>/privacy" target="_blank" class="font-bold underline text-ink">Privacy Policy</a> &amp; <a href="<?= SITE_URL ?>/terms" target="_blank" class="font-bold underline text-ink">Terms</a>.
+                    </span>
+                </label>
+            </div>
+
             <div class="pt-2">
                 <button type="submit" class="btn-gold w-full py-3 rounded-xl text-xs font-bold tracking-wider">
                     Create Collector Account

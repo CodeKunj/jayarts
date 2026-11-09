@@ -299,5 +299,124 @@ class ProfileController extends Controller {
 
         $this->redirect('/profile/ticket/' . $id);
     }
+
+    /**
+     * DPDP Act 2023: Data Principal Privacy & Rights Portal
+     */
+    public function privacy(): void {
+        self::ensurePrivacyColumns();
+        $userModel = new User();
+        $user = $userModel->find(Auth::id());
+
+        $this->render('profile/privacy', [
+            'user' => $user,
+            'seo'  => ['title' => 'DPDP Privacy & Rights Portal | JayArt']
+        ]);
+    }
+
+    /**
+     * DPDP Section 11: Right to Access Information (Export My Personal Data as JSON)
+     */
+    public function exportData(): void {
+        $userId = (int)Auth::id();
+        $userModel = new User();
+        $user = $userModel->find($userId);
+        if (!$user) {
+            $this->redirect('/profile');
+            return;
+        }
+
+        $addresses = $userModel->getAddresses($userId);
+        
+        $orderModel = new Order();
+        $orders = $orderModel->fetchAll("SELECT * FROM `orders` WHERE `user_id` = :uid", ['uid' => $userId]);
+        foreach ($orders as &$ord) {
+            $ord['items'] = $orderModel->getOrderItems((int)$ord['id']);
+        }
+        unset($ord);
+
+        $wishlistIds = $_SESSION['wishlist'] ?? [];
+
+        $export = [
+            'statutory_notice' => 'Personal Data Export generated under Section 11 of the Digital Personal Data Protection Act, 2023 (DPDPA 2023), Government of India.',
+            'generated_at'     => date('Y-m-d H:i:s T'),
+            'data_fiduciary'   => 'JayArt Fine Art Gallery (RiTiVerse)',
+            'data_principal'   => [
+                'id'              => $user['id'],
+                'name'            => $user['name'],
+                'email'           => $user['email'],
+                'phone'           => $user['phone'] ?? null,
+                'nominee_name'    => $user['nominee_name'] ?? null,
+                'nominee_contact' => $user['nominee_contact'] ?? null,
+                'registered_at'   => $user['created_at'] ?? null,
+            ],
+            'saved_shipping_addresses' => $addresses,
+            'artwork_acquisition_orders' => $orders,
+            'saved_wishlist_product_ids' => $wishlistIds
+        ];
+
+        header('Content-Type: application/json; charset=utf-8');
+        header('Content-Disposition: attachment; filename="jayart-personal-data-' . date('Ymd-His') . '.json"');
+        echo json_encode($export, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    /**
+     * DPDP Section 14: Right to Nominate a Beneficiary
+     */
+    public function updateNominee(): void {
+        $this->validateCSRF();
+        self::ensurePrivacyColumns();
+
+        $name = trim((string)($_POST['nominee_name'] ?? ''));
+        $contact = trim((string)($_POST['nominee_contact'] ?? ''));
+
+        $userModel = new User();
+        $userModel->update((int)Auth::id(), [
+            'nominee_name'    => $name,
+            'nominee_contact' => $contact
+        ]);
+
+        Auth::setFlash('success', 'DPDP Nominee details updated successfully under Section 14 of DPDP Act.');
+        $this->redirect('/profile/privacy');
+    }
+
+    /**
+     * DPDP Section 12: Right to Erasure / Request Account Deletion
+     */
+    public function requestErasure(): void {
+        $this->validateCSRF();
+        $reason = trim((string)($_POST['erasure_reason'] ?? 'Requested account deletion under DPDP Act 2023'));
+
+        $user = Auth::user();
+        $ticketModel = new Ticket();
+        $ticketId = $ticketModel->createTicket([
+            'user_id'        => $user['id'],
+            'customer_name'  => $user['name'],
+            'customer_email' => $user['email'],
+            'subject'        => 'DPDP Act Statutory Data Erasure Request (Section 12)',
+            'category'       => 'privacy_erasure',
+            'priority'       => 'high',
+            'message'        => "Data Principal Erasure Request:\n\nUser ID: {$user['id']}\nName: {$user['name']}\nEmail: {$user['email']}\n\nReason/Note: {$reason}\n\nNotice: Please verify pending orders before purging account records, while retaining statutory GST invoices for 6 years as mandated by the CGST Act, 2017."
+        ]);
+
+        Auth::setFlash('success', 'Statutory data erasure request submitted to Grievance Officer. Ticket #' . $ticketId . ' generated.');
+        $this->redirect('/profile/tickets');
+    }
+
+    /**
+     * Self-healing DB check for DPDP columns
+     */
+    private static function ensurePrivacyColumns(): void {
+        try {
+            $db = Database::connect();
+            if ($db) {
+                $cols = $db->query("SHOW COLUMNS FROM `users` LIKE 'nominee_name'")->fetchAll();
+                if (empty($cols)) {
+                    $db->exec("ALTER TABLE `users` ADD COLUMN `nominee_name` VARCHAR(120) NULL, ADD COLUMN `nominee_contact` VARCHAR(180) NULL, ADD COLUMN `dpdp_consent_at` DATETIME NULL");
+                }
+            }
+        } catch (\Throwable $e) {}
+    }
 }
 
