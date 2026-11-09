@@ -344,40 +344,63 @@ $navCategories = $categoryModel->getActiveWithCounts();
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
             
             <!-- 1. Top Modular Capsule Navigation Bar -->
-            <div class="flex items-center justify-between gap-2 sm:gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4">
                 
-                <!-- Left: Brand Logo + Atelier Salon Tag -->
-                <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-                    <a href="<?= SITE_URL ?>" class="inline-flex items-center focus:outline-none transition-transform hover:opacity-90 active:scale-95 py-0.5" title="JayArt Fine Art Atelier">
-                        <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-8 sm:h-11 w-auto object-contain">
-                    </a>
+                <!-- Left: Brand Logo + Atelier Salon Tag (Mobile: Clean Logo & Currency row) -->
+                <div class="flex items-center justify-between sm:justify-start gap-2 sm:gap-4 flex-shrink-0">
+                    <div class="flex items-center gap-2 sm:gap-4">
+                        <a href="<?= SITE_URL ?>" class="inline-flex items-center focus:outline-none transition-transform hover:opacity-90 active:scale-95 py-0.5" title="JayArt Fine Art Atelier">
+                            <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-8 sm:h-11 w-auto object-contain">
+                        </a>
 
-                    <!-- Collection / Breadcrumb Capsule (Desktop Only) -->
-                    <div class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black/[0.06] rounded-full shadow-2xs text-[11px] font-semibold text-stone-700">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                        <span>Salon 2026</span>
-                        <span class="text-stone-300">/</span>
-                        <a href="<?= SITE_URL ?>/shop" class="text-stone-500 hover:text-black">Paintings</a>
+                        <!-- Collection / Breadcrumb Capsule (Desktop Only) -->
+                        <div class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black/[0.06] rounded-full shadow-2xs text-[11px] font-semibold text-stone-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span>Salon 2026</span>
+                            <span class="text-stone-300">/</span>
+                            <a href="<?= SITE_URL ?>/shop" class="text-stone-500 hover:text-black">Paintings</a>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Center: Search Capsule Bar (Unified Single Line on Both Mobile & Desktop) -->
-                <div class="flex-1 min-w-0 max-w-lg mx-1.5 sm:mx-3">
-                    <form method="GET" action="<?= SITE_URL ?>/shop" class="relative flex items-center">
-                        <input type="text" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" placeholder="Search original paintings, mediums, artists..." class="w-full bg-white text-xs sm:text-sm text-[#18181B] rounded-full pl-3.5 sm:pl-5 pr-8 sm:pr-12 py-1.5 sm:py-2.5 border border-black/[0.08] focus:outline-none focus:ring-2 focus:ring-black/10 shadow-2xs placeholder-stone-400">
-                        <button type="submit" aria-label="Search" class="absolute right-1 sm:right-1.5 w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-[#18181B] hover:bg-black text-white flex items-center justify-center shadow-xs transition-transform active:scale-90">
-                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Right Action Capsules -->
-                <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                    <!-- Currency Selector Capsule Dropdown (Always visible) -->
+                    <!-- Mobile-Only Currency Selector in Top Row (Saves header height, zero clutter) -->
                     <?php 
                     $activeCurr = Currency::getActive();
                     $enabledCurrs = Currency::getEnabled();
                     ?>
+                    <div class="sm:hidden relative" id="siteCurrencyDropdownMobile">
+                        <button type="button" onclick="toggleCurrencyDropdown(event)" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-stone-50 border border-black/[0.08] rounded-full shadow-2xs text-xs font-bold text-stone-800 transition-colors" title="Change Currency">
+                            <span class="font-mono text-stone-500 text-[11px]"><?= htmlspecialchars($activeCurr['symbol']) ?></span>
+                            <span class="text-[11px]"><?= htmlspecialchars($activeCurr['code']) ?></span>
+                            <svg class="w-3 h-3 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div id="siteCurrencyMenuMobile" class="hidden absolute right-0 mt-2 w-48 bg-white/98 backdrop-blur-md rounded-2xl shadow-xl border border-black/[0.08] py-1.5 z-50 overflow-hidden text-left">
+                            <div class="px-3.5 py-1 text-[10px] font-bold text-stone-400 uppercase tracking-wider">Select Currency</div>
+                            <?php foreach ($enabledCurrs as $c): ?>
+                                <a href="<?= SITE_URL ?>/currency/switch/<?= $c['code'] ?>" class="flex items-center justify-between px-3.5 py-2 text-xs hover:bg-stone-100 transition-colors <?= $c['code'] === $activeCurr['code'] ? 'font-bold text-black bg-stone-50' : 'text-stone-700' ?>">
+                                    <span class="flex items-center gap-2">
+                                        <span class="w-5 text-center font-mono text-stone-500"><?= htmlspecialchars($c['symbol']) ?></span>
+                                        <span><?= htmlspecialchars($c['name']) ?></span>
+                                    </span>
+                                    <span class="text-[10px] font-mono text-stone-400"><?= htmlspecialchars($c['code']) ?></span>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: Search Capsule Bar (Full-Width on Mobile, Centered Capsule on Desktop) -->
+                <div class="w-full sm:flex-1 sm:min-w-0 sm:max-w-lg sm:mx-3">
+                    <form method="GET" action="<?= SITE_URL ?>/shop" class="relative flex items-center">
+                        <input type="text" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" placeholder="Search original paintings, mediums, artists..." class="w-full bg-white text-xs sm:text-sm text-[#18181B] rounded-full pl-4 sm:pl-5 pr-9 sm:pr-12 py-2 sm:py-2.5 border border-black/[0.08] focus:outline-none focus:ring-2 focus:ring-black/10 shadow-2xs placeholder-stone-400">
+                        <button type="submit" aria-label="Search" class="absolute right-1 sm:right-1.5 w-7 sm:w-8 h-7 sm:h-8 rounded-full bg-[#18181B] hover:bg-black text-white flex items-center justify-center shadow-xs transition-transform active:scale-90">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right Action Capsules (Desktop Only) -->
+                <div class="hidden sm:flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                    <!-- Currency Selector Capsule Dropdown (Desktop) -->
                     <div class="relative" id="siteCurrencyDropdown">
                         <button type="button" onclick="toggleCurrencyDropdown(event)" class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-white hover:bg-stone-50 border border-black/[0.06] rounded-full shadow-xs text-xs font-bold text-stone-800 transition-colors" title="Change Currency">
                             <span class="font-mono text-stone-500 text-[11px]"><?= htmlspecialchars($activeCurr['symbol']) ?></span>

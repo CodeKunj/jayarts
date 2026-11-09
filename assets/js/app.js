@@ -234,22 +234,25 @@ function showToast(message, type = 'success') {
 }
 
 /**
- * Header Currency Switcher Dropdown
+ * Header Currency Switcher Dropdown (Supports Mobile & Desktop)
  */
 window.toggleCurrencyDropdown = function(e) {
     if (e) e.stopPropagation();
-    const menu = document.getElementById('siteCurrencyMenu');
+    const btn = e ? (e.currentTarget || e.target.closest('button')) : null;
+    const parent = btn ? btn.closest('.relative') : null;
+    const menu = parent ? parent.querySelector('[id^="siteCurrencyMenu"]') : document.getElementById('siteCurrencyMenu');
     if (menu) {
         menu.classList.toggle('hidden');
     }
 };
 
 document.addEventListener('click', (e) => {
-    const wrap = document.getElementById('siteCurrencyDropdown');
-    const menu = document.getElementById('siteCurrencyMenu');
-    if (menu && !menu.classList.contains('hidden') && wrap && !wrap.contains(e.target)) {
-        menu.classList.add('hidden');
-    }
+    document.querySelectorAll('[id^="siteCurrencyMenu"]').forEach(menu => {
+        const wrap = menu.closest('.relative');
+        if (!menu.classList.contains('hidden') && wrap && !wrap.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
+    });
 });
 
 /**

@@ -241,67 +241,133 @@ if (!empty($savedAddresses) && is_array($savedAddresses)) {
                 </div>
 
                 <!-- Payment Details Card (Shopcart style with Radio buttons) -->
+                <?php
+                $gateways = (!empty($gateways) && is_array($gateways)) ? $gateways : Payment::defaultGateways();
+                
+                // Determine sensible default payment method
+                $selectedMethod = $_POST['payment_method'] ?? '';
+                if (empty($selectedMethod)) {
+                    if (!empty($gateways['upi']['is_enabled'])) {
+                        $selectedMethod = 'upi';
+                    } elseif (!empty($gateways['cod']['is_enabled'])) {
+                        $selectedMethod = 'cod';
+                    } elseif (!empty($gateways['razorpay']['is_enabled'])) {
+                        $selectedMethod = 'razorpay';
+                    } elseif (!empty($gateways['bank']['is_enabled'])) {
+                        $selectedMethod = 'bank';
+                    } else {
+                        $selectedMethod = 'cod';
+                    }
+                }
+                ?>
                 <div class="bg-white border border-stone-200/80 rounded-3xl p-5 sm:p-7 shadow-xs space-y-4">
-                    <h2 class="text-base font-extrabold text-[#18181B]">Payment Details</h2>
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-base font-extrabold text-[#18181B]">Select Payment Method</h2>
+                        <span class="text-[11px] text-stone-500 font-medium">100% Secure &amp; Encrypted</span>
+                    </div>
 
                     <div class="space-y-3">
-                        <!-- 1. Razorpay Option -->
-                        <?php if (!empty($gateways['razorpay']['is_enabled'])): ?>
-                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors gap-2">
-                                <div class="flex items-center gap-3 min-w-0">
-                                    <input type="radio" name="payment_method" value="razorpay" checked onchange="togglePaymentBox('razorpay')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
-                                    <span class="text-xs font-bold text-[#18181B] truncate">Credit / Debit Card (Razorpay)</span>
-                                </div>
-                                <div class="flex items-center gap-1.5 opacity-80 flex-shrink-0">
-                                    <span class="text-[10px] font-bold text-stone-400">VISA / MC</span>
-                                </div>
-                            </label>
-                        <?php endif; ?>
-
-                        <!-- 2. Direct Dynamic UPI QR Option -->
+                        <!-- 1. Direct Dynamic UPI QR Option -->
                         <?php if (!empty($gateways['upi']['is_enabled'])): ?>
-                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors gap-2">
+                            <label class="flex items-center justify-between p-3.5 border rounded-2xl cursor-pointer transition-all gap-2 <?= ($selectedMethod === 'upi') ? 'border-stone-900 bg-stone-50/60 shadow-xs' : 'border-stone-200 hover:border-stone-400' ?>">
                                 <div class="flex items-center gap-3 min-w-0">
-                                    <input type="radio" name="payment_method" value="upi" onchange="togglePaymentBox('upi')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
-                                    <span class="text-xs font-bold text-[#18181B] truncate">Direct UPI QR (GPay, PhonePe)</span>
+                                    <input type="radio" name="payment_method" value="upi" <?= ($selectedMethod === 'upi') ? 'checked' : '' ?> onchange="togglePaymentBox('upi')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
+                                    <div class="min-w-0">
+                                        <span class="text-xs font-bold text-[#18181B] block">Direct UPI QR (GPay, PhonePe, Paytm, BHIM)</span>
+                                        <span class="text-[10px] text-stone-500">Scan QR with any UPI app &amp; zero surcharge</span>
+                                    </div>
                                 </div>
-                                <span class="text-[10px] bg-stone-100 text-[#18181B] font-bold px-2 py-0.5 rounded-full border border-stone-200 flex-shrink-0">Instant</span>
+                                <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200 flex-shrink-0">Instant &amp; Fast</span>
                             </label>
 
                             <!-- Dynamic UPI Expandable Box -->
-                            <div id="upiBox" class="hidden p-4 bg-stone-50 rounded-2xl space-y-3 text-xs border border-stone-200">
+                            <div id="upiBox" class="<?= ($selectedMethod === 'upi') ? '' : 'hidden' ?> p-4 bg-stone-50 rounded-2xl space-y-3 text-xs border border-stone-200">
                                 <?php if ($upiData): ?>
                                     <div class="text-center">
-                                        <p class="font-bold text-[#18181B] mb-2">Scan & Pay <?= Validator::formatPrice($total) ?></p>
-                                        <img src="<?= htmlspecialchars($upiData['qr_image']) ?>" alt="UPI QR" class="w-40 h-40 mx-auto rounded-xl border border-stone-200 shadow-sm">
-                                        <p class="text-[11px] text-stone-500 mt-2 font-mono">UPI ID: <strong><?= htmlspecialchars($upiData['vpa']) ?></strong></p>
+                                        <p class="font-bold text-[#18181B] mb-2">Scan &amp; Pay <?= Validator::formatPrice($total) ?></p>
+                                        <img src="<?= htmlspecialchars($upiData['qr_image']) ?>" alt="UPI QR" class="w-40 h-40 mx-auto rounded-xl border border-stone-200 shadow-sm bg-white p-1">
+                                        <p class="text-[11px] text-stone-500 mt-2 font-mono">UPI VPA: <strong><?= htmlspecialchars($upiData['vpa']) ?></strong></p>
                                     </div>
                                     <div>
-                                        <label class="font-bold text-[#18181B] block mb-1">Enter 12-digit UPI UTR / Ref No. *</label>
-                                        <input type="text" name="upi_utr_number" placeholder="e.g. 408291028371" class="form-input text-xs font-mono">
+                                        <label class="font-bold text-[#18181B] block mb-1">Enter 12-digit UPI UTR / Reference No. *</label>
+                                        <input type="text" name="upi_utr_number" placeholder="e.g. 408291028371" class="form-input text-xs font-mono bg-white">
+                                        <p class="text-[10px] text-stone-400 mt-1">Available in your GPay / PhonePe payment receipt after transfer</p>
                                     </div>
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
 
-                        <!-- 3. Cash on Delivery (COD) -->
+                        <!-- 2. Cash on Delivery (COD) -->
                         <?php if (!empty($gateways['cod']['is_enabled'])): ?>
-                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors gap-2">
+                            <label class="flex items-center justify-between p-3.5 border rounded-2xl cursor-pointer transition-all gap-2 <?= ($selectedMethod === 'cod') ? 'border-stone-900 bg-stone-50/60 shadow-xs' : 'border-stone-200 hover:border-stone-400' ?>">
                                 <div class="flex items-center gap-3 min-w-0">
-                                    <input type="radio" name="payment_method" value="cod" onchange="togglePaymentBox('cod')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
-                                    <span class="text-xs font-bold text-[#18181B] truncate">Cash on Delivery (COD)</span>
+                                    <input type="radio" name="payment_method" value="cod" <?= ($selectedMethod === 'cod') ? 'checked' : '' ?> onchange="togglePaymentBox('cod')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
+                                    <div class="min-w-0">
+                                        <span class="text-xs font-bold text-[#18181B] block">Cash on Delivery (Pay on Delivery)</span>
+                                        <span class="text-[10px] text-stone-500">Pay cash or UPI upon delivery of your artwork</span>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] bg-stone-100 text-[#18181B] font-bold px-2 py-0.5 rounded-full border border-stone-200 flex-shrink-0">COD</span>
+                            </label>
+
+                            <!-- COD Explanatory Box -->
+                            <div id="codBox" class="<?= ($selectedMethod === 'cod') ? '' : 'hidden' ?> p-3.5 bg-stone-50 rounded-2xl text-xs border border-stone-200 text-stone-600">
+                                <p class="flex items-center gap-2 font-semibold text-[#18181B] mb-1">
+                                    <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Museum-Grade Insured Delivery</span>
+                                </p>
+                                <p class="text-[11px] leading-relaxed">Our courier will hand over your insured art consignment and collect payment via Cash or UPI at your doorstep.</p>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- 3. Razorpay Option -->
+                        <?php if (!empty($gateways['razorpay']['is_enabled'])): ?>
+                            <label class="flex items-center justify-between p-3.5 border rounded-2xl cursor-pointer transition-all gap-2 <?= ($selectedMethod === 'razorpay') ? 'border-stone-900 bg-stone-50/60 shadow-xs' : 'border-stone-200 hover:border-stone-400' ?>">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <input type="radio" name="payment_method" value="razorpay" <?= ($selectedMethod === 'razorpay') ? 'checked' : '' ?> onchange="togglePaymentBox('razorpay')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
+                                    <div class="min-w-0">
+                                        <span class="text-xs font-bold text-[#18181B] block">Credit / Debit Card / Netbanking (Razorpay)</span>
+                                        <span class="text-[10px] text-stone-500">Visa, Mastercard, RuPay, Amex, Netbanking</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1.5 opacity-80 flex-shrink-0">
+                                    <span class="text-[10px] font-bold text-stone-400">VISA / MC</span>
                                 </div>
                             </label>
+
+                            <div id="razorpayBox" class="<?= ($selectedMethod === 'razorpay') ? '' : 'hidden' ?> p-3.5 bg-stone-50 rounded-2xl text-xs border border-stone-200 text-stone-600">
+                                <p class="text-[11px] leading-relaxed">You will be securely redirected to the Razorpay checkout portal to complete payment via Card or Netbanking.</p>
+                            </div>
                         <?php endif; ?>
 
                         <!-- 4. Direct Bank Transfer -->
                         <?php if (!empty($gateways['bank']['is_enabled'])): ?>
-                            <label class="flex items-center justify-between p-3.5 border border-stone-200 rounded-2xl cursor-pointer hover:border-stone-900 transition-colors gap-2">
+                            <?php $bankInfo = $gateways['bank']; ?>
+                            <label class="flex items-center justify-between p-3.5 border rounded-2xl cursor-pointer transition-all gap-2 <?= ($selectedMethod === 'bank') ? 'border-stone-900 bg-stone-50/60 shadow-xs' : 'border-stone-200 hover:border-stone-400' ?>">
                                 <div class="flex items-center gap-3 min-w-0">
-                                    <input type="radio" name="payment_method" value="bank" onchange="togglePaymentBox('bank')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
-                                    <span class="text-xs font-bold text-[#18181B] truncate">Direct Bank Wire (NEFT / RTGS)</span>
+                                    <input type="radio" name="payment_method" value="bank" <?= ($selectedMethod === 'bank') ? 'checked' : '' ?> onchange="togglePaymentBox('bank')" class="text-[#18181B] focus:ring-[#18181B] flex-shrink-0">
+                                    <div class="min-w-0">
+                                        <span class="text-xs font-bold text-[#18181B] block">Direct Bank Wire (NEFT / RTGS / IMPS)</span>
+                                        <span class="text-[10px] text-stone-500">Transfer directly into JayArt Atelier bank account</span>
+                                    </div>
                                 </div>
+                                <span class="text-[10px] bg-stone-100 text-[#18181B] font-bold px-2 py-0.5 rounded-full border border-stone-200 flex-shrink-0">Bank Wire</span>
                             </label>
+
+                            <!-- Bank Details Expandable Box -->
+                            <div id="bankBox" class="<?= ($selectedMethod === 'bank') ? '' : 'hidden' ?> p-4 bg-stone-50 rounded-2xl space-y-2 text-xs border border-stone-200">
+                                <p class="font-bold text-[#18181B]">Beneficiary Bank Account Details:</p>
+                                <div class="bg-white p-3 rounded-xl border border-stone-200/80 font-mono text-[11px] space-y-1">
+                                    <div><span class="text-stone-400">Bank:</span> <strong><?= htmlspecialchars($bankInfo['bank_name'] ?? 'HDFC Bank Ltd') ?></strong></div>
+                                    <div><span class="text-stone-400">A/C Name:</span> <strong><?= htmlspecialchars($bankInfo['account_name'] ?? 'JayArt Fine Art Atelier LLP') ?></strong></div>
+                                    <div><span class="text-stone-400">A/C No:</span> <strong><?= htmlspecialchars($bankInfo['account_no'] ?? '50200084920194') ?></strong></div>
+                                    <div><span class="text-stone-400">IFSC:</span> <strong><?= htmlspecialchars($bankInfo['ifsc_code'] ?? 'HDFC0000240') ?></strong></div>
+                                    <?php if (!empty($bankInfo['branch'])): ?>
+                                        <div><span class="text-stone-400">Branch:</span> <strong><?= htmlspecialchars($bankInfo['branch']) ?></strong></div>
+                                    <?php endif; ?>
+                                </div>
+                                <p class="text-[10px] text-stone-500">Please mention your order reference upon transferring. We will verify and process dispatch promptly.</p>
+                            </div>
                         <?php endif; ?>
                     </div>
 
@@ -330,12 +396,19 @@ function selectCheckoutCoupon(code) {
 }
 
 function togglePaymentBox(method) {
-    const upiBox = document.getElementById('upiBox');
-    if (upiBox) {
-        if (method === 'upi') {
-            upiBox.classList.remove('hidden');
-        } else {
-            upiBox.classList.add('hidden');
+    const boxes = {
+        'upi': document.getElementById('upiBox'),
+        'cod': document.getElementById('codBox'),
+        'razorpay': document.getElementById('razorpayBox'),
+        'bank': document.getElementById('bankBox')
+    };
+    for (const key in boxes) {
+        if (boxes[key]) {
+            if (key === method) {
+                boxes[key].classList.remove('hidden');
+            } else {
+                boxes[key].classList.add('hidden');
+            }
         }
     }
 }

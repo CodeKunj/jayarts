@@ -83,15 +83,16 @@ class Product extends Model {
 
     /**
      * Get Featured Paintings for Home Page (Cached)
+     * Strictly honors is_featured = 1 so non-featured products stay in the catalog
      */
-    public function getFeatured(int $limit = 24): array {
+    public function getFeatured(int $limit = 8): array {
         $ttl = (int)Cache::getConfig()['homepage_ttl'];
         $cacheKey = 'products:featured:' . $limit;
 
         return Cache::remember($cacheKey, $ttl, function() use ($limit) {
             if ($this->db !== null) {
                 try {
-                    // 1. Try fetching explicit featured active paintings
+                    // 1. Strictly fetch active paintings explicitly marked as featured by admin
                     $sql = "SELECT p.*, c.name as category_name,
                                    (SELECT image_path FROM `product_images` WHERE `product_id` = p.id AND `is_primary` = 1 LIMIT 1) as primary_image
                             FROM `products` p
@@ -103,31 +104,21 @@ class Product extends Model {
                         return array_map([self::class, 'formatProduct'], $res);
                     }
 
-                    // 2. Fallback to any active paintings
-                    $sqlActive = "SELECT p.*, c.name as category_name,
+                    // 2. Safe fallback ONLY if admin has not yet marked any painting as featured:
+                    // Return a small teaser of up to 4 recent active paintings (never dump the whole catalog!)
+                    $sqlRecent = "SELECT p.*, c.name as category_name,
                                          (SELECT image_path FROM `product_images` WHERE `product_id` = p.id AND `is_primary` = 1 LIMIT 1) as primary_image
                                   FROM `products` p
                                   LEFT JOIN `categories` c ON p.category_id = c.id
                                   WHERE p.status = 'active'
-                                  ORDER BY p.id DESC LIMIT {$limit}";
-                    $resActive = $this->fetchAll($sqlActive);
-                    if (!empty($resActive)) {
-                        return array_map([self::class, 'formatProduct'], $resActive);
+                                  ORDER BY p.id DESC LIMIT 4";
+                    $resRecent = $this->fetchAll($sqlRecent);
+                    if (!empty($resRecent)) {
+                        return array_map([self::class, 'formatProduct'], $resRecent);
                     }
 
-                    // 3. Fallback to any paintings in catalog
-                    $sqlAll = "SELECT p.*, c.name as category_name,
-                                      (SELECT image_path FROM `product_images` WHERE `product_id` = p.id AND `is_primary` = 1 LIMIT 1) as primary_image
-                               FROM `products` p
-                               LEFT JOIN `categories` c ON p.category_id = c.id
-                               ORDER BY p.id DESC LIMIT {$limit}";
-                    $resAll = $this->fetchAll($sqlAll);
-                    if (!empty($resAll)) {
-                        return array_map([self::class, 'formatProduct'], $resAll);
-                    }
-                    // Return empty list if no paintings in catalog
                     return [];
-                } catch (Throwable $e) {
+                } catch (\Throwable $e) {
                     error_log('getFeatured DB notice: ' . $e->getMessage());
                 }
             }

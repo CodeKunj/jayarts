@@ -160,16 +160,16 @@ $blogs = !empty($latestBlogs) ? $latestBlogs : (!empty($recentBlogs) ? $recentBl
                             
                             <!-- Top Row: Medium Pill & Red Save Pin Button -->
                             <div class="flex items-center justify-between w-full">
-                                <span class="pinterest-tag-badge line-clamp-1 max-w-[130px] sm:max-w-[160px]">
+                                <span class="pinterest-tag-badge hidden sm:inline-block truncate max-w-[140px]">
                                     <?= htmlspecialchars($medium) ?>
                                 </span>
 
                                 <button type="button" 
                                         onclick="togglePinSave(<?= $pid ?>, this)" 
-                                        class="pinterest-save-btn <?= $isWish ? 'is-saved' : '' ?>"
+                                        class="pinterest-save-btn <?= $isWish ? 'is-saved' : '' ?> ml-auto"
                                         title="<?= $isWish ? 'Saved to Wishlist' : 'Save to Wishlist' ?>">
                                     <svg class="w-3.5 h-3.5" fill="<?= $isWish ? 'currentColor' : 'none' ?>" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                    <span class="save-label"><?= $isWish ? 'Saved' : 'Save' ?></span>
+                                    <span class="save-label hidden sm:inline"><?= $isWish ? 'Saved' : 'Save' ?></span>
                                 </button>
                             </div>
 
