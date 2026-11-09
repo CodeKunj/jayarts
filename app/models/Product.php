@@ -82,6 +82,27 @@ class Product extends Model {
     }
 
     /**
+     * Calculate organic Pinterest masonry aspect ratio
+     * Parses physical dimensions (e.g. "28 x 38 in", "36 x 36") or falls back to an aesthetic fine art cycle
+     */
+    public static function getAspectRatio(?string $dimensions, int $index = 0): string {
+        if (!empty($dimensions)) {
+            if (preg_match('/(\d+(?:\.\d+)?)\s*(?:x|X|\*|×)\s*(\d+(?:\.\d+)?)/', $dimensions, $m)) {
+                $w = (float)$m[1];
+                $h = (float)$m[2];
+                if ($w > 0 && $h > 0) {
+                    $ratio = $w / $h;
+                    if ($ratio < 0.58) { $w = 58; $h = 100; }
+                    elseif ($ratio > 1.65) { $w = 165; $h = 100; }
+                    return round($w, 1) . ' / ' . round($h, 1);
+                }
+            }
+        }
+        $fallbacks = ['4 / 5', '3 / 4', '1 / 1', '2 / 3', '4 / 3'];
+        return $fallbacks[$index % count($fallbacks)];
+    }
+
+    /**
      * Get Featured Paintings for Home Page (Cached)
      * Strictly honors is_featured = 1 so non-featured products stay in the catalog
      */

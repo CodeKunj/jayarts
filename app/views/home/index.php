@@ -136,7 +136,7 @@ $blogs = !empty($latestBlogs) ? $latestBlogs : (!empty($recentBlogs) ? $recentBl
                 <div class="pinterest-pin group" data-pin-id="<?= $pid ?>">
                     
                     <!-- Media Box with Natural Aspect Ratio & Pinterest Floating Controls -->
-                    <div class="pinterest-pin-media" onclick='openArtInspectModal(<?= json_encode([
+                    <div class="pinterest-pin-media" style="aspect-ratio: <?= Product::getAspectRatio($dimensions, $index) ?>;" onclick='openArtInspectModal(<?= json_encode([
                         'id' => $pid,
                         'title' => $p['title'],
                         'slug' => $slug,

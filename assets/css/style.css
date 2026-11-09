@@ -393,6 +393,188 @@ header.site-sticky-header,
   z-index: 999 !important;
 }
 
+/* Master Header Responsive Flex Architecture */
+.site-master-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+}
+
+.site-logo-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-shrink: 0 !important;
+  order: 1 !important;
+}
+
+.site-actions-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+  order: 2 !important;
+}
+
+.site-search-group {
+  width: 100% !important;
+  order: 3 !important;
+  margin-top: 4px !important;
+}
+
+@media (min-width: 900px) {
+  .site-master-nav {
+    flex-wrap: nowrap !important;
+    gap: 16px !important;
+  }
+  .site-actions-group {
+    order: 3 !important;
+    gap: 8px !important;
+    margin-left: 0 !important;
+  }
+  .site-search-group {
+    order: 2 !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
+    max-width: 500px !important;
+    margin: 0 12px !important;
+    margin-top: 0 !important;
+  }
+}
+
+/* ==========================================================================
+   Header Action Pills - Pixel-Perfect Uniform Height & Text Alignment Architecture
+   ========================================================================== */
+.site-header-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 11px !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #18181B !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: all 0.15s ease !important;
+  vertical-align: middle !important;
+}
+
+.site-header-pill:hover {
+  background: #F9FAFB !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
+  color: #000000 !important;
+}
+
+@media (min-width: 640px) {
+  .site-header-pill {
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    padding: 0 13px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* Circular pill variant (Wishlist / Mobile User Avatar) */
+.site-header-pill.is-circle {
+  width: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+}
+
+@media (min-width: 640px) {
+  .site-header-pill.is-circle {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    padding: 0 !important;
+  }
+}
+
+/* Profile / Sign In Pill variant */
+.site-header-pill.is-profile {
+  padding-left: 5px !important;
+  padding-right: 12px !important;
+  gap: 7px !important;
+}
+
+@media (min-width: 640px) {
+  .site-header-pill.is-profile {
+    padding-left: 6px !important;
+    padding-right: 14px !important;
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .site-header-pill.is-profile.user-logged-in {
+    width: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+  }
+}
+
+/* Inner elements for guaranteed optical centering */
+.site-header-pill .pill-avatar {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  background: #F4F4F5 !important;
+  color: #52525B !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 640px) {
+  .site-header-pill .pill-avatar {
+    width: 26px !important;
+    height: 26px !important;
+  }
+}
+
+.site-header-pill svg {
+  display: block !important;
+  flex-shrink: 0 !important;
+}
+
+.site-header-pill .pill-text {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #18181B !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 /* Cross-browser scrollbar hiding */
 .scrollbar-none::-webkit-scrollbar {
   display: none !important;
@@ -631,78 +813,119 @@ header.site-sticky-header,
    Pinterest-Inspired Waterfall Masonry & Pin Cards
    Tactile Discovery Feed (Natural Image Proportions & True Waterfall)
    ==================================================================== */
+/* Native CSS Column Masonry Base (Zero JS lag, instant Pinterest layout) */
 .pinterest-masonry-grid {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 12px;
+  column-count: 2;
+  column-gap: 14px;
   width: 100%;
 }
 
 @media (min-width: 640px) {
   .pinterest-masonry-grid {
-    gap: 16px;
+    column-count: 3;
+    column-gap: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pinterest-masonry-grid {
+    column-count: 4;
+    column-gap: 18px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .pinterest-masonry-grid {
+    column-count: 5;
+    column-gap: 20px;
+  }
+}
+
+/* Upgraded Dynamic Flex Waterfall Layout (When JS balances shortest-column) */
+.pinterest-masonry-grid.is-waterfall-ready {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  column-count: auto !important;
+  gap: 14px !important;
+}
+
+@media (min-width: 640px) {
+  .pinterest-masonry-grid.is-waterfall-ready {
+    gap: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pinterest-masonry-grid.is-waterfall-ready {
+    gap: 18px !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .pinterest-masonry-grid.is-waterfall-ready {
+    gap: 20px !important;
   }
 }
 
 /* Individual Responsive Waterfall Columns */
 .pinterest-column {
-  flex: 1 1 0%;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
 }
 
 @media (min-width: 640px) {
   .pinterest-column {
-    gap: 16px;
-  }
-}
-
-/* CSS Fallback before JavaScript waterfall initializes */
-.pinterest-masonry-grid:not(.is-waterfall-ready) {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-@media (min-width: 640px) {
-  .pinterest-masonry-grid:not(.is-waterfall-ready) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
+    gap: 16px !important;
   }
 }
 
 @media (min-width: 1024px) {
-  .pinterest-masonry-grid:not(.is-waterfall-ready) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
+  .pinterest-column {
+    gap: 18px !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .pinterest-column {
+    gap: 20px !important;
   }
 }
 
 .pinterest-pin {
-  display: flex;
-  flex-direction: column;
+  display: inline-block;
+  break-inside: avoid-column;
+  page-break-inside: avoid;
   width: 100%;
+  margin-bottom: 14px;
   position: relative;
-  border-radius: 18px;
+  border-radius: 16px;
   background-color: #FFFFFF;
-  border: 1px solid rgba(182, 122, 49, 0.14);
-  box-shadow: 0 2px 8px rgba(182, 122, 49, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
   overflow: hidden;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+
+.pinterest-column .pinterest-pin {
+  margin-bottom: 0 !important;
 }
 
 @media (min-width: 640px) {
   .pinterest-pin {
     border-radius: 20px;
+    margin-bottom: 16px;
   }
 }
 
 .pinterest-pin:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 30px rgba(182, 122, 49, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09);
+  border-color: rgba(0, 0, 0, 0.14);
 }
 
 /* Pin Image Box (Preserves natural painting proportions like Pinterest) */
@@ -712,23 +935,25 @@ header.site-sticky-header,
   overflow: hidden;
   background-color: #F4F4F5;
   cursor: pointer;
+  display: block;
 }
 
 .pinterest-pin-media a {
   display: block;
   width: 100%;
+  height: 100%;
 }
 
 .pinterest-pin-media img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   object-fit: cover;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pinterest-pin:hover .pinterest-pin-media img {
-  transform: scale(1.025);
+  transform: scale(1.03);
 }
 
 /* Floating Overlay Action Pills (Pinterest Style) */

@@ -276,18 +276,17 @@ function initPinterestWaterfall() {
 
         const width = grid.getBoundingClientRect().width || window.innerWidth;
 
-        // Determine column count:
-        // Mobile (< 640px): 2 columns
-        // Tablet (640px - 1023px): 3 columns
-        // Desktop (>= 1024px): 4 columns (or 3 columns if inside shop page sidebar layout)
+        // Dynamic responsive column counts:
+        // Mobile (< 600px): 2 columns
+        // Tablet (600px - 959px): 3 columns
+        // Desktop (960px - 1319px): 4 columns
+        // Wide Desktop (>= 1320px): 5 columns
         let colCount = 2;
-        if (width >= 1080) {
+        if (width >= 1320) {
+            colCount = 5;
+        } else if (width >= 960) {
             colCount = 4;
-        } else if (width >= 640) {
-            colCount = 3;
-        }
-
-        if (grid.closest('main') && width < 1200 && width >= 720) {
+        } else if (width >= 600) {
             colCount = 3;
         }
 
@@ -298,7 +297,7 @@ function initPinterestWaterfall() {
         }
         grid._currentCols = colCount;
 
-        const gap = width < 640 ? '12px' : '16px';
+        const gap = width < 640 ? '14px' : (width < 1024 ? '16px' : '18px');
 
         // Prepare flex container
         grid.innerHTML = '';
@@ -309,8 +308,9 @@ function initPinterestWaterfall() {
         grid.style.width = '100%';
         grid.classList.add('is-waterfall-ready');
 
-        // Create column containers
+        // Create column containers and track column heights
         const columns = [];
+        const colHeights = new Array(colCount).fill(0);
         for (let i = 0; i < colCount; i++) {
             const col = document.createElement('div');
             col.className = 'pinterest-column';
@@ -319,14 +319,36 @@ function initPinterestWaterfall() {
             columns.push(col);
         }
 
-        // Distribute pins across columns in row-wise order:
-        // Col 0: Pin 0, Pin 4, Pin 8...
-        // Col 1: Pin 1, Pin 5, Pin 9...
-        // Col 2: Pin 2, Pin 6, Pin 10...
-        // Col 3: Pin 3, Pin 7, Pin 11...
-        // Looking horizontally: Row 1 is [0, 1, 2, 3], Row 2 is [4, 5, 6, 7]!
-        pins.forEach((pin, index) => {
-            columns[index % colCount].appendChild(pin);
+        // Distribute pins using Shortest-Column Masonry (True Pinterest Waterfall)
+        const colWidth = (width - ((colCount - 1) * parseInt(gap, 10))) / colCount;
+        pins.forEach((pin) => {
+            // Pick the column with the minimum cumulative height
+            let minIdx = 0;
+            let minH = colHeights[0];
+            for (let i = 1; i < colCount; i++) {
+                if (colHeights[i] < minH) {
+                    minH = colHeights[i];
+                    minIdx = i;
+                }
+            }
+
+            columns[minIdx].appendChild(pin);
+
+            // Compute estimated item height contribution:
+            let pinH = 320;
+            const media = pin.querySelector('.pinterest-pin-media');
+            if (media) {
+                const aspect = media.style.aspectRatio;
+                if (aspect && aspect.includes('/')) {
+                    const parts = aspect.split('/').map(n => parseFloat(n.trim()));
+                    if (parts.length === 2 && parts[0] > 0 && parts[1] > 0) {
+                        pinH = (colWidth / (parts[0] / parts[1])) + 85;
+                    }
+                } else if (pin.offsetHeight > 0) {
+                    pinH = pin.offsetHeight;
+                }
+            }
+            colHeights[minIdx] += pinH;
         });
     });
 }

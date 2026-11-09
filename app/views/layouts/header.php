@@ -344,52 +344,25 @@ $navCategories = $categoryModel->getActiveWithCounts();
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
             
             <!-- 1. Top Modular Capsule Navigation Bar -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4">
+            <div class="site-master-nav">
                 
-                <!-- Left: Brand Logo + Atelier Salon Tag (Mobile: Clean Logo & Currency row) -->
-                <div class="flex items-center justify-between sm:justify-start gap-2 sm:gap-4 flex-shrink-0">
-                    <div class="flex items-center gap-2 sm:gap-4">
-                        <a href="<?= SITE_URL ?>" class="inline-flex items-center focus:outline-none transition-transform hover:opacity-90 active:scale-95 py-0.5" title="JayArt Fine Art Atelier">
-                            <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-8 sm:h-11 w-auto object-contain">
-                        </a>
+                <!-- Left: Brand Logo + Atelier Salon Tag -->
+                <div class="site-logo-group">
+                    <a href="<?= SITE_URL ?>" class="inline-flex items-center focus:outline-none transition-transform hover:opacity-90 active:scale-95 py-0.5" title="JayArt Fine Art Atelier">
+                        <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-8 sm:h-11 w-auto object-contain">
+                    </a>
 
-                        <!-- Collection / Breadcrumb Capsule (Desktop Only) -->
-                        <div class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black/[0.06] rounded-full shadow-2xs text-[11px] font-semibold text-stone-700">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                            <span>Salon 2026</span>
-                            <span class="text-stone-300">/</span>
-                            <a href="<?= SITE_URL ?>/shop" class="text-stone-500 hover:text-black">Paintings</a>
-                        </div>
-                    </div>
-
-                    <!-- Mobile-Only Currency Selector in Top Row (Saves header height, zero clutter) -->
-                    <?php 
-                    $activeCurr = Currency::getActive();
-                    $enabledCurrs = Currency::getEnabled();
-                    ?>
-                    <div class="sm:hidden relative" id="siteCurrencyDropdownMobile">
-                        <button type="button" onclick="toggleCurrencyDropdown(event)" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-stone-50 border border-black/[0.08] rounded-full shadow-2xs text-xs font-bold text-stone-800 transition-colors" title="Change Currency">
-                            <span class="font-mono text-stone-500 text-[11px]"><?= htmlspecialchars($activeCurr['symbol']) ?></span>
-                            <span class="text-[11px]"><?= htmlspecialchars($activeCurr['code']) ?></span>
-                            <svg class="w-3 h-3 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </button>
-                        <div id="siteCurrencyMenuMobile" class="hidden absolute right-0 mt-2 w-48 bg-white/98 backdrop-blur-md rounded-2xl shadow-xl border border-black/[0.08] py-1.5 z-50 overflow-hidden text-left">
-                            <div class="px-3.5 py-1 text-[10px] font-bold text-stone-400 uppercase tracking-wider">Select Currency</div>
-                            <?php foreach ($enabledCurrs as $c): ?>
-                                <a href="<?= SITE_URL ?>/currency/switch/<?= $c['code'] ?>" class="flex items-center justify-between px-3.5 py-2 text-xs hover:bg-stone-100 transition-colors <?= $c['code'] === $activeCurr['code'] ? 'font-bold text-black bg-stone-50' : 'text-stone-700' ?>">
-                                    <span class="flex items-center gap-2">
-                                        <span class="w-5 text-center font-mono text-stone-500"><?= htmlspecialchars($c['symbol']) ?></span>
-                                        <span><?= htmlspecialchars($c['name']) ?></span>
-                                    </span>
-                                    <span class="text-[10px] font-mono text-stone-400"><?= htmlspecialchars($c['code']) ?></span>
-                                </a>
-                            <?php endforeach; ?>
-                        </div>
+                    <!-- Collection / Breadcrumb Capsule (Desktop Only) -->
+                    <div class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black/[0.06] rounded-full shadow-2xs text-[11px] font-semibold text-stone-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        <span>Salon 2026</span>
+                        <span class="text-stone-300">/</span>
+                        <a href="<?= SITE_URL ?>/shop" class="text-stone-500 hover:text-black">Paintings</a>
                     </div>
                 </div>
 
                 <!-- Center: Search Capsule Bar (Full-Width on Mobile, Centered Capsule on Desktop) -->
-                <div class="w-full sm:flex-1 sm:min-w-0 sm:max-w-lg sm:mx-3">
+                <div class="site-search-group">
                     <form method="GET" action="<?= SITE_URL ?>/shop" class="relative flex items-center">
                         <input type="text" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" placeholder="Search original paintings, mediums, artists..." class="w-full bg-white text-xs sm:text-sm text-[#18181B] rounded-full pl-4 sm:pl-5 pr-9 sm:pr-12 py-2 sm:py-2.5 border border-black/[0.08] focus:outline-none focus:ring-2 focus:ring-black/10 shadow-2xs placeholder-stone-400">
                         <button type="submit" aria-label="Search" class="absolute right-1 sm:right-1.5 w-7 sm:w-8 h-7 sm:h-8 rounded-full bg-[#18181B] hover:bg-black text-white flex items-center justify-center shadow-xs transition-transform active:scale-90">
@@ -398,16 +371,22 @@ $navCategories = $categoryModel->getActiveWithCounts();
                     </form>
                 </div>
 
-                <!-- Right Action Capsules (Desktop Only) -->
-                <div class="hidden sm:flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                    <!-- Currency Selector Capsule Dropdown (Desktop) -->
+                <!-- Right Action Capsules (Always Visible: Currency, Offers, Wishlist, Bag, Sign In) -->
+                <?php 
+                $activeCurr = Currency::getActive();
+                $enabledCurrs = Currency::getEnabled();
+                $sessionWishlist = $_SESSION['wishlist'] ?? [];
+                $headerWishCount = is_array($sessionWishlist) ? count($sessionWishlist) : 0;
+                ?>
+                <div class="site-actions-group">
+                    <!-- 1. Currency Selector Dropdown -->
                     <div class="relative" id="siteCurrencyDropdown">
-                        <button type="button" onclick="toggleCurrencyDropdown(event)" class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-white hover:bg-stone-50 border border-black/[0.06] rounded-full shadow-xs text-xs font-bold text-stone-800 transition-colors" title="Change Currency">
-                            <span class="font-mono text-stone-500 text-[11px]"><?= htmlspecialchars($activeCurr['symbol']) ?></span>
-                            <span class="text-[11px] sm:text-xs"><?= htmlspecialchars($activeCurr['code']) ?></span>
-                            <svg class="w-3 h-3 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        <button type="button" onclick="toggleCurrencyDropdown(event)" class="site-header-pill" title="Change Currency">
+                            <span class="font-mono text-stone-500 text-[11px] leading-none"><?= htmlspecialchars($activeCurr['symbol']) ?></span>
+                            <span class="pill-text font-bold"><?= htmlspecialchars($activeCurr['code']) ?></span>
+                            <svg class="w-3 h-3 text-stone-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
-                        <div id="siteCurrencyMenu" class="hidden absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-black/[0.06] py-1.5 z-50 overflow-hidden text-left">
+                        <div id="siteCurrencyMenu" class="hidden absolute right-0 mt-2 w-48 bg-white/98 backdrop-blur-md rounded-2xl shadow-xl border border-black/[0.08] py-1.5 z-50 overflow-hidden text-left">
                             <div class="px-3.5 py-1 text-[10px] font-bold text-stone-400 uppercase tracking-wider">Select Currency</div>
                             <?php foreach ($enabledCurrs as $c): ?>
                                 <a href="<?= SITE_URL ?>/currency/switch/<?= $c['code'] ?>" class="flex items-center justify-between px-3.5 py-2 text-xs hover:bg-stone-100 transition-colors <?= $c['code'] === $activeCurr['code'] ? 'font-bold text-black bg-stone-50' : 'text-stone-700' ?>">
@@ -421,46 +400,44 @@ $navCategories = $categoryModel->getActiveWithCounts();
                         </div>
                     </div>
 
-                    <!-- Offers (Desktop Only) -->
-                    <a href="<?= SITE_URL ?>/offers" class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-stone-50 border border-black/[0.06] rounded-full shadow-xs text-xs font-semibold text-stone-700 transition-colors">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                        <span>Offers</span>
+                    <!-- 2. Offers Pill (Desktop/Tablet) -->
+                    <a href="<?= SITE_URL ?>/offers" class="site-header-pill hidden md:inline-flex" title="Special Offers">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
+                        <span class="pill-text">Offers</span>
                     </a>
 
-                    <!-- Wishlist Pill (Desktop Only - Mobile has it in sticky bottom nav) -->
-                    <?php 
-                    $sessionWishlist = $_SESSION['wishlist'] ?? [];
-                    $headerWishCount = is_array($sessionWishlist) ? count($sessionWishlist) : 0;
-                    ?>
-                    <a href="<?= SITE_URL ?>/profile/wishlist" class="hidden md:flex relative w-9 sm:w-10 h-9 sm:h-10 rounded-full bg-white hover:bg-stone-50 border border-black/[0.06] items-center justify-center shadow-xs text-red-500 hover:text-red-600 transition-colors" title="Wishlist">
-                        <svg width="16" height="16" style="width: 16px; height: 16px;" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        <span id="wishlistCountBadge" class="<?= $headerWishCount > 0 ? '' : 'hidden' ?> absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center font-mono">
+                    <!-- 3. Wishlist Pill -->
+                    <a href="<?= SITE_URL ?>/profile/wishlist" class="site-header-pill is-circle relative text-red-500 hover:text-red-600" title="Wishlist">
+                        <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span id="wishlistCountBadge" class="<?= $headerWishCount > 0 ? '' : 'hidden' ?> absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center font-mono leading-none">
                             <?= $headerWishCount ?>
                         </span>
                     </a>
 
-                    <!-- Shopping Bag Pill (Desktop Only - Mobile has it in sticky bottom nav) -->
-                    <a href="<?= SITE_URL ?>/cart" class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 sm:py-2.5 bg-white hover:bg-stone-50 border border-black/[0.06] rounded-full shadow-xs text-[#18181B] transition-colors" title="Cart Bag">
-                        <svg width="16" height="16" style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                        <span id="cartCountBadge" class="bg-[#18181B] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center font-mono">
+                    <!-- 4. Shopping Bag Pill -->
+                    <a href="<?= SITE_URL ?>/cart" class="site-header-pill" title="Cart Bag">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <span id="cartCountBadge" class="bg-[#18181B] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center font-mono leading-none flex-shrink-0">
                             <?= $cartCount ?>
                         </span>
                     </a>
 
-                    <!-- Profile Capsule (Desktop Only - Mobile has it in sticky bottom nav) -->
+                    <!-- 5. Profile / Sign In Pill -->
                     <?php if ($currentUser): ?>
-                        <a href="<?= SITE_URL ?>/profile" class="hidden md:inline-flex items-center gap-2 pl-1 pr-3 py-1 bg-white hover:bg-stone-50 border border-black/[0.06] rounded-full shadow-xs transition-colors">
-                            <div class="w-7 h-7 rounded-full bg-stone-200 text-stone-700 font-bold text-xs flex items-center justify-center overflow-hidden">
+                        <a href="<?= SITE_URL ?>/profile" class="site-header-pill is-profile user-logged-in" title="My Account">
+                            <div class="pill-avatar font-bold text-xs">
                                 <?= strtoupper(substr($currentUser['name'] ?? 'U', 0, 1)) ?>
                             </div>
-                            <span class="hidden sm:inline text-xs font-semibold text-[#18181B]"><?= htmlspecialchars(explode(' ', $currentUser['name'] ?? 'Collector')[0]) ?></span>
+                            <span class="pill-text hidden sm:inline-flex">
+                                <?= htmlspecialchars(explode(' ', $currentUser['name'] ?? 'Collector')[0]) ?>
+                            </span>
                         </a>
                     <?php else: ?>
-                        <a href="<?= SITE_URL ?>/login" class="hidden md:inline-flex items-center gap-2 pl-1.5 pr-3.5 py-1.5 bg-white hover:bg-stone-50 border border-black/[0.06] rounded-full shadow-xs transition-colors">
-                            <div class="w-6 h-6 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center text-[10px]">
-                                <svg width="12" height="12" style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <a href="<?= SITE_URL ?>/login" class="site-header-pill is-profile" title="Sign In">
+                            <div class="pill-avatar">
+                                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             </div>
-                            <span class="text-xs font-semibold text-[#18181B]">Sign In</span>
+                            <span class="pill-text">Sign In</span>
                         </a>
                     <?php endif; ?>
                 </div>

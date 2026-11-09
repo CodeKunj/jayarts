@@ -201,8 +201,8 @@ $hasActiveFilters = !empty($selectedCat) || !empty($selectedMedium) || !empty($s
                         <div class="pinterest-pin group" data-pin-id="<?= $pid ?>">
                             
                             <!-- Media Box with Natural Aspect Ratio & Hover Controls -->
-                            <div class="pinterest-pin-media">
-                                <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($slug) ?>" class="block w-full">
+                            <div class="pinterest-pin-media" style="aspect-ratio: <?= Product::getAspectRatio($dimensions, $index) ?>;">
+                                <a href="<?= SITE_URL ?>/product/<?= htmlspecialchars($slug) ?>" class="block w-full h-full">
                                     <img src="<?= htmlspecialchars($cardImg) ?>" 
                                          alt="<?= htmlspecialchars($p['title']) ?>" 
                                          loading="lazy" 
