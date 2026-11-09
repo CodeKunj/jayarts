@@ -40,6 +40,7 @@ class AdminSettingController extends Controller {
             'tax_percentage',
             'free_shipping_threshold',
             'standard_shipping_fee',
+            'delivery_charge',
             'social_instagram',
             'social_facebook',
             'social_pinterest',
@@ -58,7 +59,16 @@ class AdminSettingController extends Controller {
             }
         }
 
-        Auth::setFlash('success', 'Store settings updated successfully.');
+        // Keep standard_shipping_fee and delivery_charge synced
+        if (isset($_POST['standard_shipping_fee'])) {
+            Setting::set('delivery_charge', trim((string)$_POST['standard_shipping_fee']));
+        } elseif (isset($_POST['delivery_charge'])) {
+            Setting::set('standard_shipping_fee', trim((string)$_POST['delivery_charge']));
+        }
+
+        Cache::clear();
+
+        Auth::setFlash('success', 'Store settings and delivery charges updated successfully.');
         header('Location: ' . ADMIN_URL . '/settings');
         exit;
     }

@@ -150,13 +150,24 @@ class CheckoutController extends Controller {
         $order = $orderModel->find($orderId);
         $orderNumber = $order['order_number'];
 
-        // Send Order Confirmation Email via Mailer
+        // Send Order Confirmation Email via Mailer with itemized breakdown
+        $shippingText = ((float)$shipping > 0) ? Validator::formatPrice((float)$shipping) : 'FREE (Complimentary)';
         $emailBody = "<h3>Dear {$customerName},</h3>
                       <p>Thank you for acquiring original art from JayArt. We have received your order <strong>#{$orderNumber}</strong>.</p>
-                      <p><strong>Total Amount:</strong> " . Validator::formatPrice($total) . "</p>
-                      <p><strong>Payment Method:</strong> " . strtoupper($paymentMethod) . "</p>
-                      <p>Your artworks are currently being prepared with archival museum-grade packaging and insurance.</p>
-                      <p><a href='" . SITE_URL . "/track/{$orderNumber}' class='btn'>Track Artwork Delivery</a></p>";
+                      <table style='width:100%; max-width:500px; border-collapse:collapse; margin:15px 0; font-size:13px;'>
+                          <tr><td style='padding:6px 0; color:#555;'>Subtotal:</td><td style='text-align:right; font-weight:bold;'>" . Validator::formatPrice($subtotal) . "</td></tr>";
+        if ($discount > 0) {
+            $emailBody .= "<tr><td style='padding:6px 0; color:#2D6A4F;'>Discount Applied:</td><td style='text-align:right; color:#2D6A4F; font-weight:bold;'>- " . Validator::formatPrice($discount) . "</td></tr>";
+        }
+        $emailBody .= "   <tr><td style='padding:6px 0; color:#555;'>Delivery Charges:</td><td style='text-align:right; font-weight:bold;'>{$shippingText}</td></tr>
+                          <tr style='border-top:1px solid #ddd; font-size:15px;'><td style='padding:8px 0; font-weight:bold;'>Total Amount:</td><td style='text-align:right; font-weight:bold;'>" . Validator::formatPrice($total) . "</td></tr>
+                          <tr><td style='padding:6px 0; color:#555;'>Payment Method:</td><td style='text-align:right; font-weight:bold;'>" . strtoupper($paymentMethod) . "</td></tr>
+                      </table>
+                      <p>Your artworks are currently being prepared with archival museum-grade transit packaging and insurance.</p>
+                      <p>
+                          <a href='" . SITE_URL . "/track/{$orderNumber}' style='display:inline-block; padding:8px 16px; background:#18181B; color:#fff; text-decoration:none; border-radius:6px; font-size:12px; margin-right:8px;'>Track Delivery</a>
+                          <a href='" . SITE_URL . "/profile/invoice/{$orderId}' style='display:inline-block; padding:8px 16px; background:#E2B868; color:#18181B; text-decoration:none; border-radius:6px; font-size:12px; font-weight:bold;'>View / Print Bill</a>
+                      </p>";
         
         Mailer::send($customerEmail, "Your JayArt Acquisition Order #{$orderNumber}", $emailBody, $customerName);
 

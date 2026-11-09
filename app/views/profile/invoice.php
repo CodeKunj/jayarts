@@ -114,9 +114,15 @@
                 <span>- <?= Validator::formatPrice((float)$order['discount_amount']) ?></span>
             </div>
         <?php endif; ?>
+        <?php if ((float)($order['tax_amount'] ?? 0.0) > 0.0): ?>
+            <div class="total-row">
+                <span>GST / Tax:</span>
+                <span><?= Validator::formatPrice((float)$order['tax_amount']) ?></span>
+            </div>
+        <?php endif; ?>
         <div class="total-row">
-            <span>Insured Transit &amp; Packaging:</span>
-            <span><?= ((float)$order['shipping_fee'] === 0.0) ? 'COMPLIMENTARY' : Validator::formatPrice((float)$order['shipping_fee']) ?></span>
+            <span>Delivery Charges:</span>
+            <span><?= ((float)($order['shipping_fee'] ?? 0.0) <= 0.0) ? '<strong style="color: #2D6A4F;">FREE</strong>' : Validator::formatPrice((float)$order['shipping_fee']) ?></span>
         </div>
         <div class="total-row grand-total">
             <span>Total Payable:</span>

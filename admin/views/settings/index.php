@@ -93,9 +93,39 @@
                         <svg width="18" height="18" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
                     <div>
-                        <h2 class="text-sm font-heading font-bold text-slate-900">Financial, GST &amp; Crated Delivery Rules</h2>
-                        <p class="text-xs text-slate-400">Checkout calculation rates, currency symbol, and complimentary shipping limits</p>
+                        <h2 class="text-sm font-heading font-bold text-slate-900">Delivery Charges &amp; Financial Rules</h2>
+                        <p class="text-xs text-slate-400">Configure customer delivery charges, complimentary shipping limits, and tax rates</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- Delivery Permanent Snapshot Reassurance Note -->
+            <div class="p-3.5 bg-blue-50/70 border border-blue-200/80 rounded-xl text-xs text-blue-900 flex items-start gap-2.5">
+                <svg class="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="leading-relaxed">
+                    <strong>Permanent Order Snapshot:</strong> The delivery charge configured here is permanently frozen into each customer's order when placed. If you change delivery charges in the future, <u>previous orders and their bills will never change</u>.
+                </div>
+            </div>
+
+            <!-- Dedicated Delivery Charge & Free Delivery Threshold Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="p-4 bg-slate-50/80 rounded-xl border border-slate-200 space-y-1">
+                    <label class="block text-xs font-bold text-slate-800">
+                        Standard Delivery Charge (<?= htmlspecialchars(Currency::cleanSymbol($settings['currency_code'] ?? 'INR', $settings['currency_symbol'] ?? '₹')) ?>)
+                    </label>
+                    <input type="number" step="0.01" min="0" name="standard_shipping_fee" value="<?= htmlspecialchars($settings['standard_shipping_fee'] ?? '0') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
+                    <p class="text-[10px] text-slate-500">
+                        Standard delivery fee charged to the customer at checkout. Set to <strong>0</strong> for 100% Free Delivery.
+                    </p>
+                </div>
+                <div class="p-4 bg-slate-50/80 rounded-xl border border-slate-200 space-y-1">
+                    <label class="block text-xs font-bold text-slate-800">
+                        Free Delivery Minimum Order Amount (<?= htmlspecialchars(Currency::cleanSymbol($settings['currency_code'] ?? 'INR', $settings['currency_symbol'] ?? '₹')) ?>)
+                    </label>
+                    <input type="number" step="0.01" min="0" name="free_shipping_threshold" value="<?= htmlspecialchars($settings['free_shipping_threshold'] ?? '0') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
+                    <p class="text-[10px] text-slate-500">
+                        Orders with subtotal at or above this amount get Free Delivery automatically. Set to <strong>0</strong> to disable free threshold.
+                    </p>
                 </div>
             </div>
 
@@ -113,8 +143,8 @@
                     <input type="number" step="0.01" name="tax_percentage" value="<?= htmlspecialchars($settings['tax_percentage'] ?? '0') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Standard Crate Fee (₹)</label>
-                    <input type="number" step="0.01" name="standard_shipping_fee" value="<?= htmlspecialchars($settings['standard_shipping_fee'] ?? '0') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Authenticity &amp; Return Window (Days)</label>
+                    <input type="number" name="return_policy_days" value="<?= htmlspecialchars($settings['return_policy_days'] ?? '14') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
                 </div>
             </div>
             <div class="pt-1">
@@ -122,19 +152,6 @@
                     <span>Manage All Currencies &amp; Real-Time FX Conversion Rates</span>
                     <span>&rarr;</span>
                 </a>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Free Delivery Threshold (₹)</label>
-                    <input type="number" step="0.01" name="free_shipping_threshold" value="<?= htmlspecialchars($settings['free_shipping_threshold'] ?? '15000') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
-                    <p class="text-[10px] text-slate-400 mt-1">Orders at or above this threshold receive complimentary insured transit</p>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Authenticity &amp; Return Window (Days)</label>
-                    <input type="number" name="return_policy_days" value="<?= htmlspecialchars($settings['return_policy_days'] ?? '14') ?>" class="w-full text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#0F172A] bg-white">
-                    <p class="text-[10px] text-slate-400 mt-1">Rendered on product page trust badges and invoices</p>
-                </div>
             </div>
         </div>
 

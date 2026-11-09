@@ -223,14 +223,23 @@ class Cart {
     }
 
     /**
-     * Calculate Shipping Fee (Free for original fine art above threshold)
+     * Calculate Delivery / Shipping Fee (Dynamic based on Admin Settings)
      */
     public static function getShippingFee(): float {
         $subtotal = self::getSubtotal();
-        if ($subtotal === 0.00 || $subtotal >= 10000.00) {
-            return 0.00; // Free insured shipping above 10,000
+        if ($subtotal <= 0.00) {
+            return 0.00;
         }
-        return 450.00; // Standard insured fine art packaging
+
+        $standardFee = (float)(Setting::get('standard_shipping_fee') ?? Setting::get('delivery_charge') ?? '0');
+        $freeThreshold = (float)(Setting::get('free_shipping_threshold') ?? '0');
+
+        // If free delivery threshold is configured (> 0) and subtotal meets or exceeds threshold
+        if ($freeThreshold > 0.00 && $subtotal >= $freeThreshold) {
+            return 0.00;
+        }
+
+        return max(0.00, $standardFee);
     }
 
     /**

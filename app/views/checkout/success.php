@@ -71,6 +71,18 @@ $shipping = $order['shipping_address'] ?? [];
                     </div>
                 <?php endforeach; ?>
             </div>
+
+            <!-- Price Breakdown Summary -->
+            <div class="border-t border-linen pt-4 mt-3 space-y-1.5 text-xs text-right">
+                <div class="text-muted">Subtotal: <strong class="text-ink"><?= Validator::formatPrice((float)$order['subtotal']) ?></strong></div>
+                <?php if ((float)$order['discount_amount'] > 0): ?>
+                    <div class="text-emerald-700">Discount Applied: <strong>- <?= Validator::formatPrice((float)$order['discount_amount']) ?></strong></div>
+                <?php endif; ?>
+                <div class="text-muted">Delivery Charges: <strong class="text-ink"><?= ((float)($order['shipping_fee'] ?? 0.0) <= 0.0) ? '<span class="text-emerald-700 font-bold">FREE</span>' : Validator::formatPrice((float)$order['shipping_fee']) ?></strong></div>
+                <div class="text-sm font-bold text-forest pt-1 border-t border-linen">
+                    Total Paid: <?= Validator::formatPrice((float)$order['total_amount']) ?>
+                </div>
+            </div>
         </div>
     <?php endif; ?>
 
@@ -87,6 +99,9 @@ $shipping = $order['shipping_address'] ?? [];
     <div class="flex flex-wrap items-center justify-center gap-4">
         <a href="<?= SITE_URL ?>" class="btn-primary py-3 px-8 rounded-full text-xs font-bold uppercase tracking-wider">
             Return to Gallery Home
+        </a>
+        <a href="<?= SITE_URL ?>/profile/invoice/<?= (int)$order['id'] ?>" target="_blank" class="btn-secondary py-3 px-6 rounded-full text-xs font-semibold">
+            View / Download Bill
         </a>
         <button type="button" onclick="window.print()" class="btn-secondary py-3 px-6 rounded-full text-xs font-semibold">
             Print Order Receipt

@@ -175,8 +175,8 @@ $items = is_array($items ?? null) ? $items : [];
                             </div>
                         <?php endif; ?>
                         <div class="flex justify-between text-stone-600">
-                            <span>Shipping</span>
-                            <span><?= ($shippingFee > 0) ? Validator::formatPrice($shippingFee) : '<strong class="text-amber-600">FREE</strong>' ?></span>
+                            <span>Delivery Charges</span>
+                            <span><?= ($shippingFee > 0) ? Validator::formatPrice($shippingFee) : '<strong class="text-emerald-700">FREE</strong>' ?></span>
                         </div>
                         <div class="flex justify-between text-stone-600">
                             <span>Estimated Tax</span>

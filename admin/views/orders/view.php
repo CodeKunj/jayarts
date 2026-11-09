@@ -59,7 +59,10 @@
                     <?php if ((float)$order['discount_amount'] > 0): ?>
                         <div class="text-emerald-600">Discount (<?= htmlspecialchars($order['coupon_code'] ?? '') ?>): <strong>- <?= Validator::formatPrice((float)$order['discount_amount']) ?></strong></div>
                     <?php endif; ?>
-                    <div class="text-slate-500">Insured Shipping: <strong><?= ((float)$order['shipping_fee'] === 0.0) ? 'COMPLIMENTARY' : Validator::formatPrice((float)$order['shipping_fee']) ?></strong></div>
+                    <?php if ((float)($order['tax_amount'] ?? 0.0) > 0.0): ?>
+                        <div class="text-slate-500">GST / Tax: <strong><?= Validator::formatPrice((float)$order['tax_amount']) ?></strong></div>
+                    <?php endif; ?>
+                    <div class="text-slate-500">Delivery Charges: <strong class="text-slate-800"><?= ((float)($order['shipping_fee'] ?? 0.0) <= 0.0) ? '<span class="text-emerald-700 font-bold">FREE</span>' : Validator::formatPrice((float)$order['shipping_fee']) ?></strong></div>
                     <div class="text-base font-bold text-[#0F172A] pt-2 border-t border-slate-100">
                         Total Amount: <?= Validator::formatPrice((float)$order['total_amount']) ?>
                     </div>
