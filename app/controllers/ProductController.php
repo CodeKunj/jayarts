@@ -31,7 +31,7 @@ class ProductController extends Controller {
         $avgRating = $reviewModel->getAverageRating((int)$product['id']);
 
         // Primary Image for Schema & OpenGraph
-        $primaryImg = !empty($product['images'][0]['image_path']) ? SITE_URL . '/' . $product['images'][0]['image_path'] : ASSETS_URL . '/images/banner.jpg';
+        $primaryImg = !empty($product['images'][0]['image_path']) ? Product::imageUrl($product['images'][0]['image_path']) : ASSETS_URL . '/images/banner.jpg';
 
         // Rich Product Schema for Google Search Console & Rich Snippets
         $productSchema = SEO::buildProductSchema($product, $primaryImg);

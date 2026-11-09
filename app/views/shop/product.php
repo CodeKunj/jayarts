@@ -42,20 +42,41 @@ $primaryImg = Product::imageUrl($product['primary_image'] ?? null);
                 <img id="mainProductImage" src="<?= htmlspecialchars($primaryImg) ?>" alt="<?= htmlspecialchars($product['title']) ?>" class="max-h-full max-w-full object-contain transition-transform duration-300 hover:scale-105">
             </div>
 
-            <!-- Thumbnail Carousel -->
-            <div class="flex items-center gap-3 overflow-x-auto pb-2">
-                <button type="button" onclick="document.getElementById('mainProductImage').src = '<?= htmlspecialchars($primaryImg) ?>'" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 p-2 border-2 border-[#18181B] flex items-center justify-center flex-shrink-0 cursor-pointer">
-                    <img src="<?= htmlspecialchars($primaryImg) ?>" class="max-h-full max-w-full object-contain" alt="Main View">
-                </button>
-                <?php if (!empty($product['images'])): ?>
-                    <?php foreach ($product['images'] as $img): ?>
-                        <?php $imgPath = Product::imageUrl($img['image_path'] ?? null); ?>
-                        <button type="button" onclick="document.getElementById('mainProductImage').src = '<?= htmlspecialchars($imgPath) ?>'" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-stone-100 p-2 border-2 border-transparent hover:border-stone-400 flex items-center justify-center flex-shrink-0 transition-colors cursor-pointer">
-                            <img src="<?= htmlspecialchars($imgPath) ?>" class="max-h-full max-w-full object-contain" alt="Angle View">
+            <!-- Thumbnail Carousel (Shown when artwork has multiple gallery photos) -->
+            <?php 
+            $allImages = !empty($product['images']) ? $product['images'] : [];
+            if (empty($allImages) && !empty($primaryImg)) {
+                $allImages = [['image_path' => $primaryImg, 'is_primary' => 1]];
+            }
+            ?>
+            <?php if (count($allImages) > 1): ?>
+                <div class="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none" id="productThumbnailStrip">
+                    <?php foreach ($allImages as $idx => $img): 
+                        $imgPath = Product::imageUrl($img['image_path'] ?? null);
+                        $isFirst = ($idx === 0);
+                    ?>
+                        <button type="button" 
+                                onclick="switchProductMainImage('<?= htmlspecialchars($imgPath) ?>', this)" 
+                                class="thumb-btn w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white p-1.5 border-2 <?= $isFirst ? 'border-[#18181B] ring-2 ring-black/10' : 'border-stone-200 hover:border-stone-400' ?> flex items-center justify-center flex-shrink-0 transition-all cursor-pointer shadow-2xs">
+                            <img src="<?= htmlspecialchars($imgPath) ?>" class="max-h-full max-w-full object-contain rounded-xl" alt="View <?= $idx + 1 ?>">
                         </button>
                     <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
+                </div>
+                <script>
+                function switchProductMainImage(src, btn) {
+                    const mainImg = document.getElementById('mainProductImage');
+                    if (mainImg) mainImg.src = src;
+                    document.querySelectorAll('#productThumbnailStrip .thumb-btn').forEach(b => {
+                        b.classList.remove('border-[#18181B]', 'ring-2', 'ring-black/10');
+                        b.classList.add('border-stone-200');
+                    });
+                    if (btn) {
+                        btn.classList.add('border-[#18181B]', 'ring-2', 'ring-black/10');
+                        btn.classList.remove('border-stone-200');
+                    }
+                }
+                </script>
+            <?php endif; ?>
         </div>
 
         <!-- Right Column: Product Info & Actions (Shopcart Style) -->

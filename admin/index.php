@@ -24,13 +24,15 @@ Router::get('/admin/logout', [AdminAuthController::class, 'logout']);
 Router::get('/admin', [AdminDashboardController::class, 'index']);
 Router::get('/admin/dashboard', [AdminDashboardController::class, 'index']);
 
-// Products & Artwork Management (Includes Per-Product SEO)
+// Products & Artwork Management (Includes Per-Product SEO & Multi-Photo Gallery)
 Router::get('/admin/products', [AdminProductController::class, 'index']);
 Router::get('/admin/products/create', [AdminProductController::class, 'create']);
 Router::post('/admin/products/store', [AdminProductController::class, 'store']);
 Router::get('/admin/products/edit/{id}', [AdminProductController::class, 'edit']);
 Router::post('/admin/products/update/{id}', [AdminProductController::class, 'update']);
 Router::post('/admin/products/delete/{id}', [AdminProductController::class, 'delete']);
+Router::post('/admin/products/delete-image/{id}', [AdminProductController::class, 'deleteImage']);
+Router::post('/admin/products/set-primary-image/{id}', [AdminProductController::class, 'setPrimaryImage']);
 
 // Categories (Art Mediums & Styles)
 Router::get('/admin/categories', [AdminCategoryController::class, 'index']);

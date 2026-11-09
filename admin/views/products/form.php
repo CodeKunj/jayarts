@@ -89,10 +89,148 @@ $actionUrl = $isEdit ? ADMIN_URL . '/products/update/' . $product['id'] : ADMIN_
                 </div>
             </div>
 
-            <div>
-                <label class="text-xs font-bold text-slate-700 block mb-1">High-Resolution Painting Image File</label>
-                <input type="file" name="artwork_image" accept="image/*" class="w-full text-xs text-slate-500">
-                <span class="text-[10px] text-slate-400">Accepted formats: JPG, PNG, WebP (Optimized for 4K and Retina screens)</span>
+            <!-- Artwork Imagery & Multi-Photo Gallery Section -->
+            <div class="pt-4 border-t border-slate-100 space-y-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Artwork Imagery &amp; Multi-Photo Gallery</h3>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Upload the main cover artwork and multiple gallery perspectives (texture close-ups, wall angles, framing).</p>
+                    </div>
+                    <?php if (!empty($images)): ?>
+                        <span class="text-[11px] font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">
+                            <?= count($images) ?> <?= count($images) === 1 ? 'Photo' : 'Photos' ?> in Gallery
+                        </span>
+                    <?php endif; ?>
+                </div>
+
+                <!-- 1. Primary Cover Painting Image -->
+                <div class="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-bold text-slate-800 flex items-center gap-2">
+                            <span>Primary Cover Image</span>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Main Catalog &amp; Feed Thumbnail</span>
+                        </label>
+                        <span class="text-[10px] text-slate-400">JPG, PNG, WebP (Max 15MB)</span>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <?php 
+                        $primaryImgUrl = null;
+                        if (!empty($images)) {
+                            foreach ($images as $im) {
+                                if (!empty($im['is_primary'])) {
+                                    $primaryImgUrl = Product::imageUrl($im['image_path']);
+                                    break;
+                                }
+                            }
+                            if (!$primaryImgUrl && !empty($images[0])) {
+                                $primaryImgUrl = Product::imageUrl($images[0]['image_path']);
+                            }
+                        } elseif (!empty($product['primary_image'])) {
+                            $primaryImgUrl = Product::imageUrl($product['primary_image']);
+                        }
+                        ?>
+                        <!-- Preview Thumbnail -->
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-white border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center p-1 shadow-2xs">
+                            <img id="primaryImagePreview" src="<?= $primaryImgUrl ?: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80' ?>" alt="Cover Preview" class="w-full h-full object-cover rounded-lg">
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <input type="file" name="artwork_image" id="artworkImageInput" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#18181B] file:text-white hover:file:bg-black cursor-pointer">
+                            <p class="text-[10px] text-slate-400 mt-1">
+                                <?= $isEdit ? 'Upload a new photo to replace the current primary cover image.' : 'This will be the hero photo shown in search feeds and collection cards.' ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Additional Gallery Photos Uploader (Multiple Files) -->
+                <div class="p-4 bg-slate-50 border border-dashed border-slate-300 rounded-2xl space-y-3">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div>
+                            <label class="text-xs font-bold text-slate-800 flex items-center gap-2">
+                                <span>Add Gallery Photos (Multiple Selection)</span>
+                                <span class="text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">Multi-Angle &amp; Close-ups</span>
+                            </label>
+                            <p class="text-[11px] text-slate-500 mt-0.5">Select multiple photos at once (hold Ctrl/Cmd or drag &amp; drop). They will appear as interactive thumbnails on the artwork page.</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <input type="file" name="gallery_images[]" id="galleryImagesInput" multiple accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border file:border-slate-300 file:text-xs file:font-bold file:bg-white file:text-slate-700 hover:file:bg-slate-100 cursor-pointer">
+                    </div>
+
+                    <!-- Client-side Live Preview for newly selected gallery photos -->
+                    <div id="newGalleryPreviewsContainer" class="hidden pt-2 border-t border-slate-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-bold text-slate-700" id="newGalleryCountText">0 new photos ready to upload</span>
+                            <button type="button" onclick="clearSelectedGalleryFiles()" class="text-[10px] text-red-600 hover:underline font-semibold">Clear Selected</button>
+                        </div>
+                        <div id="newGalleryPreviews" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2.5"></div>
+                    </div>
+                </div>
+
+                <!-- 3. Existing Gallery Photos Manager (When Editing) -->
+                <?php if ($isEdit && !empty($images)): ?>
+                    <div class="space-y-3 pt-2">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-bold text-slate-800">Existing Gallery Images (<?= count($images) ?>)</h4>
+                            <span class="text-[10px] text-slate-400">Click &ldquo;Make Cover&rdquo; to change primary or trash icon to remove</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5" id="existingGalleryGrid">
+                            <?php foreach ($images as $img): 
+                                $imgId = (int)$img['id'];
+                                $isPrim = !empty($img['is_primary']);
+                                $imgPath = Product::imageUrl($img['image_path']);
+                            ?>
+                                <div class="relative bg-white border <?= $isPrim ? 'border-emerald-500 ring-2 ring-emerald-100' : 'border-slate-200' ?> rounded-2xl p-2.5 shadow-2xs group flex flex-col justify-between" id="galleryCard-<?= $imgId ?>">
+                                    <!-- Thumbnail -->
+                                    <div class="aspect-square rounded-xl bg-slate-100 overflow-hidden mb-2 relative flex items-center justify-center border border-slate-100">
+                                        <img src="<?= htmlspecialchars($imgPath) ?>" alt="Gallery Image" class="w-full h-full object-cover">
+                                        
+                                        <!-- Primary Badge -->
+                                        <div class="primary-badge-indicator <?= $isPrim ? '' : 'hidden' ?> absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[9px] font-extrabold shadow-sm flex items-center gap-1">
+                                            <span>★</span> <span>Cover</span>
+                                        </div>
+
+                                        <!-- Direct AJAX Delete Button -->
+                                        <button type="button" 
+                                                onclick="deleteGalleryImage(<?= $imgId ?>, <?= (int)$product['id'] ?>)" 
+                                                class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-red-600/90 hover:bg-red-700 text-white flex items-center justify-center shadow-sm opacity-90 hover:opacity-100 transition-opacity" 
+                                                title="Delete this photo">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        </button>
+                                    </div>
+
+                                    <!-- Bottom Action Controls -->
+                                    <div class="flex items-center justify-between pt-1 text-[10px]">
+                                        <div class="cover-action-wrap">
+                                            <?php if ($isPrim): ?>
+                                                <span class="text-emerald-700 font-bold flex items-center gap-1 primary-label">
+                                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                                    <span>Main Cover</span>
+                                                </span>
+                                            <?php else: ?>
+                                                <button type="button" 
+                                                        onclick="setAsPrimaryImage(<?= $imgId ?>, <?= (int)$product['id'] ?>)" 
+                                                        class="text-blue-600 hover:text-blue-800 font-bold hover:underline make-cover-btn">
+                                                    Make Cover
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <!-- Hidden fallback radio for standard non-AJAX form submit -->
+                                        <label class="text-[9px] text-slate-400 cursor-pointer flex items-center gap-1" title="Select cover for form save">
+                                            <input type="radio" name="primary_image_id" value="<?= $imgId ?>" <?= $isPrim ? 'checked' : '' ?> class="text-emerald-600 focus:ring-emerald-500 w-3 h-3">
+                                            <span>Cover</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <div>
@@ -313,6 +451,127 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // 1. Primary Cover Live Preview
+    const artworkInput = document.getElementById('artworkImageInput');
+    const primaryPreview = document.getElementById('primaryImagePreview');
+    if (artworkInput && primaryPreview) {
+        artworkInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    primaryPreview.src = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+
+    // 2. Multi-File Gallery Photos Live Preview
+    const galleryInput = document.getElementById('galleryImagesInput');
+    const galleryPrevContainer = document.getElementById('newGalleryPreviewsContainer');
+    const galleryPrevGrid = document.getElementById('newGalleryPreviews');
+    const galleryCountText = document.getElementById('newGalleryCountText');
+
+    if (galleryInput && galleryPrevContainer && galleryPrevGrid) {
+        galleryInput.addEventListener('change', function() {
+            galleryPrevGrid.innerHTML = '';
+            const files = Array.from(this.files || []);
+            if (files.length > 0) {
+                galleryPrevContainer.classList.remove('hidden');
+                if (galleryCountText) {
+                    galleryCountText.textContent = `${files.length} new ${files.length === 1 ? 'photo' : 'photos'} ready to upload`;
+                }
+
+                files.forEach((file) => {
+                    if (!file.type.startsWith('image/')) return;
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const card = document.createElement('div');
+                        card.className = 'relative bg-white border border-slate-200 rounded-xl p-1.5 shadow-2xs text-[9px] text-slate-600';
+                        card.innerHTML = `
+                            <div class="aspect-square rounded-lg bg-slate-100 overflow-hidden mb-1 flex items-center justify-center">
+                                <img src="${e.target.result}" alt="Preview" class="w-full h-full object-cover">
+                            </div>
+                            <p class="truncate font-mono">${file.name}</p>
+                            <span class="text-slate-400 font-mono">${(file.size / 1024).toFixed(0)} KB</span>
+                        `;
+                        galleryPrevGrid.appendChild(card);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                galleryPrevContainer.classList.add('hidden');
+            }
+        });
+    }
+
+    window.clearSelectedGalleryFiles = function() {
+        if (galleryInput) galleryInput.value = '';
+        if (galleryPrevGrid) galleryPrevGrid.innerHTML = '';
+        if (galleryPrevContainer) galleryPrevContainer.classList.add('hidden');
+    };
+
+    // 3. AJAX Delete Existing Gallery Image
+    window.deleteGalleryImage = function(imgId, productId) {
+        if (!confirm('Are you sure you want to delete this gallery photo?')) return;
+        
+        const card = document.getElementById('galleryCard-' + imgId);
+        if (card) card.style.opacity = '0.4';
+
+        fetch('<?= ADMIN_URL ?>/products/delete-image/' + imgId, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (card) {
+                    card.style.transition = 'all 0.3s ease';
+                    card.style.transform = 'scale(0.8)';
+                    card.style.opacity = '0';
+                    setTimeout(() => card.remove(), 300);
+                }
+            } else {
+                alert(data.message || 'Could not delete image.');
+                if (card) card.style.opacity = '1';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to delete image.');
+            if (card) card.style.opacity = '1';
+        });
+    };
+
+    // 4. AJAX Set Existing Gallery Image As Primary Cover
+    window.setAsPrimaryImage = function(imgId, productId) {
+        const card = document.getElementById('galleryCard-' + imgId);
+        if (card) card.style.opacity = '0.5';
+
+        fetch('<?= ADMIN_URL ?>/products/set-primary-image/' + imgId, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                window.location.reload();
+            } else {
+                alert(data.message || 'Could not set cover image.');
+                if (card) card.style.opacity = '1';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to set cover image.');
+            if (card) card.style.opacity = '1';
+        });
+    };
 });
 </script>
 

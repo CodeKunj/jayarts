@@ -35,6 +35,7 @@ class AdminProductController extends Controller {
             'product'    => null,
             'categories' => $categories,
             'seo'        => null,
+            'images'     => [],
             'isEdit'     => false,
             'title'      => 'Add New Painting — JayArt Admin'
         ]);
@@ -72,18 +73,25 @@ class AdminProductController extends Controller {
             'status'                   => $_POST['status'] ?? 'active',
         ]);
 
-        // Handle Image Upload
-        if (!empty($_FILES['artwork_image']['name'])) {
+        // Handle Primary Artwork Image Upload
+        $hasPrimary = false;
+        if (!empty($_FILES['artwork_image']['name']) && ($_FILES['artwork_image']['error'] ?? 1) === UPLOAD_ERR_OK) {
             $ext = strtolower(pathinfo($_FILES['artwork_image']['name'], PATHINFO_EXTENSION));
             if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) {
                 $filename = 'art_' . $productId . '_' . time() . '.' . $ext;
                 $dest = UPLOADS_PATH . '/products/' . $filename;
                 if (move_uploaded_file($_FILES['artwork_image']['tmp_name'], $dest)) {
                     $db = Database::connect();
-                    $db->prepare("INSERT INTO `product_images` (`product_id`, `image_path`, `is_primary`) VALUES (:pid, :path, 1)")
+                    $db->prepare("INSERT INTO `product_images` (`product_id`, `image_path`, `is_primary`, `sort_order`) VALUES (:pid, :path, 1, 0)")
                        ->execute(['pid' => $productId, 'path' => 'uploads/products/' . $filename]);
+                    $hasPrimary = true;
                 }
             }
+        }
+
+        // Handle Multiple Additional Gallery Images Upload
+        if (!empty($_FILES['gallery_images'])) {
+            $this->uploadGalleryImages($productId, $_FILES['gallery_images'], $hasPrimary);
         }
 
         // Save Dedicated Per-Product SEO
@@ -190,17 +198,43 @@ class AdminProductController extends Controller {
             'status'                   => $_POST['status'] ?? 'active',
         ]);
 
-        // Upload image if provided
-        if (!empty($_FILES['artwork_image']['name'])) {
+        // Upload primary cover image if provided
+        $hasNewPrimary = false;
+        if (!empty($_FILES['artwork_image']['name']) && ($_FILES['artwork_image']['error'] ?? 1) === UPLOAD_ERR_OK) {
             $ext = strtolower(pathinfo($_FILES['artwork_image']['name'], PATHINFO_EXTENSION));
             if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) {
                 $filename = 'art_' . $id . '_' . time() . '.' . $ext;
                 $dest = UPLOADS_PATH . '/products/' . $filename;
                 if (move_uploaded_file($_FILES['artwork_image']['tmp_name'], $dest)) {
                     $db = Database::connect();
-                    $db->prepare("INSERT INTO `product_images` (`product_id`, `image_path`, `is_primary`) VALUES (:pid, :path, 1)")
+                    // Set all prior images for this product to non-primary
+                    $db->prepare("UPDATE `product_images` SET `is_primary` = 0 WHERE `product_id` = :pid")->execute(['pid' => $id]);
+                    // Insert new primary image
+                    $db->prepare("INSERT INTO `product_images` (`product_id`, `image_path`, `is_primary`, `sort_order`) VALUES (:pid, :path, 1, 0)")
                        ->execute(['pid' => $id, 'path' => 'uploads/products/' . $filename]);
+                    $hasNewPrimary = true;
                 }
+            }
+        }
+
+        // Handle Multiple Additional Gallery Images Upload during Edit
+        if (!empty($_FILES['gallery_images'])) {
+            $this->uploadGalleryImages($id, $_FILES['gallery_images'], $hasNewPrimary);
+        }
+
+        // Handle Setting Primary Image from Existing Gallery Photos
+        if (!empty($_POST['primary_image_id']) && !$hasNewPrimary) {
+            $primId = (int)$_POST['primary_image_id'];
+            $db = Database::connect();
+            $db->prepare("UPDATE `product_images` SET `is_primary` = 0 WHERE `product_id` = :pid")->execute(['pid' => $id]);
+            $db->prepare("UPDATE `product_images` SET `is_primary` = 1 WHERE `id` = :id AND `product_id` = :pid")
+               ->execute(['id' => $primId, 'pid' => $id]);
+        }
+
+        // Handle Deleting Marked Gallery Photos via Checkboxes
+        if (!empty($_POST['delete_image_ids']) && is_array($_POST['delete_image_ids'])) {
+            foreach ($_POST['delete_image_ids'] as $delId) {
+                $this->removeImageFileAndRecord((int)$delId, $id);
             }
         }
 
@@ -266,6 +300,171 @@ class AdminProductController extends Controller {
         Auth::setFlash('success', 'Artwork removed from catalog.');
         header('Location: ' . ADMIN_URL . '/products');
         exit;
+    }
+
+    /**
+     * Upload Multiple Additional Gallery Images
+     */
+    private function uploadGalleryImages(int $productId, array $files, bool $hasPrimary = false): int {
+        $count = 0;
+        if (empty($files['name']) || !is_array($files['name'])) {
+            return 0;
+        }
+
+        $db = Database::connect();
+        $stmtMax = $db->prepare("SELECT MAX(sort_order) as max_sort FROM `product_images` WHERE `product_id` = :pid");
+        $stmtMax->execute(['pid' => $productId]);
+        $row = $stmtMax->fetch();
+        $nextSort = (int)($row['max_sort'] ?? 0) + 1;
+
+        if (!$hasPrimary) {
+            $stmtPrimary = $db->prepare("SELECT COUNT(*) as primary_count FROM `product_images` WHERE `product_id` = :pid AND `is_primary` = 1");
+            $stmtPrimary->execute(['pid' => $productId]);
+            $hasPrimary = ((int)($stmtPrimary->fetch()['primary_count'] ?? 0)) > 0;
+        }
+
+        $targetDir = UPLOADS_PATH . '/products';
+        if (!is_dir($targetDir)) {
+            @mkdir($targetDir, 0755, true);
+        }
+
+        $allowedExts = ['jpg', 'jpeg', 'png', 'webp'];
+
+        foreach ($files['name'] as $i => $name) {
+            if (empty($name) || ($files['error'][$i] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            $ext = strtolower(pathinfo((string)$name, PATHINFO_EXTENSION));
+            if (!in_array($ext, $allowedExts, true)) {
+                continue;
+            }
+
+            $filename = 'art_' . $productId . '_gal_' . time() . '_' . $i . '_' . bin2hex(random_bytes(3)) . '.' . $ext;
+            $dest = $targetDir . '/' . $filename;
+
+            if (move_uploaded_file($files['tmp_name'][$i], $dest)) {
+                $isPrimary = (!$hasPrimary && $count === 0) ? 1 : 0;
+                if ($isPrimary) $hasPrimary = true;
+
+                $stmt = $db->prepare("INSERT INTO `product_images` (`product_id`, `image_path`, `is_primary`, `sort_order`) VALUES (:pid, :path, :primary, :sort)");
+                $stmt->execute([
+                    'pid'     => $productId,
+                    'path'    => 'uploads/products/' . $filename,
+                    'primary' => $isPrimary,
+                    'sort'    => $nextSort++
+                ]);
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * Delete an individual gallery photo (supports AJAX or redirect)
+     */
+    public function deleteImage(int|string $imageId): void {
+        $imageId = (int)$imageId;
+        $db = Database::connect();
+
+        $stmt = $db->prepare("SELECT * FROM `product_images` WHERE `id` = :id LIMIT 1");
+        $stmt->execute(['id' => $imageId]);
+        $image = $stmt->fetch();
+
+        if ($image) {
+            $productId = (int)$image['product_id'];
+            $wasPrimary = (int)$image['is_primary'] === 1;
+
+            $this->removeImageFileAndRecord($imageId, $productId);
+
+            if ($wasPrimary) {
+                // Elect another existing photo as primary
+                $db->prepare("UPDATE `product_images` SET `is_primary` = 1 WHERE `product_id` = :pid ORDER BY `id` ASC LIMIT 1")
+                   ->execute(['pid' => $productId]);
+            }
+
+            Cache::deletePattern('products:*');
+            Cache::deletePattern('home:*');
+
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Gallery photo deleted successfully']);
+                exit;
+            }
+
+            Auth::setFlash('success', 'Gallery photo deleted successfully.');
+            header('Location: ' . ADMIN_URL . '/products/edit/' . $productId);
+            exit;
+        }
+
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Image not found']);
+            exit;
+        }
+
+        header('Location: ' . ADMIN_URL . '/products');
+        exit;
+    }
+
+    /**
+     * Make an existing gallery photo the primary cover image
+     */
+    public function setPrimaryImage(int|string $imageId): void {
+        $imageId = (int)$imageId;
+        $db = Database::connect();
+
+        $stmt = $db->prepare("SELECT * FROM `product_images` WHERE `id` = :id LIMIT 1");
+        $stmt->execute(['id' => $imageId]);
+        $image = $stmt->fetch();
+
+        if ($image) {
+            $productId = (int)$image['product_id'];
+            $db->prepare("UPDATE `product_images` SET `is_primary` = 0 WHERE `product_id` = :pid")->execute(['pid' => $productId]);
+            $db->prepare("UPDATE `product_images` SET `is_primary` = 1 WHERE `id` = :id AND `product_id` = :pid")
+               ->execute(['id' => $imageId, 'pid' => $productId]);
+
+            Cache::deletePattern('products:*');
+            Cache::deletePattern('home:*');
+
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Cover image updated successfully']);
+                exit;
+            }
+
+            Auth::setFlash('success', 'Primary cover photo updated.');
+            header('Location: ' . ADMIN_URL . '/products/edit/' . $productId);
+            exit;
+        }
+
+        header('Location: ' . ADMIN_URL . '/products');
+        exit;
+    }
+
+    /**
+     * Helper to safely remove image file and DB record
+     */
+    private function removeImageFileAndRecord(int $imageId, int $productId): void {
+        $db = Database::connect();
+        $stmt = $db->prepare("SELECT `image_path` FROM `product_images` WHERE `id` = :id AND `product_id` = :pid LIMIT 1");
+        $stmt->execute(['id' => $imageId, 'pid' => $productId]);
+        $row = $stmt->fetch();
+
+        if ($row && !empty($row['image_path'])) {
+            $path = $row['image_path'];
+            if (!str_starts_with($path, 'http://') && !str_starts_with($path, 'https://')) {
+                $fullPath = ROOT_PATH . '/' . ltrim($path, '/');
+                if (file_exists($fullPath) && is_file($fullPath)) {
+                    @unlink($fullPath);
+                }
+            }
+        }
+
+        $db->prepare("DELETE FROM `product_images` WHERE `id` = :id AND `product_id` = :pid")
+           ->execute(['id' => $imageId, 'pid' => $productId]);
     }
 }
 
