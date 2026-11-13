@@ -301,7 +301,7 @@ $navCategories = $categoryModel->getActiveWithCounts();
             </div>
 
             <div class="sculpture-brand">
-                <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-8 w-auto object-contain mx-auto mb-1">
+                <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION . '.' . (file_exists(ROOT_PATH . '/assets/images/logo.svg') ? filemtime(ROOT_PATH . '/assets/images/logo.svg') : '1') ?>" alt="JayArt" class="h-8 w-auto object-contain mx-auto mb-1">
                 <span class="sculpture-brand-sub">Fine Art Atelier • 2026</span>
             </div>
 
@@ -341,7 +341,7 @@ $navCategories = $categoryModel->getActiveWithCounts();
 
     <!-- Sticky Full-Width Header -->
     <header id="siteMasterHeader" class="site-sticky-header w-full bg-[#FAF6F0]/90 backdrop-blur-md sticky top-0 z-50 border-b border-[#B67A31]/15 shadow-xs transition-all">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3.5">
             
             <!-- 1. Top Modular Capsule Navigation Bar -->
             <div class="site-master-nav">
@@ -349,7 +349,7 @@ $navCategories = $categoryModel->getActiveWithCounts();
                 <!-- Left: Brand Logo + Atelier Salon Tag -->
                 <div class="site-logo-group">
                     <a href="<?= SITE_URL ?>" class="inline-flex items-center focus:outline-none transition-transform hover:opacity-90 active:scale-95 py-0.5" title="JayArt Fine Art Atelier">
-                        <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION ?>" alt="JayArt" class="h-8 sm:h-11 w-auto object-contain">
+                        <img src="<?= ASSETS_URL ?>/images/logo.svg?v=<?= APP_VERSION . '.' . (file_exists(ROOT_PATH . '/assets/images/logo.svg') ? filemtime(ROOT_PATH . '/assets/images/logo.svg') : '1') ?>" alt="JayArt Fine Art Atelier" class="site-logo-img" width="85" height="32">
                     </a>
 
                     <!-- Collection / Breadcrumb Capsule (Desktop Only) -->
@@ -363,15 +363,15 @@ $navCategories = $categoryModel->getActiveWithCounts();
 
                 <!-- Center: Search Capsule Bar (Full-Width on Mobile, Centered Capsule on Desktop) -->
                 <div class="site-search-group">
-                    <form method="GET" action="<?= SITE_URL ?>/shop" class="relative flex items-center">
-                        <input type="text" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" placeholder="Search original paintings, mediums, artists..." class="w-full bg-white text-xs sm:text-sm text-[#18181B] rounded-full pl-4 sm:pl-5 pr-9 sm:pr-12 py-2 sm:py-2.5 border border-black/[0.08] focus:outline-none focus:ring-2 focus:ring-black/10 shadow-2xs placeholder-stone-400">
-                        <button type="submit" aria-label="Search" class="absolute right-1 sm:right-1.5 w-7 sm:w-8 h-7 sm:h-8 rounded-full bg-[#18181B] hover:bg-black text-white flex items-center justify-center shadow-xs transition-transform active:scale-90">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <form method="GET" action="<?= SITE_URL ?>/shop" class="site-search-form">
+                        <input type="text" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" placeholder="Search original paintings, mediums, artists..." class="site-search-input">
+                        <button type="submit" aria-label="Search" class="site-search-btn">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </button>
                     </form>
                 </div>
 
-                <!-- Right Action Capsules (Always Visible: Currency, Offers, Wishlist, Bag, Sign In) -->
+                <!-- Right Action Capsules -->
                 <?php 
                 $activeCurr = Currency::getActive();
                 $enabledCurrs = Currency::getEnabled();
@@ -379,63 +379,60 @@ $navCategories = $categoryModel->getActiveWithCounts();
                 $headerWishCount = is_array($sessionWishlist) ? count($sessionWishlist) : 0;
                 ?>
                 <div class="site-actions-group">
-                    <!-- 1. Currency Selector Dropdown -->
+                    <!-- 1. Currency Selector Dropdown (Icon on Mobile, Pill on Desktop) -->
                     <div class="relative" id="siteCurrencyDropdown">
-                        <button type="button" onclick="toggleCurrencyDropdown(event)" class="site-header-pill" title="Change Currency">
-                            <span class="font-mono text-stone-500 text-[11px] leading-none"><?= htmlspecialchars($activeCurr['symbol']) ?></span>
+                        <button type="button" onclick="toggleCurrencyDropdown(event)" class="site-header-pill pill-currency" title="Change Currency">
+                            <span class="pill-currency-symbol font-mono font-bold"><?= htmlspecialchars($activeCurr['symbol']) ?></span>
                             <span class="pill-text font-bold"><?= htmlspecialchars($activeCurr['code']) ?></span>
-                            <svg class="w-3 h-3 text-stone-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            <svg class="pill-chevron w-3 h-3 text-stone-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
-                        <div id="siteCurrencyMenu" class="hidden absolute right-0 mt-2 w-48 bg-white/98 backdrop-blur-md rounded-2xl shadow-xl border border-black/[0.08] py-1.5 z-50 overflow-hidden text-left">
-                            <div class="px-3.5 py-1 text-[10px] font-bold text-stone-400 uppercase tracking-wider">Select Currency</div>
+                        <div id="siteCurrencyMenu" class="site-currency-menu hidden">
+                            <div class="site-currency-header">Select Currency</div>
                             <?php foreach ($enabledCurrs as $c): ?>
-                                <a href="<?= SITE_URL ?>/currency/switch/<?= $c['code'] ?>" class="flex items-center justify-between px-3.5 py-2 text-xs hover:bg-stone-100 transition-colors <?= $c['code'] === $activeCurr['code'] ? 'font-bold text-black bg-stone-50' : 'text-stone-700' ?>">
-                                    <span class="flex items-center gap-2">
-                                        <span class="w-5 text-center font-mono text-stone-500"><?= htmlspecialchars($c['symbol']) ?></span>
-                                        <span><?= htmlspecialchars($c['name']) ?></span>
-                                    </span>
-                                    <span class="text-[10px] font-mono text-stone-400"><?= htmlspecialchars($c['code']) ?></span>
+                                <?php $isActive = ($c['code'] === $activeCurr['code']); ?>
+                                <a href="<?= SITE_URL ?>/currency/switch/<?= $c['code'] ?>" class="site-currency-item <?= $isActive ? 'is-active' : '' ?>">
+                                    <span class="site-currency-symbol"><?= htmlspecialchars($c['symbol']) ?></span>
+                                    <span class="site-currency-name"><?= htmlspecialchars($c['name']) ?></span>
+                                    <span class="site-currency-code"><?= htmlspecialchars($c['code']) ?></span>
                                 </a>
                             <?php endforeach; ?>
                         </div>
                     </div>
 
-                    <!-- 2. Offers Pill (Desktop/Tablet) -->
-                    <a href="<?= SITE_URL ?>/offers" class="site-header-pill hidden md:inline-flex" title="Special Offers">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
+                    <!-- 2. Offers Pill (Icon on Mobile, Pill on Desktop) -->
+                    <a href="<?= SITE_URL ?>/offers" class="site-header-pill pill-offers" title="Special Offers">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="pill-icon text-amber-600 flex-shrink-0">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                        </svg>
                         <span class="pill-text">Offers</span>
                     </a>
 
-                    <!-- 3. Wishlist Pill -->
-                    <a href="<?= SITE_URL ?>/profile/wishlist" class="site-header-pill is-circle relative text-red-500 hover:text-red-600" title="Wishlist">
-                        <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        <span id="wishlistCountBadge" class="<?= $headerWishCount > 0 ? '' : 'hidden' ?> absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center font-mono leading-none">
-                            <?= $headerWishCount ?>
-                        </span>
+                    <!-- 3. Wishlist Pill (Icon Circle with Badge) -->
+                    <a href="<?= SITE_URL ?>/profile/wishlist" class="site-header-pill pill-wishlist is-circle relative text-red-500 hover:text-red-600" title="Wishlist">
+                        <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24" class="pill-icon flex-shrink-0"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span id="wishlistCountBadge" class="<?= ($headerWishCount > 0) ? '' : 'hidden' ?> pill-badge bg-red-500 text-white"><?= $headerWishCount ?></span>
                     </a>
 
-                    <!-- 4. Shopping Bag Pill -->
-                    <a href="<?= SITE_URL ?>/cart" class="site-header-pill" title="Cart Bag">
-                        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                        <span id="cartCountBadge" class="bg-[#18181B] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center font-mono leading-none flex-shrink-0">
-                            <?= $cartCount ?>
-                        </span>
+                    <!-- 4. Shopping Bag / Cart Pill (Icon on Mobile, Pill with Badge on Desktop) -->
+                    <a href="<?= SITE_URL ?>/cart" class="site-header-pill pill-cart relative" title="Cart Bag">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="pill-icon flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <span id="cartCountBadge" class="<?= ($cartCount > 0) ? '' : 'hidden' ?> pill-badge bg-[#18181B] text-white"><?= $cartCount ?></span>
                     </a>
 
-                    <!-- 5. Profile / Sign In Pill -->
+                    <!-- 5. Profile / Sign In Pill (Icon on Mobile, Pill on Desktop) -->
                     <?php if ($currentUser): ?>
                         <a href="<?= SITE_URL ?>/profile" class="site-header-pill is-profile user-logged-in" title="My Account">
                             <div class="pill-avatar font-bold text-xs">
                                 <?= strtoupper(substr($currentUser['name'] ?? 'U', 0, 1)) ?>
                             </div>
-                            <span class="pill-text hidden sm:inline-flex">
+                            <span class="pill-text">
                                 <?= htmlspecialchars(explode(' ', $currentUser['name'] ?? 'Collector')[0]) ?>
                             </span>
                         </a>
                     <?php else: ?>
                         <a href="<?= SITE_URL ?>/login" class="site-header-pill is-profile" title="Sign In">
                             <div class="pill-avatar">
-                                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             </div>
                             <span class="pill-text">Sign In</span>
                         </a>
@@ -444,13 +441,30 @@ $navCategories = $categoryModel->getActiveWithCounts();
             </div>
 
             <?php
-            $reqUri = $_SERVER['REQUEST_URI'] ?? '';
+            $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+            $parsedPath = parse_url($requestUri, PHP_URL_PATH) ?? '/';
+
+            // Strip subfolder if running in subdirectory
+            $scriptDir = dirname($_SERVER['SCRIPT_NAME'] ?? '');
+            $subfolder = rtrim(str_replace(['/admin', '\\admin'], '', $scriptDir), '/\\');
+            if (!empty($subfolder) && $subfolder !== '/' && str_starts_with($parsedPath, $subfolder)) {
+                $parsedPath = substr($parsedPath, strlen($subfolder));
+            }
+
+            $cleanPath = '/' . trim($parsedPath, '/');
+            if ($cleanPath === '/index.php' || $cleanPath === '//' || $cleanPath === '') {
+                $cleanPath = '/';
+            }
+
+            // Categories capsule bar must show strictly on /shop page ONLY
+            $isShopPage = ($cleanPath === '/shop' || (isset($_GET['url']) && trim($_GET['url'], '/') === 'shop'));
+
             $reqCategory = $_GET['category'] ?? '';
             $reqFilter = $_GET['filter'] ?? '';
             $reqMedium = $_GET['medium'] ?? '';
 
             $activeKey = 'all';
-            if (str_contains($reqUri, '/offers')) {
+            if (str_contains($requestUri, '/offers')) {
                 $activeKey = 'offers';
             } elseif (!empty($reqCategory)) {
                 if ($reqCategory === 'oil-paintings') $activeKey = 'oil';
@@ -470,12 +484,8 @@ $navCategories = $categoryModel->getActiveWithCounts();
             }
             ?>
 
-            <?php 
-            $requestPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
-            $isHome = ($requestPath === '' || $requestPath === 'index.php');
-            ?>
-            <?php if (!$isHome): ?>
-            <!-- 2. Sub-Nav Category Capsule Bar (Scrollbar-Free, Native Swipe & Desktop Drag) -->
+            <?php if ($isShopPage): ?>
+            <!-- 2. Sub-Nav Category Capsule Bar (Scrollbar-Free, Native Swipe & Desktop Drag) - Visible on /shop ONLY -->
             <div id="categoryCapsuleBar" class="mt-2 sm:mt-3.5 flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none pb-1 sm:pb-1.5 -mx-1 px-1 select-none cursor-grab active:cursor-grabbing" style="scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch;">
                 <!-- Filter Toggle Pill Button -->
                 <button type="button" onclick="openAllFiltersModal()" class="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white hover:bg-stone-100 border border-black/[0.08] flex items-center justify-center text-stone-800 shadow-2xs flex-shrink-0 transition-transform active:scale-95" title="All Art Filters">

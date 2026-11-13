@@ -12,20 +12,22 @@
 
 /* 1. Sticky Mobile Bottom Navigation Bar */
 .mobile-bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: var(--mobile-nav-height);
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid var(--color-border);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  z-index: 990;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: var(--mobile-nav-height, 64px) !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-top: 1px solid rgba(182, 122, 49, 0.18) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+  z-index: 990 !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06) !important;
+  padding: 0 4px !important;
+  box-sizing: border-box !important;
 }
 
 @media (min-width: 1024px) {
@@ -35,48 +37,99 @@
 }
 
 .bottom-nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  height: 100%;
-  color: var(--color-muted);
-  text-decoration: none;
-  font-size: 11px;
-  font-weight: 500;
-  transition: color 0.15s ease;
-  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 1 !important;
+  height: 100% !important;
+  color: #71717A !important;
+  text-decoration: none !important;
+  position: relative !important;
+  padding: 3px 2px !important;
+  box-sizing: border-box !important;
+  transition: color 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
-.bottom-nav-item.active,
-.bottom-nav-item:hover {
-  color: var(--color-primary);
+/* Icon Capsule Wrap */
+.bottom-nav-icon-wrap {
+  width: 44px !important;
+  height: 28px !important;
+  border-radius: 9999px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  background: transparent !important;
+  color: #71717A !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-.bottom-nav-item svg {
-  width: 22px;
-  height: 22px;
-  margin-bottom: 3px;
-  transition: transform 0.15s ease;
+.bottom-nav-icon-wrap svg {
+  width: 20px !important;
+  height: 20px !important;
+  display: block !important;
+  stroke: #71717A !important;
+  stroke-width: 1.8 !important;
+  transition: stroke 0.18s ease, transform 0.18s ease !important;
 }
 
-.bottom-nav-item:active svg {
-  transform: scale(0.92);
+/* Nav Text Label */
+.bottom-nav-label {
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  color: #71717A !important;
+  margin-top: 2px !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  transition: color 0.18s ease, font-weight 0.18s ease !important;
 }
 
+/* ============================================================
+   ACTIVE STATE: High-Contrast Obsidian Capsule
+   ============================================================ */
+.bottom-nav-item.active .bottom-nav-icon-wrap {
+  background: #18181B !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 3px 10px rgba(24, 24, 27, 0.22) !important;
+  transform: translateY(-1px) scale(1.02) !important;
+}
+
+.bottom-nav-item.active .bottom-nav-icon-wrap svg {
+  stroke: #FFFFFF !important;
+  stroke-width: 2.2 !important;
+}
+
+.bottom-nav-item.active .bottom-nav-label {
+  color: #18181B !important;
+  font-weight: 800 !important;
+}
+
+.bottom-nav-item:active .bottom-nav-icon-wrap {
+  transform: scale(0.94) !important;
+}
+
+/* Notification Badges */
 .bottom-nav-badge {
-  position: absolute;
-  top: 6px;
-  right: calc(50% - 18px);
-  background: var(--color-primary);
-  color: #FFFFFF;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: var(--radius-pill);
-  min-width: 16px;
-  text-align: center;
+  position: absolute !important;
+  top: -4px !important;
+  right: -5px !important;
+  background: #E11D48 !important; /* Vibrant Rose Red */
+  color: #FFFFFF !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+  padding: 0 4px !important;
+  min-width: 15px !important;
+  height: 15px !important;
+  line-height: 15px !important;
+  border-radius: 9999px !important;
+  text-align: center !important;
+  border: 1.5px solid #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+  box-sizing: border-box !important;
+  z-index: 10 !important;
 }
 
 /* 2. Off-Canvas Mobile Drawer (Slide from Left) */
